@@ -1,0 +1,68 @@
+# DB構成
+
+anei_status:{
+    updateTime: 2017年02月28日　07:29時点
+    comment: 波照間航路、通常運航。、その他通常運航。
+    hateruma:{
+        name: 波照間島航路
+        code: normal
+        status {
+            code: nomal
+            text: 通常運行
+        }
+        comment: 通常運航。本日、フェリーはてるま、運航日です。
+    },
+    hateruma:{
+        name: 波照間島航路
+        code: normal
+        status {
+            code: nomal
+            text: 通常運行
+        }
+        comment: 通常運航。本日、フェリーはてるま、運航日です。
+    }
+    ...
+    createTime:yyyy/MM/dd hh:mm:ss  //このデータをDBへ登録した日時
+},
+ykf_status:{
+    // aneiと同じ構成
+}
+
+anei_status_talbe:{
+    header:{
+        left:石垣
+        right:大原
+    },
+    row[
+        left: {
+            time:08：30,
+            status: {
+                code:normal,
+                text:通常運行
+            },
+        right: {
+            time:08：30,
+            status: {
+                code:normal,
+                text:通常運行
+            },
+            ...
+    ]
+}
+
+weather {
+    today:{
+        date:3月10日(金),
+        weater:雨,
+        temp:21 ℃[+2] 18 ℃[+2],
+        wind:東の風強く,
+        wave:3メートル後4メートル
+    },
+    tomorrow:{
+      date:3月11日(土),
+        weater:雨,
+        temp:21 ℃[+2] 18 ℃[+2],
+        wind:東の風強く,
+        wave:3メートル後4メートル
+    }
+}

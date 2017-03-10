@@ -1,0 +1,11 @@
+{
+  "firebase": {
+    "apiKey": "xxx",
+    "authDomain": "xxx",
+    "databaseURL": "xxx",
+    "storageBucket": "xxx"
+  },
+  "slack": {
+    "webHookUrl": "xxx"
+  }
+}
