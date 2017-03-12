@@ -9,104 +9,110 @@ const JSON_PATH = 'json/list-ykf.json';
 
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
-console.log('スクレイピング開始:' + COMPANY);
 
-client.fetch(URL)
-    .then(function(result) {
-        const $ = result.$;
-        if (!$) return null;
 
-        // const saveTag = { html: $('#unkou_bg_top').html().trim().replace(/\t/g, '') };
-        // console.log(html);
-        //読み込み開始
-        // try {
-        //   let json = { html: '' };
+function run() {
+    console.log('スクレイピング開始:' + COMPANY);
+    return new Promise(function(resolve) {
+        client.fetch(URL)
+            .then(function(result) {
+                const $ = result.$;
+                if (!$) return null;
 
-        //   try {
-        //     fs.exists(JSON_PATH, function() {
-        //       json = JSON.parse(fs.readFileSync(JSON_PATH, 'utf-8') || "null");
-        //     });
-        //   } catch (error) {
-        //     console.log(JSON_PATH + "読み込み時にエラー発生");
-        //     console.log(error);
-        //   };
+                // const saveTag = { html: $('#unkou_bg_top').html().trim().replace(/\t/g, '') };
+                // console.log(html);
+                //読み込み開始
+                // try {
+                //   let json = { html: '' };
 
-        //   if (json.html == saveTag.html) {
-        //     // 前回と値が変わってない
-        //     console.log("前回と値が変わってない");
-        //     //   return null;
-        //   } else {
-        //     // 何かしら値が変わっているので続行
-        //     console.log("前回から値の変更あり");
-        //     fs.writeFile(JSON_PATH, JSON.stringify(saveTag, null, ""))
-        //   }
-        // } catch (error) {
-        //   console.log("json読み書きでエラー発生");
-        //   console.log(error);
-        // }
+                //   try {
+                //     fs.exists(JSON_PATH, function() {
+                //       json = JSON.parse(fs.readFileSync(JSON_PATH, 'utf-8') || "null");
+                //     });
+                //   } catch (error) {
+                //     console.log(JSON_PATH + "読み込み時にエラー発生");
+                //     console.log(error);
+                //   };
 
-        const sendData = {
-            comment: '',
-            updateTime: $('div.unkou_time_top').html().trim() // 更新日時
-        }
+                //   if (json.html == saveTag.html) {
+                //     // 前回と値が変わってない
+                //     console.log("前回と値が変わってない");
+                //     //   return null;
+                //   } else {
+                //     // 何かしら値が変わっているので続行
+                //     console.log("前回から値の変更あり");
+                //     fs.writeFile(JSON_PATH, JSON.stringify(saveTag, null, ""))
+                //   }
+                // } catch (error) {
+                //   console.log("json読み書きでエラー発生");
+                //   console.log(error);
+                // }
 
-        // 港別に取得してパース処理
-        $('#unkou_bg_top > div.unkou_joukyou > div').each(function() {
-
-            // 港名
-            let portName = $(this).find('div').eq(0).text();
-            console.log('----------------');
-            console.log(portName + ' 開始');
-            // 港コード
-            let portCode = getPortCode(portName);
-
-            // ステータス取得
-            const unkou_item_display_txt = $(this).find('div.unkou_item_display_in > div.unkou_item_display_txt');
-            const kigou = unkou_item_display_txt.find('span').eq(0).text().trim(); // ○ , △ , ×
-            const statusText = unkou_item_display_txt.text().replace(kigou, '').trim(); // ○通常運行 -> 通常運行
-            const bikou = $(this).find('div.no_disp.unkou_item_display_bikou').text().trim(); //備考 あったりなかったりする
-            const statusCode = getStatusCode(kigou);
-
-            //   console.log(portName);
-            //   console.log(portCode);
-            //   console.log(kigou);
-            //   console.log(statusText);
-            //   console.log(bikou);
-            //   console.log(statusCode);
-            //   console.log(comment);
-
-            // 運行情報を作成
-            const port = {
-                code: portCode,
-                name: portName,
-                comment: bikou,
-                html: $(this).html().trim().replace(/\t/g, ''), // デバッグ用　後で消す
-                status: {
-                    code: statusCode,
-                    text: statusText
+                const sendData = {
+                    comment: '',
+                    updateTime: $('div.unkou_time_top').html().trim() // 更新日時
                 }
-            }
-            sendData[portCode] = port;
-            console.log(portName + ' 完了');
-        });
-        return sendData;
-    })
-    .then(function(data) {
-        if (!data) return;
-        console.log('DB登録開始');
-        return firebase.database().ref(TABLE).set(data, function() {
-            console.log('DB登録完了');
-            firebase.database().goOffline(); //プロセスが終わらない対策
-        })
-    })
-    .catch(function(error) {
-        console.log('エラー発生');
-        console.log(error);
-    })
-    .finally(function() {
-        console.log('処理完了');
-        process.exit();
+
+                // 港別に取得してパース処理
+                $('#unkou_bg_top > div.unkou_joukyou > div').each(function() {
+
+                    // 港名
+                    let portName = $(this).find('div').eq(0).text();
+                    console.log('----------------');
+                    console.log(portName + ' 開始');
+                    // 港コード
+                    let portCode = getPortCode(portName);
+
+                    // ステータス取得
+                    const unkou_item_display_txt = $(this).find('div.unkou_item_display_in > div.unkou_item_display_txt');
+                    const kigou = unkou_item_display_txt.find('span').eq(0).text().trim(); // ○ , △ , ×
+                    const statusText = unkou_item_display_txt.text().replace(kigou, '').trim(); // ○通常運行 -> 通常運行
+                    const bikou = $(this).find('div.no_disp.unkou_item_display_bikou').text().trim(); //備考 あったりなかったりする
+                    const statusCode = getStatusCode(kigou);
+
+                    //   console.log(portName);
+                    //   console.log(portCode);
+                    //   console.log(kigou);
+                    //   console.log(statusText);
+                    //   console.log(bikou);
+                    //   console.log(statusCode);
+                    //   console.log(comment);
+
+                    // 運行情報を作成
+                    const port = {
+                        code: portCode,
+                        name: portName,
+                        comment: bikou,
+                        html: $(this).html().trim().replace(/\t/g, ''), // デバッグ用　後で消す
+                        status: {
+                            code: statusCode,
+                            text: statusText
+                        }
+                    }
+                    sendData[portCode] = port;
+                    console.log(portName + ' 完了');
+                });
+                return sendData;
+            })
+            .then(function(data) {
+                if (!data) return;
+                console.log('DB登録開始');
+                return firebase.database().ref(TABLE).set(data, function() {
+                    console.log('DB登録完了');
+                    // firebase.database().goOffline(); //プロセスが終わらない対策
+                })
+            })
+            .catch(function(error) {
+                console.log('エラー発生');
+                console.log(error);
+            })
+            .finally(function() {
+                console.log('処理完了 ' + COMPANY);
+                firebase.database().goOffline(); //プロセスが終わらない対策
+                resolve()
+            });
     });
+}
 
 // 港名から港コードを返す
 function getPortCode(port_name) {
@@ -142,3 +148,5 @@ function getStatusCode(kigou) {
         return "cation";
     }
 }
+
+module.exports = run;
