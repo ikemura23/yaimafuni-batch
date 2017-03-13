@@ -66,3 +66,95 @@ weather {
         wave:3メートル後4メートル
     }
 }
+
+top_company {
+    anei : {
+        updateTime: 2017年02月28日　07:29時点,
+        comment: 波照間航路、通常運航。、その他通常運航。,
+        status: {
+            code:normal,
+            text:通常運行
+        }
+    },
+    ykf : {
+        updateTime: 2017年02月28日　07:29時点,
+        comment: 波照間航路、通常運航。、その他通常運航。,
+        status: {
+            code:normal,
+            text:通常運行
+        }
+    }
+    dream : {
+        updateTime: 2017年02月28日　07:29時点,
+        comment: 波照間航路、通常運航。、その他通常運航。,
+        status: {
+            code:normal,
+            text:通常運行
+        }
+    }
+}
+
+top_port {
+    taketomi : {
+        comment: ,
+        status: {
+            code:normal,
+            text:全便運行
+        },
+        anei : {
+            updateTime: 2017年02月28日　07:29時点,
+            comment: 波照間航路、通常運航。、その他通常運航。,
+            status: {
+                code:normal,
+                text:通常運行
+            }
+        },
+        ykf : {
+            updateTime: 2017年02月28日　07:29時点,
+            comment: 波照間航路、通常運航。、その他通常運航。,
+            status: {
+                code:normal,
+                text:通常運行
+            }
+        }
+        dream : {
+            updateTime: 2017年02月28日　07:29時点,
+            comment: 波照間航路、通常運航。、その他通常運航。,
+            status: {
+                code:normal,
+                text:通常運行
+            }
+        }
+    },
+    kohama : {
+        comment: 安永は運行、八観フェは運行、ドリームは運行未定,
+        status: {
+            code:cation,
+            text:未定あり
+        },
+        anei : {
+            updateTime: 2017年02月28日　07:29時点,
+            comment: 波照間航路、通常運航。、その他通常運航。,
+            status: {
+                code:normal,
+                text:通常運行
+            }
+        },
+        ykf : {
+            updateTime: 2017年02月28日　07:29時点,
+            comment: 波照間航路、通常運航。、その他通常運航。,
+            status: {
+                code:normal,
+                text:通常運行
+            }
+        }
+        dream : {
+            updateTime: 2017年02月28日　07:29時点,
+            comment: 未定です,
+            status: {
+                code:cation,
+                text:未定
+            }
+        }
+    },
+}
