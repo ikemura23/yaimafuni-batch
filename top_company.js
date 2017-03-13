@@ -21,9 +21,7 @@ function readFirebase() {
         if (portData.code == undefined) return false; //全体コメントはスキップ
         statuses.push(portData.status.code); // 一旦配列に結果を保存
       });
-      return new Promise(function(resolve) {
-        resolve(statuses);
-      })
+      return Promise.resolve(statuses);
     });
 }
 
@@ -52,7 +50,8 @@ function createAneiTopStatus(statuses) {
       comment: comment
     }
     // console.log(comment);
-  return Promise.resolve(sendData);
+    // return Promise.resolve(sendData);
+  return sendData;
 }
 
 /**
@@ -71,16 +70,15 @@ function sendFirebase(sendData) {
  * 外部からの呼び出し用メソッド
  */
 function run() {
-  // console.log('top_company 開始');
-  Promise.resolve()
-    .then(() => console.log('top_company 開始'))
+  return Promise.resolve()
+    .then(() => console.log(TABLE_NAME + ' 開始'))
     .then(() => readFirebase())
     .then(data => createAneiTopStatus(data))
     .then(sendData => sendFirebase(sendData))
-    .then(() => console.log('top_company 完了'))
+    .then(() => console.log(TABLE_NAME + ' 完了'))
     .catch(function(e) {
       console.log(e);
     })
 }
-run()
+// run()
 module.exports = run;
