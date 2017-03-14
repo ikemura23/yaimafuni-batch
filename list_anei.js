@@ -27,25 +27,20 @@ function run() {
 
           // 港名
           var port_name = arreaTag.find('span.name').text();
-          // console.log(port_name);
 
           // 港id
           var port_code = getPortCode(port_name);
-          // console.log(port_code);
 
           // ステータス名
           var statusText = arreaTag.find('span').eq(1).text();
-          // console.log(status_text);
 
           // クラス名
           var statusCode = getStatusCode(arreaTag);
-          // console.log(tag_status_span);
 
           // チップス
           var chips = $(this).find('div').eq(1);
           // 港別コメント
           var chips_comment = chips.find("div").find("p").text().trim();
-          // console.log(chips_comment);
 
           var port = {
             code: port_code,
@@ -54,8 +49,7 @@ function run() {
               code: statusCode,
               text: statusText
             },
-            comment: chips_comment,
-            html: arreaTag.html().trim().replace(/\t/g, '')
+            comment: chips_comment
           }
           sendData[port_code] = port;
 
@@ -100,7 +94,7 @@ function getPortCode(portName) {
 
 /**
  * タグのcssクラス名からステータスコードを取得
- * @param {港単体タグ} arrea 
+ * @param {港単体タグ} arreaTag 
  */
 function getStatusCode(arreaTag) {
   if (arreaTag.find('span').eq(1).hasClass("flag triangle")) {

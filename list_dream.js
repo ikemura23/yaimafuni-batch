@@ -42,9 +42,6 @@ function run() {
 
           // 港コード
           const portCode = getPortCode(portName);
-          //   if (portCode.length == 0) {
-          //     return true;
-          //   }
 
           // ステータス
           const statusText = $(this).find('span').text();
@@ -52,13 +49,6 @@ function run() {
 
           // 港別のコメント
           const portComment = $(this).children('div').eq(1).text();
-
-          //   console.log($(this).html());
-          //   console.log(portName);
-          //   console.log(portCode);
-          //   console.log(statusText);
-          //   console.log(statusCode);
-          //   console.log(portComment);
 
           // 運行情報を作成
           const port = {
@@ -68,8 +58,7 @@ function run() {
             status: {
               code: statusCode,
               text: statusText
-            },
-            html: $(this).html() //デバッグ用、後で消す
+            }
           }
           sendData[portCode] = port;
         });

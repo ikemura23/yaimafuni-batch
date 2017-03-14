@@ -1,10 +1,10 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const PORT = require('./consts.js');
+
 const COMPANY = 'ykf';
 const TABLE = COMPANY + '_status';
 const URL = 'http://www.yaeyama.co.jp/';
-const JSON_PATH = 'json/list-ykf.json';
 
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
@@ -37,20 +37,11 @@ function run() {
           const bikou = $(this).find('div.no_disp.unkou_item_display_bikou').text().trim(); //備考 あったりなかったりする
           const statusCode = getStatusCode(kigou);
 
-          //   console.log(portName);
-          //   console.log(portCode);
-          //   console.log(kigou);
-          //   console.log(statusText);
-          //   console.log(bikou);
-          //   console.log(statusCode);
-          //   console.log(comment);
-
           // 運行情報を作成
           const port = {
             code: portCode,
             name: portName,
             comment: bikou,
-            html: $(this).html().trim().replace(/\t/g, ''), // デバッグ用　後で消す
             status: {
               code: statusCode,
               text: statusText
