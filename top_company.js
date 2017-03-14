@@ -59,10 +59,10 @@ function createAneiTopStatus(statuses) {
  * @param {送信する値} sendData 
  */
 function sendFirebase(sendData) {
-  console.log('DB登録開始');
+  // console.log('DB登録開始');
   return firebase.database().ref(TABLE_NAME).update(sendData, function() {
-    console.log('DB登録完了');
-    firebase.database().goOffline(); //プロセスが終わらない対策
+    // console.log('DB登録完了');
+    // firebase.database().goOffline(); //プロセスが終わらない対策
   })
 }
 
@@ -71,11 +71,11 @@ function sendFirebase(sendData) {
  */
 function run() {
   return Promise.resolve()
-    .then(() => console.log(TABLE_NAME + ' 開始'))
+    .then(() => console.log('開始 トップ 会社別'))
     .then(() => readFirebase())
     .then(data => createAneiTopStatus(data))
     .then(sendData => sendFirebase(sendData))
-    .then(() => console.log(TABLE_NAME + ' 完了'))
+    .then(() => console.log('完了 トップ 会社別'))
     .catch(function(e) {
       console.log(e);
     })

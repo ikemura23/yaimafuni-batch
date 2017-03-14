@@ -11,7 +11,7 @@ const JSON_PATH = 'json/list-ykf.json';
 
 
 function run() {
-  console.log('開始:' + COMPANY);
+  console.log('開始:' + COMPANY + ' 一覧');
   return new Promise(function(resolve) {
     client.fetch(URL)
       .then(function(result) {
@@ -95,9 +95,9 @@ function run() {
       })
       .then(function(data) {
         if (!data) return;
-        console.log('DB登録開始' + ':' + COMPANY);
+        // console.log('DB登録開始' + ':' + COMPANY);
         return firebase.database().ref(TABLE).set(data, function() {
-          console.log('DB登録完了' + ':' + COMPANY);
+          // console.log('DB登録完了' + ':' + COMPANY);
           // firebase.database().goOffline(); //プロセスが終わらない対策
         })
       })
@@ -106,7 +106,7 @@ function run() {
         console.log(error);
       })
       .finally(function() {
-        console.log('完了' + ':' + COMPANY);
+        console.log('完了' + ':' + COMPANY + ' 一覧');
         // firebase.database().goOffline(); //プロセスが終わらない対策
         resolve()
       });

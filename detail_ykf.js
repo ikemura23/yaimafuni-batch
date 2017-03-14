@@ -8,56 +8,58 @@ const TABLE = COMPANY + '_status_detail_';
 // const sendData = {};
 let $;
 
-console.log('開始:' + COMPANY + '-詳細');
-client.fetch(URL)
-  .then(function(result) {
-    return new Promise(function(resolve, reject) {
-      $ = result.$;
-      resolve();
+function run() {
+  console.log('開始:' + COMPANY + '-詳細');
+  return client.fetch(URL)
+    .then(function(result) {
+      return new Promise(function(resolve, reject) {
+        $ = result.$;
+        resolve();
+      })
     })
-  })
-  .then(function() {
-    return perseAndSend(consts.TAKETOMI); // 竹富
-  })
-  .then(function() {
-    return perseAndSend(consts.KOHAMA); // 小浜
-  })
-  .then(function() {
-    return perseAndSend(consts.KUROSHIMA); // 黒島
-  })
-  .then(function() {
-    return perseAndSend(consts.OOHARA); // 大原
-  })
-  .then(function() {
-    return perseAndSend(consts.UEHARA); // 上原
-  })
-  .then(function() {
-    return perseAndSend(consts.HATOMA); // 鳩間
-  })
-  .then(function() {
-    return perseAndSend(consts.KOHAMA_TAKETOMI); // 小浜-竹富
-  })
-  .then(function() {
-    return perseAndSend(consts.KOHAMA_OOHARA); // 小浜-大原
-  })
-  .then(function() {
-    return perseAndSend(consts.UEHARA_HATOMA); // 上原-鳩間
-  })
-  .catch(function(error) {
-    console.log('Error');
-    console.log(error);
-  })
-  .finally(function() {
-    console.log('完了:' + COMPANY + '-詳細');
-    firebase.database().goOffline(); //プロセスが終わらない対策
-  })
+    .then(function() {
+      return perseAndSend(consts.TAKETOMI); // 竹富
+    })
+    .then(function() {
+      return perseAndSend(consts.KOHAMA); // 小浜
+    })
+    .then(function() {
+      return perseAndSend(consts.KUROSHIMA); // 黒島
+    })
+    .then(function() {
+      return perseAndSend(consts.OOHARA); // 大原
+    })
+    .then(function() {
+      return perseAndSend(consts.UEHARA); // 上原
+    })
+    .then(function() {
+      return perseAndSend(consts.HATOMA); // 鳩間
+    })
+    .then(function() {
+      return perseAndSend(consts.KOHAMA_TAKETOMI); // 小浜-竹富
+    })
+    .then(function() {
+      return perseAndSend(consts.KOHAMA_OOHARA); // 小浜-大原
+    })
+    .then(function() {
+      return perseAndSend(consts.UEHARA_HATOMA); // 上原-鳩間
+    })
+    .catch(function(error) {
+      console.log('Error');
+      console.log(error);
+    })
+    .finally(function() {
+      console.log('完了:' + COMPANY + '-詳細');
+      firebase.database().goOffline(); //プロセスが終わらない対策
+    })
+}
 
 /**
  * 引数の港をパースしてDBに登録
  * @param {タグ全体} $ 
  */
 function perseAndSend(portCode) {
-  console.log('スクレイピング開始 ' + portCode);
+  // console.log('スクレイピング開始 ' + portCode);
   const selecotr = getSelectorString(portCode);
   // putHtmlLog(selecotr).find('td');
 
@@ -107,7 +109,7 @@ function perseAndSend(portCode) {
     timeTable.row.push(row);
   });
 
-  console.log('スクレイピング完了 ' + portCode);
+  // console.log('スクレイピング完了 ' + portCode);
 
   // Firebaseへ登録
   return saveToFirebase(portCode, timeTable);
@@ -185,14 +187,16 @@ function getStatusCode(arreaTag) {
  */
 function saveToFirebase(portCode, sendData) {
   const tableName = TABLE + portCode;
-  console.log('DB登録開始 ' + tableName);
+  // console.log('DB登録開始 ' + tableName);
   // console.log(sendData);
   return new Promise(function(resolve, reject) {
     firebase.database()
       .ref(tableName)
       .set(sendData, function() {
-        console.log('DB登録完了 ' + tableName);
+        // console.log('DB登録完了 ' + tableName);
         resolve();
       })
   });
 };
+
+module.exports = run;

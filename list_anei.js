@@ -11,7 +11,7 @@ const URL = 'http://www.aneikankou.co.jp';
 var AneiList = function() {};
 
 function run() {
-  console.log('開始:' + COMPANY);
+  console.log('開始:' + COMPANY + ' 一覧');
   return new Promise(function(resolve) {
     client.fetch(URL)
       .then(function(result) {
@@ -89,7 +89,7 @@ function run() {
       })
       .finally(function() {
         // firebase.database().goOffline(); //プロセスが終わらない対策
-        console.log('完了 ' + COMPANY);
+        console.log('完了 ' + COMPANY + ' 一覧');
         resolve()
       });
   });

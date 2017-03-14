@@ -8,7 +8,7 @@ const sendData = { today: '', tomorrow: '' };
 
 
 function run() {
-  console.log('開始 天気');
+  console.log('天気 開始');
   return new Promise(function(resolve) {
     client.fetch(URL)
       .then(function(result) {
@@ -20,7 +20,7 @@ function run() {
         console.log(error);
       })
       .finally(function() {
-        console.log('完了 天気');
+        console.log('天気 完了');
         resolve();
         // firebase.database().goOffline(); //プロセスが終わらない対策
       })
@@ -70,12 +70,12 @@ function putHtmlLog(value) {
  * DBへ登録
  */
 function saveToFirebase(sendData) {
-  console.log('DB登録開始 ' + TABLE);
+  // console.log('DB登録開始 ' + TABLE);
   // console.log(sendData);
   return firebase.database()
     .ref(TABLE)
     .set(sendData, function() {
-      console.log('DB登録完了 ' + TABLE);
+      // console.log('DB登録完了 ' + TABLE);
     })
 };
 
