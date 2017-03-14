@@ -1,12 +1,11 @@
 const client = require('cheerio-httpcli');
-const fs = require('fs');
 const firebase = require("firebase");
+const consts = require('./consts.js');
 
-const COMPANY = 'anei';
+const COMPANY = consts.ANEI;
 const TABLE = COMPANY + '_status';
 const URL = 'http://www.aneikankou.co.jp';
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
-
 
 var AneiList = function() {};
 
@@ -16,21 +15,6 @@ function run() {
     client.fetch(URL)
       .then(function(result) {
         var $ = result.$;
-
-        //読み込み開始
-        // const ul = {
-        //     html: $('#situation div ul.route').html().trim().replace(/\t/g, '')
-        // };
-        // const json = JSON.parse(fs.readFileSync('json/list-anei.json', 'utf-8'));
-        // if (json.html == ul.html) {
-        //   // 前回と値が変わってない
-        //   console.log("前回と値が変わってないので終了");
-        //   return;
-        // } else {
-        //   // 何かしら値が変わっている
-        //   console.log("前回から値の変更あり");
-        //   fs.writeFile('json/list-anei.json', JSON.stringify(ul, null, ""))
-        // }
 
         let sendData = {
           comment: $('div.content_wrap').find('p.all-note').text().trim(), // 全体コメント
@@ -88,7 +72,6 @@ function run() {
         console.log(error);
       })
       .finally(function() {
-        // firebase.database().goOffline(); //プロセスが終わらない対策
         console.log('完了 ' + COMPANY + ' 一覧');
         resolve()
       });
@@ -99,19 +82,19 @@ function run() {
 function getPortCode(portName) {
   // 港id
   if (portName.toString().includes("竹富")) {
-    return "taketomi";
+    return consts.TAKETOMI;
   } else if (portName.toString().includes("小浜")) {
-    return "kohama";
+    return consts.KOHAMA;
   } else if (portName.toString().includes("黒島")) {
-    return "kuroshima";
+    return consts.KUROSHIMA;
   } else if (portName.toString().includes("大原")) {
-    return "oohara";
+    return consts.OOHARA;
   } else if (portName.toString().includes("上原")) {
-    return "uehara";
+    return consts.UEHARA;
   } else if (portName.toString().includes("鳩間")) {
-    return "hatoma";
+    return consts.HATOMA;
   } else if (portName.toString().includes("波照間")) {
-    return "hateruma";
+    return consts.HATERUMA;
   }
 }
 
@@ -121,13 +104,13 @@ function getPortCode(portName) {
  */
 function getStatusCode(arreaTag) {
   if (arreaTag.find('span').eq(1).hasClass("flag triangle")) {
-    return "cation";
+    return consts.CATION;
   } else if (arreaTag.find('span').eq(1).hasClass("flag out")) {
-    return "cancel";
+    return consts.CANCEL;
   } else if (arreaTag.find('span').eq(1).hasClass("flag circle")) {
-    return "normal";
+    return consts.NORMAL;
   } else {
-    return "cation";
+    return consts.CATION;
   }
 }
 

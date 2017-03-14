@@ -1,9 +1,8 @@
 const client = require('cheerio-httpcli');
-// const fs = require('fs');
 const firebase = require("firebase");
 const consts = require('./consts.js');
 
-const COMPANY = 'dream';
+const COMPANY = consts.DREAM;
 const TABLE = COMPANY + '_status';
 const URL = 'http://ishigaki-dream.co.jp/';
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
@@ -21,20 +20,6 @@ function run() {
           throw DOMException('初めのタグ取得に失敗したぞー');
         }
 
-        // キャッシュ用HTML
-        // const saveData = { html: html.html().trim() };
-        // //読み込み開始
-        // const json = JSON.parse(fs.readFileSync('json/list-dream.json', 'utf-8'));
-        // if (json.html == saveData.html) {
-        //   // 前回と値が変わってない
-        //   console.log("前回と値が変わってない");
-        //   //   return null;
-        // } else {
-        //   // 何かしら値が変わっているので続行
-        //   console.log("前回から値の変更あり");
-        //   fs.writeFile('json/list-dream.json', JSON.stringify(saveData, null, ""))
-        // }
-
         let sendData = {
           comment: html.find('#ticker_area').text().trim(), // 全体コメント
           updateTime: getUpdateTime(html.find('li.last').text()) // 更新日時
@@ -42,7 +27,6 @@ function run() {
 
         // 港別に取得してパース処理
         html.find('li').each(function(idx) {
-          // console.log('----------------');
           if (idx > 6) {
             return true; //最後のliタグは更新日時と時刻表リンクなのでループ抜ける
           }
@@ -88,7 +72,6 @@ function run() {
             html: $(this).html() //デバッグ用、後で消す
           }
           sendData[portCode] = port;
-          // console.log(portName + ' 完了');
         });
         // console.log('スクレイピング完了');
         // console.log(sendData);
@@ -105,8 +88,6 @@ function run() {
       })
       .finally(function() {
         console.log('完了 ' + COMPANY + ' 一覧');
-
-        // firebase.database().goOffline(); //プロセスが終わらない対策
         resolve()
       });
   });
@@ -127,19 +108,19 @@ function getPortCode(portName) {
   // 港id
   switch (portName) {
     case "竹富島":
-      return "taketomi";
+      return consts.TAKETOMI;
     case "小浜島":
-      return "kohama";
+      return consts.KOHAMA;
     case "黒島":
-      return "kuroshima";
+      return consts.KUROSHIMA;
     case "西表島・大原":
-      return "oohara";
+      return consts.OOHARA;
     case "鳩間島経由西表島・上原":
-      return "uehara_hatoma";
+      return consts.UEHARA_HATOMA;
     case "プレミアムドリーム":
-      return "premium_dream";
+      return consts.PREMIUM_DREAM;
     case "スーパードリーム":
-      return "super_dream";
+      return consts.SUPER_DREAM;
     default:
       return '';
   }

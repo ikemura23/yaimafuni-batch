@@ -8,7 +8,7 @@ const sendData = { today: '', tomorrow: '' };
 
 
 function run() {
-  console.log('天気 開始');
+  console.log('開始 天気');
   return new Promise(function(resolve) {
     client.fetch(URL)
       .then(function(result) {
@@ -20,9 +20,8 @@ function run() {
         console.log(error);
       })
       .finally(function() {
-        console.log('天気 完了');
+        console.log('完了 天気');
         resolve();
-        // firebase.database().goOffline(); //プロセスが終わらない対策
       })
   })
 }

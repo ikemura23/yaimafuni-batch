@@ -50,7 +50,6 @@ function run() {
     })
     .finally(function() {
       console.log('完了:' + COMPANY + '-詳細');
-      firebase.database().goOffline(); //プロセスが終わらない対策
     })
 }
 

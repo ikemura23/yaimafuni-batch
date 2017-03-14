@@ -1,14 +1,12 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
-
+const PORT = require('./consts.js');
 const COMPANY = 'ykf';
 const TABLE = COMPANY + '_status';
 const URL = 'http://www.yaeyama.co.jp/';
 const JSON_PATH = 'json/list-ykf.json';
 
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
-
-
 
 function run() {
   console.log('開始:' + COMPANY + ' 一覧');
@@ -17,35 +15,6 @@ function run() {
       .then(function(result) {
         const $ = result.$;
         if (!$) return null;
-
-        // const saveTag = { html: $('#unkou_bg_top').html().trim().replace(/\t/g, '') };
-        // console.log(html);
-        //読み込み開始
-        // try {
-        //   let json = { html: '' };
-
-        //   try {
-        //     fs.exists(JSON_PATH, function() {
-        //       json = JSON.parse(fs.readFileSync(JSON_PATH, 'utf-8') || "null");
-        //     });
-        //   } catch (error) {
-        //     console.log(JSON_PATH + "読み込み時にエラー発生");
-        //     console.log(error);
-        //   };
-
-        //   if (json.html == saveTag.html) {
-        //     // 前回と値が変わってない
-        //     console.log("前回と値が変わってない");
-        //     //   return null;
-        //   } else {
-        //     // 何かしら値が変わっているので続行
-        //     console.log("前回から値の変更あり");
-        //     fs.writeFile(JSON_PATH, JSON.stringify(saveTag, null, ""))
-        //   }
-        // } catch (error) {
-        //   console.log("json読み書きでエラー発生");
-        //   console.log(error);
-        // }
 
         const sendData = {
           comment: '',
@@ -57,8 +26,7 @@ function run() {
 
           // 港名
           let portName = $(this).find('div').eq(0).text();
-          //   console.log('----------------');
-          //   console.log(portName + ' 開始');
+
           // 港コード
           let portCode = getPortCode(portName);
 
@@ -98,7 +66,6 @@ function run() {
         // console.log('DB登録開始' + ':' + COMPANY);
         return firebase.database().ref(TABLE).set(data, function() {
           // console.log('DB登録完了' + ':' + COMPANY);
-          // firebase.database().goOffline(); //プロセスが終わらない対策
         })
       })
       .catch(function(error) {
@@ -107,35 +74,34 @@ function run() {
       })
       .finally(function() {
         console.log('完了' + ':' + COMPANY + ' 一覧');
-        // firebase.database().goOffline(); //プロセスが終わらない対策
         resolve()
       });
   });
 }
 
 // 港名から港コードを返す
-function getPortCode(port_name) {
+function getPortCode(portName) {
   // 港id
-  if (port_name === "竹富航路") {
-    return "taketomi";
-  } else if (port_name === "小浜航路") {
-    return "kohama";
-  } else if (port_name === "小浜－竹富航路") {
-    return "kohama-taketomi";
-  } else if (port_name === "黒島航路") {
-    return "kuroshima";
-  } else if (port_name === "小浜－大原航路") {
-    return "kohama-oohara";
-  } else if (port_name === "西表島大原航路") {
-    return "oohara";
-  } else if (port_name === "西表島上原航路") {
-    return "uehara";
-  } else if (port_name === "鳩間航路") {
-    return "hatoma";
+  if (portName === "竹富航路") {
+    return PORT.TAKETOMI;
+  } else if (portName === "小浜航路") {
+    return PORT.KOHAMA;
+  } else if (portName === "小浜－竹富航路") {
+    return PORT.KOHAMA_TAKETOMI;
+  } else if (portName === "黒島航路") {
+    return PORT.KUROSHIMA;
+  } else if (portName === "小浜－大原航路") {
+    return PORT.KOHAMA_OOHARA;
+  } else if (portName === "西表島大原航路") {
+    return PORT.OOHARA;
+  } else if (portName === "西表島上原航路") {
+    return PORT.UEHARA;
+  } else if (portName === "鳩間航路") {
+    return PORT.HATOMA;
   }
 }
 
-// クラス名を取得
+// 記号から運行ステータスを判別
 function getStatusCode(kigou) {
   if (kigou == '△') {
     return "cation";
