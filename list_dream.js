@@ -1,6 +1,7 @@
 const client = require('cheerio-httpcli');
-const fs = require('fs');
+// const fs = require('fs');
 const firebase = require("firebase");
+const consts = require('./consts.js');
 
 const COMPANY = 'dream';
 const TABLE = COMPANY + '_status';
@@ -148,13 +149,17 @@ function getPortCode(portName) {
 function getStatusCode(className) {
   switch (className) {
     case 'pcan':
-      return "cation";
+      return consts.CATION;
     case 'can':
-      return "cancel";
+      return consts.CANCEL;
+    case 'sus':
+      return consts.SUSPEND; // 運休
+    case 'sub':
+      return consts.NORMAL; // 臨時便にて運航
     case '':
-      return "normal";
+      return consts.NORMAL;
     default:
-      return "cation";
+      return consts.CATION;
   }
 }
 

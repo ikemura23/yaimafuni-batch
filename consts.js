@@ -18,6 +18,7 @@ exports.KOHAMA_TAKETOMI = "kohama-taketomi";
 exports.KOHAMA_OOHARA = "kohama-oohara";
 exports.UEHARA_HATOMA = "uehara-hatoma";
 
-exports.CANCEL = "cancel";
-exports.CATION = "cation";
-exports.NORMAL = "normal";
+exports.CANCEL = "cancel"; // 欠航
+exports.CATION = "cation"; // 注意
+exports.NORMAL = "normal"; // 運行
+exports.SUSPEND = "suspend"; // 運休

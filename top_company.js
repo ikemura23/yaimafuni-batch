@@ -53,6 +53,7 @@ function createStatus(statuses, company) {
     comment: '',
     cationFlag: false,
     cancelFlag: false,
+    suspendFlag: false,
     allNormalFlag: false
   }
   if (statuses.filter((value) => value == consts.CANCEL)) {
@@ -63,6 +64,11 @@ function createStatus(statuses, company) {
     if (data.comment.length) data.comment += ',';
     data.comment += '注意';
     data.cationFlag = true;
+  }
+  if (statuses.indexOf(consts.SUSPEND) > 0) {
+    if (data.comment.length) data.comment += ',';
+    data.comment += '運休';
+    data.suspendFlag = true;
   }
 
   if (data.comment.length == '') {
