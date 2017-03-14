@@ -1,3 +1,7 @@
+exports.ANEI = "anei";
+exports.YKF = "ykf";
+exports.DREAM = "dream";
+
 // anei ykf dream共通
 exports.TAKETOMI = "taketomi";
 exports.KOHAMA = "kohama";

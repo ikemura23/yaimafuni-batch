@@ -1,7 +1,8 @@
 const firebase = require("firebase");
 const consts = require('./consts.js');
 
-const TABLE_NAME = 'top_company/anei';
+const TABLE = 'top_company/';
+const sendData = {};
 /*
 firebaseから一覧を読み込む
 読み込み完了後、1社ずつステータスを判定して結果を変数に格納
@@ -9,11 +10,27 @@ firebaseから一覧を読み込む
 変数をDBに登録
 */
 
+function createTopCompanyStatus(company) {
+  return readFirebase(getReadTableName(company))
+    .then((statuses) => createStatus(statuses, company));
+}
+
+function getReadTableName(company) {
+  switch (company) {
+    case consts.ANEI:
+      return 'anei_status';
+    case consts.YKF:
+      return 'ykf_status';
+    case consts.DREAM:
+      return 'dream_status';
+  }
+}
+
 /**
  * DBからanei_statusを取得してstatus.codeのみを取得
  */
-function readFirebase() {
-  return firebase.database().ref('/anei_status/').once('value')
+function readFirebase(tableName) {
+  return firebase.database().ref(tableName).once('value')
     .then(function(snapshot) {
       const statuses = [];
       snapshot.forEach(function(element) {
@@ -29,40 +46,45 @@ function readFirebase() {
  * 配列の運行結果をみて運行コメントを作成する
  * @param {aneiの運行結果配列} statuses 
  */
-function createAneiTopStatus(statuses) {
+function createStatus(statuses, company) {
   // console.log(statuses);
-  let comment = '';
-  if (statuses.indexOf(consts.CANCEL) > 0) {
-    //欠航あり
-    comment += '欠航あり';
+
+  const data = {
+    comment: '',
+    cationFlag: false,
+    cancelFlag: false,
+    allNormalFlag: false
+  }
+  if (statuses.filter((value) => value == consts.CANCEL)) {
+    data.comment += '欠航';
+    data.cancelFlag = true;
   }
   if (statuses.indexOf(consts.CATION) > 0) {
-    if (comment.length) comment += ' ';
-    //注意あり
-    comment += '注意あり';
+    if (data.comment.length) data.comment += ',';
+    data.comment += '注意';
+    data.cationFlag = true;
   }
 
-  if (comment.length == '') {
+  if (data.comment.length == '') {
     // 欠航も注意も未定もなし＝すべて運行
-    comment = '全便運行';
+    data.comment = '全便運行';
+    data.allNormalFlag = true;
+  } else {
+    data.comment += 'あり';
   }
-  const sendData = {
-      comment: comment
-    }
-    // console.log(comment);
-    // return Promise.resolve(sendData);
-  return sendData;
+
+  sendData[company] = data;
+
 }
 
 /**
  * firebaseへ送信
- * @param {送信する値} sendData 
  */
-function sendFirebase(sendData) {
+function sendFirebase() {
   // console.log('DB登録開始');
-  return firebase.database().ref(TABLE_NAME).update(sendData, function() {
+  // console.log(sendData)
+  return firebase.database().ref(TABLE).update(sendData, function() {
     // console.log('DB登録完了');
-    // firebase.database().goOffline(); //プロセスが終わらない対策
   })
 }
 
@@ -72,13 +94,13 @@ function sendFirebase(sendData) {
 function run() {
   return Promise.resolve()
     .then(() => console.log('開始 トップ 会社別'))
-    .then(() => readFirebase())
-    .then(data => createAneiTopStatus(data))
-    .then(sendData => sendFirebase(sendData))
+    .then(() => createTopCompanyStatus(consts.ANEI))
+    .then(() => createTopCompanyStatus(consts.YKF))
+    .then(() => createTopCompanyStatus(consts.DREAM))
+    .then(() => sendFirebase())
     .then(() => console.log('完了 トップ 会社別'))
     .catch(function(e) {
       console.log(e);
     })
 }
-// run()
 module.exports = run;
