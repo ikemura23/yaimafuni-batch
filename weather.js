@@ -33,12 +33,11 @@ function run() {
 function perseAndSend($) {
   return new Promise((resolve) => {
 
-    // console.log('スクレイピング 開始');
     $("div.forecastCity > table > tr > td").each(function(idx) {
-      // putHtmlLog($(this));
       let value = {
         date: $(this).find("p.date").text(), //日付
-        temp: {
+        weather: $(this).find("p.pict").text(), //天気
+        temperature: {
           hight: $(this).find("ul > li.high").text(), //最高 気温
           low: $(this).find("ul > li.low").text() //最高 気温
         },
@@ -52,9 +51,7 @@ function perseAndSend($) {
         // 明日
         sendData.tomorrow = value;
       }
-      // console.log(value);
     });
-    // console.log('スクレイピング 完了');
 
     resolve(sendData);
   })
