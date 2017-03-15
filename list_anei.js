@@ -18,7 +18,8 @@ function run() {
 
         let sendData = {
           comment: $('div.content_wrap').find('p.all-note').text().trim(), // 全体コメント
-          updateTime: $('div.service').find('h3').find('span').text().trim() // 更新日時
+          updateTime: $('div.service').find('h3').find('span').text().trim(), // 更新日時
+          statuses: {}
         };
 
         // 一覧ステータス
@@ -51,7 +52,7 @@ function run() {
             },
             comment: chips_comment
           }
-          sendData[port_code] = port;
+          sendData.statuses[port_code] = port;
 
         });
         // console.log('スクレイピング完了:' + COMPANY);

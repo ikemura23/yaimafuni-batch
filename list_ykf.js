@@ -18,7 +18,8 @@ function run() {
 
         const sendData = {
           comment: '',
-          updateTime: $('div.unkou_time_top').html().trim() // 更新日時
+          updateTime: $('div.unkou_time_top').html().trim(), // 更新日時
+          statuses: {}
         }
 
         // 港別に取得してパース処理
@@ -47,7 +48,7 @@ function run() {
               text: statusText
             }
           }
-          sendData[portCode] = port;
+          sendData.statuses[portCode] = port;
           //   console.log(portName + ' 完了');
         });
         return sendData;

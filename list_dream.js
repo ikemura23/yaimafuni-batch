@@ -22,7 +22,8 @@ function run() {
 
         let sendData = {
           comment: html.find('#ticker_area').text().trim(), // 全体コメント
-          updateTime: getUpdateTime(html.find('li.last').text()) // 更新日時
+          updateTime: getUpdateTime(html.find('li.last').text()), // 更新日時
+          statuses: {}
         }
 
         // 港別に取得してパース処理
@@ -60,7 +61,7 @@ function run() {
               text: statusText
             }
           }
-          sendData[portCode] = port;
+          sendData.statuses[portCode] = port;
         });
         // console.log('スクレイピング完了');
         // console.log(sendData);

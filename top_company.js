@@ -18,11 +18,11 @@ function createTopCompanyStatus(company) {
 function getReadTableName(company) {
   switch (company) {
     case consts.ANEI:
-      return 'anei_status';
+      return 'anei_status/statuses';
     case consts.YKF:
-      return 'ykf_status';
+      return 'ykf_status/statuses';
     case consts.DREAM:
-      return 'dream_status';
+      return 'dream_status/statuses';
   }
 }
 
