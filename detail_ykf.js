@@ -1,6 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const consts = require('./consts.js');
+const sendError = require('./slack');
 
 const COMPANY = 'ykf';
 const URL = 'http://www.yaeyama.co.jp/situation.php';
@@ -44,10 +45,7 @@ function run() {
     .then(function() {
       return perseAndSend(consts.UEHARA_HATOMA); // 上原-鳩間
     })
-    .catch(function(error) {
-      console.log('Error');
-      console.log(error);
-    })
+    .catch((error) => sendError(error))
     .finally(function() {
       console.log('完了:' + COMPANY + '-詳細');
     })

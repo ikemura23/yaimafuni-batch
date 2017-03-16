@@ -1,5 +1,6 @@
 const firebase = require("firebase");
 const consts = require('./consts.js');
+const sendError = require('./slack');
 
 const TABLE = 'top_company/';
 const sendData = {};
@@ -104,9 +105,7 @@ function run() {
     .then(() => createTopCompanyStatus(consts.YKF))
     .then(() => createTopCompanyStatus(consts.DREAM))
     .then(() => sendFirebase())
+    .catch((error) => sendError(error))
     .then(() => console.log('完了 トップ 会社別'))
-    .catch(function(e) {
-      console.log(e);
-    })
 }
 module.exports = run;

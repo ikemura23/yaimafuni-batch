@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "cheerio-httpcli": "^0.6.11",
-    "firebase": "^3.6.10"
+    "firebase": "^3.6.10",
+    "slack-node": "^0.1.8"
   }
 }

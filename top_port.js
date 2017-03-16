@@ -1,5 +1,6 @@
 const firebase = require("firebase");
 const consts = require('./consts.js');
+const sendError = require('./slack');
 
 const TABLE = 'top_port/';
 const sendData = {};
@@ -28,10 +29,8 @@ function run() {
     .then(() => createStatus(consts.HATOMA))
     .then(() => createStatus(consts.HATERUMA))
     .then(() => sendFirebase())
+    .catch((error) => sendError(error))
     .then(() => console.log('完了 トップ 港別'))
-    .catch(function(e) {
-      console.log(e);
-    })
 }
 
 function readAllData() {

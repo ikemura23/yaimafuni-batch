@@ -1,11 +1,10 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
+const sendError = require('./slack');
 
 const URL = 'http://weather.yahoo.co.jp/weather/jp/47/9410.html';
 const TABLE = "weather";
 const sendData = { today: '', tomorrow: '' };
-
-
 
 function run() {
   console.log('開始 天気');
@@ -15,10 +14,7 @@ function run() {
         return perseAndSend(result.$);
       })
       .then(sendData => saveToFirebase(sendData))
-      .catch(function(error) {
-        console.log('Error');
-        console.log(error);
-      })
+      .catch((error) => sendError(error))
       .finally(function() {
         console.log('完了 天気');
         resolve();

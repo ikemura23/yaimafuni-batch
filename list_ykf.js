@@ -1,6 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const PORT = require('./consts.js');
+const sendError = require('./slack');
 
 const COMPANY = 'ykf';
 const TABLE = COMPANY + '_status';
@@ -60,10 +61,7 @@ function run() {
           // console.log('DB登録完了' + ':' + COMPANY);
         })
       })
-      .catch(function(error) {
-        console.log('エラー発生' + ':' + COMPANY);
-        console.log(error);
-      })
+      .catch((error) => sendError(error))
       .finally(function() {
         console.log('完了' + ':' + COMPANY + ' 一覧');
         resolve()

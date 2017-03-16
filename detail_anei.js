@@ -1,6 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const consts = require('./consts.js');
+const sendError = require('./slack');
 
 const COMPANY = 'anei';
 const TABLE = COMPANY + '_status_detail_';
@@ -40,10 +41,7 @@ function run() {
     .then(function() {
       return sendFirebase(consts.HATERUMA);
     })
-    .catch(function(error) {
-      console.log('Error');
-      console.log(error);
-    })
+    .catch((error) => sendError(error))
     .finally(function() {
       console.log('完了:' + COMPANY + '-詳細');
       //   firebase.database().goOffline(); //プロセスが終わらない対策

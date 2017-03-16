@@ -1,6 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const consts = require('./consts.js');
+const sendError = require('./slack');
 
 const COMPANY = consts.ANEI;
 const TABLE = COMPANY + '_status';
@@ -15,7 +16,9 @@ function run() {
     client.fetch(URL)
       .then(function(result) {
         var $ = result.$;
-
+        // if ($.html.length == 0) {
+        //   throw new Error(COMPANY + "一覧 HTMLの取得に失敗しました");
+        // }
         let sendData = {
           comment: $('div.content_wrap').find('p.all-note').text().trim(), // 全体コメント
           updateTime: $('div.service').find('h3').find('span').text().trim(), // 更新日時
@@ -62,10 +65,7 @@ function run() {
         // console.log('DB登録開始');
         return firebase.database().ref(TABLE).set(data);
       })
-      .catch(function(error) {
-        console.log('エラー発生');
-        console.log(error);
-      })
+      .catch((error) => sendError(error))
       .finally(function() {
         console.log('完了 ' + COMPANY + ' 一覧');
         resolve()
