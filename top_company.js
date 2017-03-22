@@ -57,21 +57,29 @@ function createStatus(statuses, company) {
     suspendFlag: false,
     allNormalFlag: false
   }
-  if (statuses.filter((value) => value == consts.CANCEL)) {
+
+  // 欠航 があるか？
+  if (statuses.indexOf(consts.CANCEL) > 0) {
+    console.log(consts.CANCEL);
     data.comment += '欠航';
     data.cancelFlag = true;
   }
+
+  // 注意 があるか？
   if (statuses.indexOf(consts.CATION) > 0) {
     if (data.comment.length) data.comment += ',';
     data.comment += '注意';
     data.cationFlag = true;
   }
+
+  // 運休 があるか？
   if (statuses.indexOf(consts.SUSPEND) > 0) {
     if (data.comment.length) data.comment += ',';
     data.comment += '運休';
     data.suspendFlag = true;
   }
 
+  // すべて運行か？
   if (data.comment.length == '') {
     // 欠航も注意も未定もなし＝すべて運行
     data.comment = '全便運行';
@@ -81,7 +89,6 @@ function createStatus(statuses, company) {
   }
 
   sendData[company] = data;
-
 }
 
 /**
