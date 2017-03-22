@@ -1,0 +1,11 @@
+{
+  "firebase": {
+    "apiKey": "AIzaSyB0bKf_bGMHP62fiQD4D00bG_vdm_RNb5A",
+    "authDomain": "yaima-funi.firebaseapp.com",
+    "databaseURL": "https://yaima-funi.firebaseio.com",
+    "storageBucket": "yaima-funi.appspot.com"
+  },
+  "slack": {
+    "webHookUrl": "https://hooks.slack.com/services/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"
+  }
+}
