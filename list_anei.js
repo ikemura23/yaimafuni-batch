@@ -65,7 +65,7 @@ function run() {
         // console.log('DB登録開始');
         return firebase.database().ref(TABLE).set(data);
       })
-      .catch((error) => sendError(error))
+      .catch((error) => sendError(error.stack))
       .finally(function() {
         console.log('完了 ' + COMPANY + ' 一覧');
         resolve()

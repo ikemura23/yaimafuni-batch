@@ -61,7 +61,7 @@ function run() {
           // console.log('DB登録完了' + ':' + COMPANY);
         })
       })
-      .catch((error) => sendError(error))
+      .catch((error) => sendError(error.stack))
       .finally(function() {
         console.log('完了' + ':' + COMPANY + ' 一覧');
         resolve()
