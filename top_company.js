@@ -60,7 +60,6 @@ function createStatus(statuses, company) {
 
   // 欠航 があるか？
   if (statuses.indexOf(consts.CANCEL) > 0) {
-    console.log(consts.CANCEL);
     data.comment += '欠航';
     data.cancelFlag = true;
   }
@@ -112,7 +111,7 @@ function run() {
     .then(() => createTopCompanyStatus(consts.YKF))
     .then(() => createTopCompanyStatus(consts.DREAM))
     .then(() => sendFirebase())
-    .catch((error) => sendError(error))
+    .catch((error) => sendError(error.stack))
     .then(() => console.log('完了 トップ 会社別'))
 }
 module.exports = run;

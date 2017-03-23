@@ -45,7 +45,7 @@ function run() {
     .then(function() {
       return perseAndSend(consts.UEHARA_HATOMA); // 上原-鳩間
     })
-    .catch((error) => sendError(error))
+    .catch((error) => sendError(error.stack))
     .finally(function() {
       console.log('完了:' + COMPANY + '-詳細');
     })

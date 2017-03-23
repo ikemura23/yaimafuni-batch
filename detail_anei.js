@@ -41,7 +41,7 @@ function run() {
     .then(function() {
       return sendFirebase(consts.HATERUMA);
     })
-    .catch((error) => sendError(error))
+    .catch((error) => sendError(error.stack))
     .finally(function() {
       console.log('完了:' + COMPANY + '-詳細');
       //   firebase.database().goOffline(); //プロセスが終わらない対策

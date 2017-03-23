@@ -29,7 +29,7 @@ function run() {
     .then(() => createStatus(consts.HATOMA))
     .then(() => createStatus(consts.HATERUMA))
     .then(() => sendFirebase())
-    .catch((error) => sendError(error))
+    .catch((error) => sendError(error.stack))
     .then(() => console.log('完了 トップ 港別'))
 }
 
