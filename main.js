@@ -22,7 +22,6 @@ const slack = require('./slack');
 
 Promise.resolve()
   .then(() => console.log('main start'))
-  .then(() => slack('バックエンド 起動'))
   .then(() => AneiList())
   .then(() => YkfList())
   .then(() => DreamList())
