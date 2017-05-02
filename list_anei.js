@@ -4,7 +4,7 @@ const consts = require('./consts.js');
 const sendError = require('./slack');
 
 const COMPANY = consts.ANEI;
-const TABLE = COMPANY + '_status';
+const TABLE_NAME = COMPANY + '/list';
 const URL = 'http://www.aneikankou.co.jp';
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
@@ -22,7 +22,7 @@ function run() {
         let sendData = {
           comment: $('div.content_wrap').find('p.all-note').text().trim(), // 全体コメント
           updateTime: $('div.service').find('h3').find('span').text().trim(), // 更新日時
-          statuses: {}
+          ports: []
         };
 
         // 一覧ステータス
@@ -47,15 +47,15 @@ function run() {
           var chips_comment = chips.find("div").find("p").text().trim();
 
           var port = {
-            code: port_code,
-            name: port_name,
+            portCode: port_code,
+            portName: port_name,
             status: {
               code: statusCode,
               text: statusText
             },
             comment: chips_comment
           }
-          sendData.statuses[port_code] = port;
+          sendData.ports.push(port);
 
         });
         // console.log('スクレイピング完了:' + COMPANY);
@@ -63,7 +63,7 @@ function run() {
       })
       .then(function(data) {
         // console.log('DB登録開始');
-        return firebase.database().ref(TABLE).set(data);
+        return firebase.database().ref(TABLE_NAME).set(data);
       })
       .catch((error) => sendError(error.stack))
       .finally(function() {
