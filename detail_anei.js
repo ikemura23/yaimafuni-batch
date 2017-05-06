@@ -1,25 +1,33 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
+const config = require("./config.json");
+const firebaseConfig = {
+  databaseURL: config.firebase.databaseURL
+};
+firebase.initializeApp(firebaseConfig);
 const consts = require('./consts.js');
 const sendError = require('./slack');
 
 const COMPANY = 'anei';
-const TABLE = COMPANY + '_status_detail_';
+const TABLE = COMPANY + '/detail';
 const URL = 'http://www.aneikankou.co.jp';
 const sendData = new Map();
-
+let ports = new Map();
+run()
 function run() {
   console.log('開始:' + COMPANY + '-詳細');
 
-  return client.fetch(URL)
-    .then(function(result) {
-      return new Promise(function(resolve, reject) {
-        resolve(result.$);
-      })
-    })
-    .then(function($) {
-      return setDetailData($);
-    })
+  // return client.fetch(URL)
+  //   .then(function(result) {
+  //     return new Promise(function(resolve, reject) {
+  //       resolve(result.$);
+  //     })
+  //   })
+
+  Promise.resolve()
+    .then(() => getStatusFromFirebase())
+    .then(() => getHtmlContents())
+    .then(($) => setDetailData($))    
     .then(function() {
       return sendFirebase(consts.TAKETOMI);
     })
@@ -41,20 +49,32 @@ function run() {
     .then(function() {
       return sendFirebase(consts.HATERUMA);
     })
-    .catch((error) => sendError(error.stack))
-    .finally(function() {
+    // .catch((error) => sendError(error.stack))
+    .then(function() {
       console.log('完了:' + COMPANY + '-詳細');
-      //   firebase.database().goOffline(); //プロセスが終わらない対策
+        firebase.database().goOffline(); //プロセスが終わらない対策
     })
 }
 
 /**
- * 
- * @param {タグ全体} $ 
+ * HTMLコンテンツを取得
+ */
+function getHtmlContents() {
+  return client.fetch(URL)
+    .then(function (result) {
+      return new Promise(function (resolve) {
+        resolve(result.$);
+      })
+    })
+}
+
+/**
+ * HTMLから詳細データを作成
+ * @param {HTMLコンテンツ} $ 
  */
 function setDetailData($) {
 
-  $('#situation div ul.route li').each(function(idx) {
+  $('#situation div ul.route li').each(function (idx) {
     var arreaTag = $(this).find('div').eq(0);
 
     // 港名
@@ -65,18 +85,28 @@ function setDetailData($) {
     var portCode = getPortCode(portName);
     // console.log(port_code);
 
-    // ステータス名
-    var statusText = arreaTag.find('span').eq(1).text();
-    // console.log(status_text);
+    // // ステータス名
+    // var statusText = arreaTag.find('span').eq(1).text();
+    // // console.log(status_text);
 
-    // クラス名
-    var statusCode = getStatusCode(arreaTag);
-    // console.log(tag_status_span);
+    // // クラス名
+    // var statusCode = getStatusCode(arreaTag);
+    // // console.log(tag_status_span);
 
-    // チップス
-    var chips = $(this).find('div').eq(1);
-    // 港別コメント
-    var comment = chips.find("div").find("p").text().trim();
+    // // チップス
+    // var chips = $(this).find('div').eq(1);
+    // // 港別コメント
+    // var comment = chips.find("div").find("p").text().trim();
+
+    // 詳細ステータスは自分で作らず、firebaseの一覧から取得して作成する
+    const portStatus = getPortStatus(portCode);
+    const detailData = {
+      portName: portName,
+      portCode: portCode,
+      comment: portStatus.comment,
+      status: portStatus.status,
+      timeTable: null
+    }
 
     // 詳細テーブル用の変数
     let timeTable = {
@@ -87,7 +117,7 @@ function setDetailData($) {
       row: []
     };
 
-    $(this).find('table > tr').each(function(idx) {
+    $(this).find('table > tr').each(function (idx) {
 
       if ($(this).has('th').text().length > 0) {
         //ヘッダー
@@ -119,17 +149,30 @@ function setDetailData($) {
         }
         timeTable.row.push(row);
       }
-      //   putHtmlLog($(this));
+      detailData.timeTable = timeTable;
+      // putHtmlLog($(this));
     });
 
-    sendData.set(portCode, timeTable);
+    sendData.set(portCode, detailData);
   });
   // console.log(sendData);
-  //   console.log('スクレイピング完了');
-  return new Promise(function(resolve) {
+    console.log('スクレイピング完了');
+  return new Promise(function (resolve) {
     resolve()
   })
 };
+
+function getPortStatus(targetPortCode) {
+  let portStatus;
+  ports.forEach(function(val, key) {
+    if (val.portCode == targetPortCode) {
+      portStatus = val;
+      return false;
+    }
+  })
+  // console.log(targetPortData)
+  return portStatus;
+}
 
 function putHtmlLog(value) {
   console.log(value.html().trim().replace(/\t/g, ''));
@@ -198,16 +241,33 @@ function getStatusCode(arreaTag) {
  */
 function sendFirebase(targetPort) {
   // console.log(timeTable);
-  const tableName = TABLE + targetPort;
-  //   console.log('DB登録開始:' + tableName);
-  return new Promise(function(resolve, reject) {
+  const tableName = TABLE + '/' + targetPort;
+    console.log('DB登録開始:' + tableName);
+  return new Promise(function (resolve, reject) {
     firebase.database()
       .ref(tableName)
-      .set(sendData.get(targetPort), function() {
-        // console.log('DB登録完了');
+      .set(sendData.get(targetPort), function () {
+        console.log('DB登録完了');
         resolve();
       })
   });
 };
+
+/**
+ * 一覧のステータスを取得して変数に格納しておく
+ */
+function getStatusFromFirebase() {
+  tableName = 'anei/list/ports'
+  return firebase.database()
+    .ref(tableName)
+    .once('value')
+    .then(function (snapshot) {
+      // console.log(snapshot.val());
+      snapshot.val().forEach(function (e, i) {
+        ports.set(e.portCode, e);
+      });
+      // console.log(ports);
+    })
+}
 
 module.exports = run;
