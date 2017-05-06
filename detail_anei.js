@@ -1,10 +1,5 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
-const config = require("./config.json");
-const firebaseConfig = {
-  databaseURL: config.firebase.databaseURL
-};
-firebase.initializeApp(firebaseConfig);
 const consts = require('./consts.js');
 const sendError = require('./slack');
 
@@ -13,47 +8,39 @@ const TABLE = COMPANY + '/detail';
 const URL = 'http://www.aneikankou.co.jp';
 const sendData = new Map();
 let ports = new Map();
-run()
-function run() {
+
+module.exports = () => {
   console.log('開始:' + COMPANY + '-詳細');
-
-  // return client.fetch(URL)
-  //   .then(function(result) {
-  //     return new Promise(function(resolve, reject) {
-  //       resolve(result.$);
-  //     })
-  //   })
-
   Promise.resolve()
     .then(() => getStatusFromFirebase())
     .then(() => getHtmlContents())
-    .then(($) => setDetailData($))    
-    .then(function() {
+    .then(($) => setDetailData($))
+    .then(function () {
       return sendFirebase(consts.TAKETOMI);
     })
-    .then(function() {
+    .then(function () {
       return sendFirebase(consts.KOHAMA);
     })
-    .then(function() {
+    .then(function () {
       return sendFirebase(consts.KUROSHIMA);
     })
-    .then(function() {
+    .then(function () {
       return sendFirebase(consts.OOHARA);
     })
-    .then(function() {
+    .then(function () {
       return sendFirebase(consts.UEHARA);
     })
-    .then(function() {
+    .then(function () {
       return sendFirebase(consts.HATOMA);
     })
-    .then(function() {
+    .then(function () {
       return sendFirebase(consts.HATERUMA);
     })
-    // .catch((error) => sendError(error.stack))
-    .then(function() {
-      console.log('完了:' + COMPANY + '-詳細');
-        firebase.database().goOffline(); //プロセスが終わらない対策
-    })
+    .catch((error) => sendError(error.stack))
+  // .then(function() {
+  //   console.log('完了:' + COMPANY + '-詳細');
+  //     firebase.database().goOffline(); //プロセスが終わらない対策
+  // })
 }
 
 /**
@@ -84,19 +71,6 @@ function setDetailData($) {
     // 港id
     var portCode = getPortCode(portName);
     // console.log(port_code);
-
-    // // ステータス名
-    // var statusText = arreaTag.find('span').eq(1).text();
-    // // console.log(status_text);
-
-    // // クラス名
-    // var statusCode = getStatusCode(arreaTag);
-    // // console.log(tag_status_span);
-
-    // // チップス
-    // var chips = $(this).find('div').eq(1);
-    // // 港別コメント
-    // var comment = chips.find("div").find("p").text().trim();
 
     // 詳細ステータスは自分で作らず、firebaseの一覧から取得して作成する
     const portStatus = getPortStatus(portCode);
@@ -155,8 +129,7 @@ function setDetailData($) {
 
     sendData.set(portCode, detailData);
   });
-  // console.log(sendData);
-    console.log('スクレイピング完了');
+  // console.log('スクレイピング完了');
   return new Promise(function (resolve) {
     resolve()
   })
@@ -164,13 +137,12 @@ function setDetailData($) {
 
 function getPortStatus(targetPortCode) {
   let portStatus;
-  ports.forEach(function(val, key) {
+  ports.forEach(function (val, key) {
     if (val.portCode == targetPortCode) {
       portStatus = val;
       return false;
     }
   })
-  // console.log(targetPortData)
   return portStatus;
 }
 
@@ -240,14 +212,13 @@ function getStatusCode(arreaTag) {
  * DBへ登録
  */
 function sendFirebase(targetPort) {
-  // console.log(timeTable);
   const tableName = TABLE + '/' + targetPort;
-    console.log('DB登録開始:' + tableName);
+  // console.log('DB登録開始:' + tableName);
   return new Promise(function (resolve, reject) {
     firebase.database()
       .ref(tableName)
       .set(sendData.get(targetPort), function () {
-        console.log('DB登録完了');
+        // console.log('DB登録完了');
         resolve();
       })
   });
@@ -262,12 +233,8 @@ function getStatusFromFirebase() {
     .ref(tableName)
     .once('value')
     .then(function (snapshot) {
-      // console.log(snapshot.val());
       snapshot.val().forEach(function (e, i) {
         ports.set(e.portCode, e);
       });
-      // console.log(ports);
     })
 }
-
-module.exports = run;
