@@ -93,17 +93,19 @@ function setDetailData($) {
         // 時間別ステータス 
         // <tr><td class="time">08：15</td><td class="check circle">通常運航</td><td class="time">-</td><td class="check ">-</td></tr>
         // console.log('ボディ');
-
+        
         let row = {
           left: {
-            time: $(this).find('td').eq(0).text().trim(),
+            time: $(this).find('td').eq(0).contents().eq(0).text().trim(),
+            memo: $(this).find('td').eq(0).contents().eq(2).text().trim(),
             status: {
               code: getRowStatusCode($(this).find('td').eq(1)),
               text: $(this).find('td').eq(1).text().trim()
             }
           },
           right: {
-            time: $(this).find('td').eq(2).text().trim(),
+            time: $(this).find('td').eq(2).contents().eq(0).text().trim(),
+            memo: $(this).find('td').eq(2).contents().eq(2).text().trim(),
             status: {
               code: getRowStatusCode($(this).find('td').eq(3)),
               text: $(this).find('td').eq(3).text().trim()
