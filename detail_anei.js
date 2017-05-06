@@ -9,33 +9,22 @@ const URL = 'http://www.aneikankou.co.jp';
 const sendData = new Map();
 let ports = new Map();
 
+/**
+ * メイン処理
+ */
 module.exports = () => {
   console.log('開始:' + COMPANY + '-詳細');
   Promise.resolve()
     .then(() => getStatusFromFirebase())
     .then(() => getHtmlContents())
     .then(($) => setDetailData($))
-    .then(function () {
-      return sendFirebase(consts.TAKETOMI);
-    })
-    .then(function () {
-      return sendFirebase(consts.KOHAMA);
-    })
-    .then(function () {
-      return sendFirebase(consts.KUROSHIMA);
-    })
-    .then(function () {
-      return sendFirebase(consts.OOHARA);
-    })
-    .then(function () {
-      return sendFirebase(consts.UEHARA);
-    })
-    .then(function () {
-      return sendFirebase(consts.HATOMA);
-    })
-    .then(function () {
-      return sendFirebase(consts.HATERUMA);
-    })
+    .then(() => sendFirebase(consts.TAKETOMI))
+    .then(() => sendFirebase(consts.KOHAMA))
+    .then(() => sendFirebase(consts.KUROSHIMA))
+    .then(() => sendFirebase(consts.OOHARA))
+    .then(() => sendFirebase(consts.UEHARA))
+    .then(() => sendFirebase(consts.HATOMA))
+    .then(() => sendFirebase(consts.HATERUMA))
     .catch((error) => sendError(error.stack))
   // .then(function() {
   //   console.log('完了:' + COMPANY + '-詳細');
@@ -135,6 +124,9 @@ function setDetailData($) {
   })
 };
 
+/**
+ * ports変数から引数の港の運行ステータスを取得する
+ */
 function getPortStatus(targetPortCode) {
   let portStatus;
   ports.forEach(function (val, key) {
@@ -146,6 +138,9 @@ function getPortStatus(targetPortCode) {
   return portStatus;
 }
 
+/**
+ * デバッグ用 htmlタグを出力
+ */
 function putHtmlLog(value) {
   console.log(value.html().trim().replace(/\t/g, ''));
 }
