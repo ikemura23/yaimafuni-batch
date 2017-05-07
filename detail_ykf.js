@@ -3,51 +3,38 @@ const firebase = require("firebase");
 const consts = require('./consts.js');
 const sendError = require('./slack');
 
-const COMPANY = 'ykf';
+const COMPANY = consts.YKF;
 const URL = 'http://www.yaeyama.co.jp/situation.php';
-const TABLE = COMPANY + '_status_detail_';
-// const sendData = {};
+const TABLE = COMPANY + '/detail/';
 let $;
+const ports = new Map();
 
-function run() {
+module.exports = () => {
   console.log('開始:' + COMPANY + '-詳細');
+  return Promise.resolve()
+    .then(() => getStatusFromFirebase())
+    .then(() => getHtmlContents())
+    .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
+    .then(() => perseAndSend(consts.KOHAMA))    // 小浜
+    .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
+    .then(() => perseAndSend(consts.OOHARA))    // 大原
+    .then(() => perseAndSend(consts.UEHARA))    // 上原
+    .then(() => perseAndSend(consts.HATOMA))    // 鳩間
+    // .then(() => perseAndSend(consts.KOHAMA_TAKETOMI)) // 小浜-竹富
+    // .then(() => perseAndSend(consts.KOHAMA_OOHARA)) // 小浜-大原
+    // .then(() => perseAndSend(consts.UEHARA_HATOMA)) // 上原-鳩間
+    .catch((error) => sendError(error.stack))
+    // .then(() => console.log('完了:' + COMPANY + '-詳細'))
+    // .catch((error) => console.log(error))
+}
+
+function getHtmlContents() {
   return client.fetch(URL)
-    .then(function(result) {
-      return new Promise(function(resolve, reject) {
+    .then(function (result) {
+      return new Promise(function (resolve) {
         $ = result.$;
         resolve();
       })
-    })
-    .then(function() {
-      return perseAndSend(consts.TAKETOMI); // 竹富
-    })
-    .then(function() {
-      return perseAndSend(consts.KOHAMA); // 小浜
-    })
-    .then(function() {
-      return perseAndSend(consts.KUROSHIMA); // 黒島
-    })
-    .then(function() {
-      return perseAndSend(consts.OOHARA); // 大原
-    })
-    .then(function() {
-      return perseAndSend(consts.UEHARA); // 上原
-    })
-    .then(function() {
-      return perseAndSend(consts.HATOMA); // 鳩間
-    })
-    .then(function() {
-      return perseAndSend(consts.KOHAMA_TAKETOMI); // 小浜-竹富
-    })
-    .then(function() {
-      return perseAndSend(consts.KOHAMA_OOHARA); // 小浜-大原
-    })
-    .then(function() {
-      return perseAndSend(consts.UEHARA_HATOMA); // 上原-鳩間
-    })
-    .catch((error) => sendError(error.stack))
-    .finally(function() {
-      console.log('完了:' + COMPANY + '-詳細');
     })
 }
 
@@ -60,6 +47,15 @@ function perseAndSend(portCode) {
   const selecotr = getSelectorString(portCode);
   // putHtmlLog(selecotr).find('td');
 
+  const portStatus = getPortStatus(portCode);
+  const detailData = {
+    portName: portStatus.portName,
+    portCode: portCode,
+    comment: portStatus.comment,
+    status: portStatus.status,
+    timeTable: {}
+  }
+
   // 詳細テーブル用の変数
   let timeTable = {
     header: {
@@ -70,7 +66,7 @@ function perseAndSend(portCode) {
   };
 
   // tableタグをループしてパース
-  $(selecotr).each(function(idx) {
+  $(selecotr).each(function (idx) {
     // console.log(idx);
     // 2列目以下は不要なのでスキップ
     if (idx < 2) {
@@ -105,11 +101,12 @@ function perseAndSend(portCode) {
     }
     timeTable.row.push(row);
   });
+  detailData.timeTable = timeTable;
 
   // console.log('スクレイピング完了 ' + portCode);
 
   // Firebaseへ登録
-  return saveToFirebase(portCode, timeTable);
+  return saveToFirebase(portCode, detailData);
 };
 
 function putHtmlLog(value) {
@@ -186,14 +183,40 @@ function saveToFirebase(portCode, sendData) {
   const tableName = TABLE + portCode;
   // console.log('DB登録開始 ' + tableName);
   // console.log(sendData);
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     firebase.database()
       .ref(tableName)
-      .set(sendData, function() {
+      .set(sendData, function () {
         // console.log('DB登録完了 ' + tableName);
         resolve();
       })
   });
 };
 
-module.exports = run;
+/**
+ * 一覧のステータスを取得して変数に格納しておく
+ */
+function getStatusFromFirebase() {
+  return firebase.database()
+    .ref('ykf/list/ports')
+    .once('value')
+    .then(function (snapshot) {
+      snapshot.val().forEach(function (e) {
+        ports.set(e.portCode, e);
+      });
+    })
+}
+
+/**
+ * ports変数から引数の港の運行ステータスを取得する
+ */
+function getPortStatus(targetPortCode) {
+  let portStatus;
+  ports.forEach(function (val, key) {
+    if (val.portCode == targetPortCode) {
+      portStatus = val;
+      return false;
+    }
+  })
+  return portStatus;
+}
