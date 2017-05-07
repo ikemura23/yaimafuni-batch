@@ -4,7 +4,7 @@ const PORT = require('./consts.js');
 const sendError = require('./slack');
 
 const COMPANY = 'ykf';
-const TABLE = COMPANY + '_status';
+const TABLE = COMPANY + '/list/';
 const URL = 'http://www.yaeyama.co.jp/';
 
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
