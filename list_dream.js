@@ -4,15 +4,15 @@ const consts = require('./consts.js');
 const sendError = require('./slack');
 
 const COMPANY = consts.DREAM;
-const TABLE = COMPANY + '_status';
+const TABLE = COMPANY + '/list';
 const URL = 'http://ishigaki-dream.co.jp/';
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
-function run() {
+module.exports = function () {
   console.log('開始:' + COMPANY + ' 一覧');
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     client.fetch(URL)
-      .then(function(result) {
+      .then(function (result) {
         const $ = result.$;
         if (!$) return null;
 
@@ -24,11 +24,11 @@ function run() {
         let sendData = {
           comment: html.find('#ticker_area').text().trim(), // 全体コメント
           updateTime: getUpdateTime(html.find('li.last').text()), // 更新日時
-          statuses: {}
+          ports: []
         }
 
         // 港別に取得してパース処理
-        html.find('li').each(function(idx) {
+        html.find('li').each(function (idx) {
           if (idx > 6) {
             return true; //最後のliタグは更新日時と時刻表リンクなのでループ抜ける
           }
@@ -54,27 +54,27 @@ function run() {
 
           // 運行情報を作成
           const port = {
-            code: portCode,
-            name: portName,
+            portCode: portCode,
+            portName: portName,
             comment: portComment,
             status: {
               code: statusCode,
               text: statusText
             }
           }
-          sendData.statuses[portCode] = port;
+          sendData.ports.push(port);
         });
         // console.log('スクレイピング完了');
         // console.log(sendData);
         return sendData;
       })
-      .then(function(data) {
+      .then(function (data) {
         if (!data) return;
         // console.log('DB登録開始 ' + COMPANY);
         return firebase.database().ref(TABLE).set(data);
       })
       .catch((error) => sendError(error.stack))
-      .finally(function() {
+      .finally(function () {
         console.log('完了 ' + COMPANY + ' 一覧');
         resolve()
       });
@@ -131,5 +131,3 @@ function getStatusCode(className) {
       return consts.CATION;
   }
 }
-
-module.exports = run;
