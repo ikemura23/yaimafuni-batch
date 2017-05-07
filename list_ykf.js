@@ -41,8 +41,8 @@ function run() {
 
           // 運行情報を作成
           const port = {
-            code: portCode,
-            name: portName,
+            portCode: portCode,
+            portName: portName,
             comment: bikou,
             status: {
               code: statusCode,
