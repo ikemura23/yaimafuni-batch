@@ -20,7 +20,7 @@ function run() {
         const sendData = {
           comment: '',
           updateTime: $('div.unkou_time_top').html().trim(), // 更新日時
-          statuses: {}
+          ports: []
         }
 
         // 港別に取得してパース処理
@@ -49,7 +49,7 @@ function run() {
               text: statusText
             }
           }
-          sendData.statuses[portCode] = port;
+          sendData.ports.push(port);
           //   console.log(portName + ' 完了');
         });
         return sendData;
