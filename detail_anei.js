@@ -14,7 +14,7 @@ let ports = new Map();
  */
 module.exports = () => {
   console.log('開始:' + COMPANY + '-詳細');
-  Promise.resolve()
+  return Promise.resolve()
     .then(() => getStatusFromFirebase())
     .then(() => getHtmlContents())
     .then(($) => setDetailData($))
