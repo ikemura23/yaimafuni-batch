@@ -12,31 +12,22 @@ firebaseから一覧を読み込む
 */
 
 function createTopCompanyStatus(company) {
-  return readFirebase(getReadTableName(company))
+  return readFirebase(company)
     .then((statuses) => createStatus(statuses, company));
 }
 
-function getReadTableName(company) {
-  switch (company) {
-    case consts.ANEI:
-      return 'anei_status/statuses';
-    case consts.YKF:
-      return 'ykf_status/statuses';
-    case consts.DREAM:
-      return 'dream_status/statuses';
-  }
-}
-
 /**
- * DBからanei_statusを取得してstatus.codeのみを取得
+ * DBから 会社名/list/ports を取得して status.code のみを取得
  */
-function readFirebase(tableName) {
-  return firebase.database().ref(tableName).once('value')
-    .then(function(snapshot) {
+function readFirebase(company) {
+  return firebase.database()
+    .ref(`${company}/list/ports`)
+    .once('value')
+    .then(function (snapshot) {
       const statuses = [];
-      snapshot.forEach(function(element) {
+      snapshot.forEach(function (element) {
         const portData = element.val();
-        if (portData.code == undefined) return false; //全体コメントはスキップ
+        if (portData.portCode == undefined) return false; //全体コメントはスキップ
         statuses.push(portData.status.code); // 一旦配列に結果を保存
       });
       return Promise.resolve(statuses);
@@ -81,7 +72,7 @@ function createStatus(statuses, company) {
   // すべて運行か？
   if (data.comment.length == '') {
     // 欠航も注意も未定もなし＝すべて運行
-    data.comment = '全便運行';
+    data.comment = '通常運行';
     data.allNormalFlag = true;
   } else {
     data.comment += 'あり';
@@ -96,15 +87,13 @@ function createStatus(statuses, company) {
 function sendFirebase() {
   // console.log('DB登録開始');
   // console.log(sendData)
-  return firebase.database().ref(TABLE).update(sendData, function() {
-    // console.log('DB登録完了');
-  })
+  return firebase.database().ref(TABLE).update(sendData)
 }
 
 /**
  * 外部からの呼び出し用メソッド
  */
-function run() {
+module.exports = () => {
   return Promise.resolve()
     .then(() => console.log('開始 トップ 会社別'))
     .then(() => createTopCompanyStatus(consts.ANEI))
@@ -114,4 +103,3 @@ function run() {
     .catch((error) => sendError(error.stack))
     .then(() => console.log('完了 トップ 会社別'))
 }
-module.exports = run;
