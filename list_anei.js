@@ -8,13 +8,11 @@ const TABLE_NAME = COMPANY;
 const URL = 'http://www.aneikankou.co.jp';
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
-var AneiList = function() {};
-
-function run() {
+module.exports = function () {
   console.log('開始:' + COMPANY + ' 一覧');
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     client.fetch(URL)
-      .then(function(result) {
+      .then(function (result) {
         var $ = result.$;
         // if ($.html.length == 0) {
         //   throw new Error(COMPANY + "一覧 HTMLの取得に失敗しました");
@@ -26,7 +24,7 @@ function run() {
         };
 
         // 一覧ステータス
-        $('#situation div ul.route li').each(function(idx) {
+        $('#situation div ul.route li').each(function (idx) {
           var arreaTag = $(this).find('div').eq(0);
 
           // 港名
@@ -62,12 +60,12 @@ function run() {
         // console.log('スクレイピング完了:' + COMPANY);
         return sendData;
       })
-      .then(function(data) {
+      .then(function (data) {
         // console.log('DB登録開始');
         return firebase.database().ref(TABLE_NAME).update(data);
       })
       .catch((error) => sendError(error.stack))
-      .finally(function() {
+      .finally(function () {
         console.log('完了 ' + COMPANY + ' 一覧');
         resolve()
       });
@@ -109,5 +107,3 @@ function getStatusCode(arreaTag) {
     return consts.CATION;
   }
 }
-
-module.exports = run;
