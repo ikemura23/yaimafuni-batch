@@ -18,6 +18,8 @@ const topCompany = require('./top_company');
 const weather = require('./weather.js');
 const topPort = require('./top_port');
 
+const ports = require('./ports');
+
 const slack = require('./slack');
 
 Promise.resolve()
@@ -30,5 +32,6 @@ Promise.resolve()
   .then(() => YkfDetail())
   .then(() => topCompany())
   .then(() => topPort())
+  .then(() => ports())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))
