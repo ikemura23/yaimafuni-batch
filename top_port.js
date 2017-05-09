@@ -46,7 +46,7 @@ function readAllData() {
  */
 function readFirebase(company, data) {
   return firebase.database()
-    .ref(`${company}/list/ports`)
+    .ref(`${company}/ports`)
     .once('value')
     .then(function (snapshot) {
       const statuses = [];

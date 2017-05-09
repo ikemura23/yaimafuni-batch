@@ -4,7 +4,7 @@ const consts = require('./consts.js');
 const sendError = require('./slack');
 
 const COMPANY = consts.DREAM;
-const TABLE = COMPANY + '/list';
+const TABLE = COMPANY + '/';
 const URL = 'http://ishigaki-dream.co.jp/';
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
@@ -63,6 +63,7 @@ module.exports = function () {
             }
           }
           sendData.ports.push(port);
+          sendData[portCode] = port;
         });
         // console.log('スクレイピング完了');
         // console.log(sendData);
@@ -71,7 +72,7 @@ module.exports = function () {
       .then(function (data) {
         if (!data) return;
         // console.log('DB登録開始 ' + COMPANY);
-        return firebase.database().ref(TABLE).set(data);
+        return firebase.database().ref(TABLE).update(data);
       })
       .catch((error) => sendError(error.stack))
       .finally(function () {

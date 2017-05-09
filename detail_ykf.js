@@ -198,7 +198,7 @@ function saveToFirebase(portCode, sendData) {
  */
 function getStatusFromFirebase() {
   return firebase.database()
-    .ref('ykf/list/ports')
+    .ref('ykf/ports')
     .once('value')
     .then(function (snapshot) {
       snapshot.val().forEach(function (e) {
