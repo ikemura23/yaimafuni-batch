@@ -21,7 +21,7 @@ function createTopCompanyStatus(company) {
  */
 function readFirebase(company) {
   return firebase.database()
-    .ref(`${company}/list/ports`)
+    .ref(`${company}/ports`)
     .once('value')
     .then(function (snapshot) {
       const statuses = [];

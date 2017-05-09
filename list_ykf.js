@@ -4,7 +4,7 @@ const PORT = require('./consts.js');
 const sendError = require('./slack');
 
 const COMPANY = 'ykf';
-const TABLE = COMPANY + '/list/';
+const TABLE = COMPANY + '/';
 const URL = 'http://www.yaeyama.co.jp/';
 
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
@@ -50,6 +50,7 @@ function run() {
             }
           }
           sendData.ports.push(port);
+          sendData[portCode] = port;
           //   console.log(portName + ' 完了');
         });
         return sendData;
@@ -57,7 +58,7 @@ function run() {
       .then(function(data) {
         if (!data) return;
         // console.log('DB登録開始' + ':' + COMPANY);
-        return firebase.database().ref(TABLE).set(data, function() {
+        return firebase.database().ref(TABLE).update(data, function() {
           // console.log('DB登録完了' + ':' + COMPANY);
         })
       })

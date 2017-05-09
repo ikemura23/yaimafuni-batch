@@ -225,7 +225,7 @@ function sendFirebase(targetPort) {
  * 一覧のステータスを取得して変数に格納しておく
  */
 function getStatusFromFirebase() {
-  tableName = 'anei/list/ports'
+  tableName = 'anei/ports'
   return firebase.database()
     .ref(tableName)
     .once('value')
