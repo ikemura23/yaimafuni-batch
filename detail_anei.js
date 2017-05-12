@@ -80,7 +80,7 @@ function setDetailData($) {
       row: []
     };
 
-    $(this).find('table > tr').each(function (idx) {
+    $(this).find('table > tr').each(function () {
 
       if ($(this).has('th').text().length > 0) {
         //ヘッダー
@@ -96,7 +96,7 @@ function setDetailData($) {
         
         let row = {
           left: {
-            time: $(this).find('td').eq(0).contents().eq(0).text().trim(),
+            time: $(this).find('td').eq(0).contents().eq(0).text().replace('-','').trim(),
             memo: $(this).find('td').eq(0).contents().eq(2).text().trim(),
             status: {
               code: getRowStatusCode($(this).find('td').eq(1)),
@@ -104,7 +104,7 @@ function setDetailData($) {
             }
           },
           right: {
-            time: $(this).find('td').eq(2).contents().eq(0).text().trim(),
+            time: $(this).find('td').eq(2).contents().eq(0).text().replace('-','').trim(),
             memo: $(this).find('td').eq(2).contents().eq(2).text().trim(),
             status: {
               code: getRowStatusCode($(this).find('td').eq(3)),
@@ -174,6 +174,7 @@ function getPortCode(portName) {
 function getRowStatusCode(statusTag) {
   // ステータスが「-」の場合は空白を返す
   if (statusTag.text().trim() == '-') return '';
+  console.log(statusTag.text)
 
   const statusClass = statusTag.attr('class');
   switch (statusClass) {
