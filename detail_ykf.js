@@ -23,9 +23,8 @@ module.exports = () => {
     // .then(() => perseAndSend(consts.KOHAMA_TAKETOMI)) // 小浜-竹富
     // .then(() => perseAndSend(consts.KOHAMA_OOHARA)) // 小浜-大原
     // .then(() => perseAndSend(consts.UEHARA_HATOMA)) // 上原-鳩間
+    .then(() => console.log('完了:' + COMPANY + '-詳細'))
     .catch((error) => sendError(error.stack))
-  // .then(() => console.log('完了:' + COMPANY + '-詳細'))
-  // .catch((error) => console.log(error))
 }
 
 function getHtmlContents() {
