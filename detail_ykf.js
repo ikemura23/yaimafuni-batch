@@ -24,8 +24,6 @@ module.exports = () => {
     // .then(() => perseAndSend(consts.KOHAMA_OOHARA)) // 小浜-大原
     // .then(() => perseAndSend(consts.UEHARA_HATOMA)) // 上原-鳩間
     .catch((error) => sendError(error.stack))
-    // .then(() => console.log('完了:' + COMPANY + '-詳細'))
-    // .catch((error) => console.log(error))
 }
 
 function getHtmlContents() {
@@ -88,14 +86,14 @@ function perseAndSend(portCode) {
         time: td.eq(0).contents().eq(2).text(),
         status: {
           code: getRowStatusCode(td.eq(0).contents().eq(1).text()),
-          text: td.eq(0).contents().eq(1).text()
+          text: convertRowStatusText(td.eq(0).contents().eq(1).text())
         }
       },
       right: {
         time: td.eq(1).contents().eq(2).text(),
         status: {
           code: getRowStatusCode(td.eq(1).contents().eq(1).text()),
-          text: td.eq(1).contents().eq(1).text().trim()
+          text: convertRowStatusText(td.eq(1).contents().eq(1).text().trim())
         }
       }
     }
@@ -156,6 +154,8 @@ function getRowStatusCode(statusRawText) {
       return consts.CANCEL;
     case '○':
       return consts.NORMAL;
+    case '':
+      return '';
     default:
       return consts.CATION;
   }
@@ -219,4 +219,20 @@ function getPortStatus(targetPortCode) {
     }
   })
   return portStatus;
+}
+
+function convertRowStatusText(statusText) {
+  
+  switch (statusText) {
+    case '○':
+      return '通常運行'
+    case '〇':
+      return '通常運行'
+    case '×':
+      return '欠航'
+    case '':
+      return ''
+    default:
+      return '注意'
+  }
 }
