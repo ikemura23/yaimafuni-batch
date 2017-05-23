@@ -98,9 +98,8 @@ function parseContents($) {
  * @param {オブジェクトリテラル} data パースして作成したデータ
  */
 function sendToFirebase(data) {
-  console.log('firebase 送信');
   if (!data) return;
-  return firebase.database().ref(TABLE).update(data,() => {console.log('firebase 完了');})
+  return firebase.database().ref(TABLE).update(data);
 }
 
 /**
@@ -165,14 +164,11 @@ function getStatusCode(className) {
  * @param {オブジェクトリテラル} data パース済みデータ
  */
 function convertData(data) {
-  console.log('convertData')
-  // console.log(data)
   if (data.uehara_hatoma) {
     data['uehara'] = data.uehara_hatoma;
     data.uehara.portCode = 'uehara';
     data['hatoma'] = data.uehara_hatoma;
     data.hatoma.portCode = 'hatoma';
   }
-  console.log(data)
-  Promise.resolve(data);
+  return Promise.resolve(data);
 }
