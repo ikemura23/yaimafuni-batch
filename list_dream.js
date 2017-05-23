@@ -8,16 +8,23 @@ const TABLE = COMPANY + '/';
 const URL = 'http://ishigaki-dream.co.jp/';
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
+/**
+ * 外部呼び出しメイン処理
+ */
 module.exports = () => {
   return Promise.resolve()
     .then(() => console.log(`開始 ${COMPANY} 一覧`))
     .then(() => getHtmlContents())
     .then($ => parseContents($))
+    .then(data => convertData(data))
     .then(data => sendToFirebase(data))
     .then(() => console.log(`完了 ${COMPANY} 一覧`))
     .catch((error) => sendError(error.stack))
 }
 
+/**
+ * HTMLコンテンツを取得
+ */
 function getHtmlContents() {
   return client.fetch(URL)
     .then(function (result) {
@@ -27,8 +34,11 @@ function getHtmlContents() {
     })
 }
 
+/**
+ * HTMLからパースする
+ * @param {CheerioStaticEx} $ 取得したHTMLタグ
+ */
 function parseContents($) {
-  // console.log('スクレイピング開始');
   if (!$) return null;
 
   const html = $('#post-12 > div > div.operationArea.clearfix > div > ul');
@@ -80,96 +90,22 @@ function parseContents($) {
     sendData.ports.push(port);
     sendData[portCode] = port;
   });
-  // console.log('スクレイピング完了');
-  // console.log(sendData);
-  // return sendData;
   return Promise.resolve(sendData);
 }
 
+/**
+ * firebaseへ送信
+ * @param {オブジェクトリテラル} data パースして作成したデータ
+ */
 function sendToFirebase(data) {
   console.log('firebase 送信');
   if (!data) return;
-  // console.log('DB登録開始 ' + COMPANY);
-  return firebase.database().ref(TABLE).update(data)
+  return firebase.database().ref(TABLE).update(data,() => {console.log('firebase 完了');})
 }
-
-// module.exports = function () {
-//   console.log('開始:' + COMPANY + ' 一覧');
-//   return new Promise(function (resolve) {
-//     client.fetch(URL)
-//       .then(function (result) {
-//         const $ = result.$;
-//         if (!$) return null;
-
-//         const html = $('#post-12 > div > div.operationArea.clearfix > div > ul');
-//         if (!html) {
-//           throw DOMException('初めのタグ取得に失敗したぞー');
-//         }
-
-//         let sendData = {
-//           comment: html.find('#ticker_area').text().trim(), // 全体コメント
-//           updateTime: getUpdateTime(html.find('li.last').text()), // 更新日時
-//           ports: []
-//         }
-
-//         // 港別に取得してパース処理
-//         html.find('li').each(function (idx) {
-//           if (idx > 6) {
-//             return true; //最後のliタグは更新日時と時刻表リンクなのでループ抜ける
-//           }
-
-//           // 港名
-//           let portName;
-//           if ($(this).has('a').text().length > 0) {
-//             portName = $(this).find('a').text();
-//           } else {
-//             // contentsについて http://qiita.com/sl2/items/0a6d877d1f9f6ea63999
-//             portName = $(this).children('div').eq(0).contents().eq(0).text();
-//           }
-
-//           // 港コード
-//           const portCode = getPortCode(portName);
-
-//           // ステータス
-//           const statusText = $(this).find('span').text();
-//           const statusCode = getStatusCode($(this).find('span').attr('class'));
-
-//           // 港別のコメント
-//           const portComment = $(this).children('div').eq(1).text();
-
-//           // 運行情報を作成
-//           const port = {
-//             portCode: portCode,
-//             portName: portName,
-//             comment: portComment,
-//             status: {
-//               code: statusCode,
-//               text: statusText
-//             }
-//           }
-//           sendData.ports.push(port);
-//           sendData[portCode] = port;
-//         });
-//         // console.log('スクレイピング完了');
-//         // console.log(sendData);
-//         return sendData;
-//       })
-//       .then(function (data) {
-//         if (!data) return;
-//         // console.log('DB登録開始 ' + COMPANY);
-//         return firebase.database().ref(TABLE).update(data);
-//       })
-//       .catch((error) => sendError(error.stack))
-//       .finally(function () {
-//         console.log('完了 ' + COMPANY + ' 一覧');
-//         resolve()
-//       });
-//   });
-// }
 
 /**
  * 最後のliタグから更新日時を取得する
- * @param {最後のliタグ内容} before 
+ * @param {最後のliタグ内容} rawText 最後のli内容
  */
 function getUpdateTime(rawText) {
   const before = "更新（時刻表はこちら）";
@@ -177,7 +113,10 @@ function getUpdateTime(rawText) {
   return rawText.replace(regExp, "").trim();;
 }
 
-// 港名から港コードを返す
+/**
+ * 引数の港名から港コードを返す
+ * @param {string} portName 
+ */
 function getPortCode(portName) {
   // 港id
   switch (portName) {
@@ -200,7 +139,10 @@ function getPortCode(portName) {
   }
 }
 
-// クラス名を取得
+/**
+ * 引数のクラス名から運行ステータスを返す
+ * @param {string} className 
+ */
 function getStatusCode(className) {
   switch (className) {
     case 'pcan':
@@ -218,10 +160,19 @@ function getStatusCode(className) {
   }
 }
 
-function convertDreamData(orgData) {
-  if (!orgData.uehara_hatoma) return null;
-  orgData['uehara'] = orgData.uehara_hatoma;
-  orgData['hatoma'] = orgData.uehara_hatoma;
-  return orgData;
-  // console.log(orgData)
+/**
+ * dreamのみ上原と鳩間が一つになっているので、他の会社に合わせて分離する
+ * @param {オブジェクトリテラル} data パース済みデータ
+ */
+function convertData(data) {
+  console.log('convertData')
+  // console.log(data)
+  if (data.uehara_hatoma) {
+    data['uehara'] = data.uehara_hatoma;
+    data.uehara.portCode = 'uehara';
+    data['hatoma'] = data.uehara_hatoma;
+    data.hatoma.portCode = 'hatoma';
+  }
+  console.log(data)
+  Promise.resolve(data);
 }
