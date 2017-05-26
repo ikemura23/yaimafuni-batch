@@ -8,12 +8,16 @@ const URL = 'http://www.yaeyama.co.jp/situation.php';
 const TABLE = COMPANY + '/detail/';
 let $;
 const ports = new Map();
+let baseData = {};
 
 module.exports = () => {
   console.log('開始:' + COMPANY + '-詳細');
   return Promise.resolve()
+  .then(() => console.log('getStatusFromFirebase'))
     .then(() => getStatusFromFirebase())
+    .then(() => console.log('getHtmlContents'))
     .then(() => getHtmlContents())
+    .then(() => console.log('perseAndSend'))
     .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
     .then(() => perseAndSend(consts.KOHAMA))    // 小浜
     .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
@@ -46,14 +50,14 @@ function perseAndSend(portCode) {
   const selecotr = getSelectorString(portCode);
   // putHtmlLog(selecotr).find('td');
 
-  const portStatus = getPortStatus(portCode);
-  const detailData = {
-    portName: portStatus.portName,
-    portCode: portCode,
-    comment: portStatus.comment,
-    status: portStatus.status,
-    timeTable: {}
-  }
+  // const portStatus = getPortStatus(portCode);
+  // const detailData = {
+  //   portName: portStatus.portName,
+  //   portCode: portCode,
+  //   comment: portStatus.comment,
+  //   status: portStatus.status,
+  //   timeTable: {}
+  // }
 
   // 詳細テーブル用の変数
   let timeTable = {
@@ -100,12 +104,12 @@ function perseAndSend(portCode) {
     }
     timeTable.row.push(row);
   });
-  detailData.timeTable = timeTable;
+  // detailData.timeTable = timeTable;
 
   // console.log('スクレイピング完了 ' + portCode);
 
   // Firebaseへ登録
-  return saveToFirebase(portCode, detailData);
+  return saveToFirebase(portCode, timeTable);
 };
 
 function putHtmlLog(value) {
@@ -181,7 +185,7 @@ function getStatusCode(arreaTag) {
  * DBへ登録
  */
 function saveToFirebase(portCode, sendData) {
-  const tableName = TABLE + portCode;
+  const tableName = `${COMPANY}/${portCode}/timeTable/`;
   // console.log('DB登録開始 ' + tableName);
   // console.log(sendData);
   return new Promise(function (resolve, reject) {
@@ -199,12 +203,11 @@ function saveToFirebase(portCode, sendData) {
  */
 function getStatusFromFirebase() {
   return firebase.database()
-    .ref('ykf/ports')
+    .ref('ykf')
     .once('value')
     .then(function (snapshot) {
-      snapshot.val().forEach(function (e) {
-        ports.set(e.portCode, e);
-      });
+      baseData = snapshot.val();
+      // console.log(baseData);
     })
 }
 
