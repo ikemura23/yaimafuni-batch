@@ -13,19 +13,21 @@ let ports = new Map();
  * メイン処理
  */
 module.exports = () => {
-  console.log('開始:' + COMPANY + '-詳細');
+  console.log('開始 ' + COMPANY + ' 詳細');
   return Promise.resolve()
-    .then(() => getStatusFromFirebase())
+    // .then(() => console.log('getHtmlContents'))
     .then(() => getHtmlContents())
-    .then(($) => setDetailData($))
-    .then(() => sendFirebase(consts.TAKETOMI))
-    .then(() => sendFirebase(consts.KOHAMA))
-    .then(() => sendFirebase(consts.KUROSHIMA))
-    .then(() => sendFirebase(consts.OOHARA))
-    .then(() => sendFirebase(consts.UEHARA))
-    .then(() => sendFirebase(consts.HATOMA))
-    .then(() => sendFirebase(consts.HATERUMA))
-    .catch((error) => sendError(error.stack))
+    .then($ => setDetailData($))
+    // .then(() => console.log('sendToFirebase'))
+    .then(() => sendToFirebase(consts.TAKETOMI))
+    .then(() => sendToFirebase(consts.KOHAMA))
+    .then(() => sendToFirebase(consts.KUROSHIMA))
+    .then(() => sendToFirebase(consts.OOHARA))
+    .then(() => sendToFirebase(consts.UEHARA))
+    .then(() => sendToFirebase(consts.HATOMA))
+    .then(() => sendToFirebase(consts.HATERUMA))
+    .then(() => console.log(`完了 ${COMPANY} 詳細`))
+  // .catch((error) => sendError(error.stack))
   // .then(function() {
   //   console.log('完了:' + COMPANY + '-詳細');
   //     firebase.database().goOffline(); //プロセスが終わらない対策
@@ -49,27 +51,24 @@ function getHtmlContents() {
  * @param {HTMLコンテンツ} $ 
  */
 function setDetailData($) {
-
   $('#situation div ul.route li').each(function (idx) {
     var arreaTag = $(this).find('div').eq(0);
 
     // 港名
     var portName = arreaTag.find('span.name').text();
-    // console.log(port_name);
 
     // 港id
     var portCode = getPortCode(portName);
-    // console.log(port_code);
 
     // 詳細ステータスは自分で作らず、firebaseの一覧から取得して作成する
-    const portStatus = getPortStatus(portCode);
-    const detailData = {
-      portName: portName,
-      portCode: portCode,
-      comment: portStatus.comment,
-      status: portStatus.status,
-      timeTable: null
-    }
+    // const portStatus = getPortStatus(portCode);
+    // const detailData = {
+    //   portName: portName,
+    //   portCode: portCode,
+    //   comment: portStatus.comment,
+    //   status: portStatus.status,
+    //   timeTable: null
+    // }
 
     // 詳細テーブル用の変数
     let timeTable = {
@@ -93,10 +92,10 @@ function setDetailData($) {
         // 時間別ステータス 
         // <tr><td class="time">08：15</td><td class="check circle">通常運航</td><td class="time">-</td><td class="check ">-</td></tr>
         // console.log('ボディ');
-        
-        let row = {
+
+        const row = {
           left: {
-            time: $(this).find('td').eq(0).contents().eq(0).text().replace('-','').trim(),
+            time: $(this).find('td').eq(0).contents().eq(0).text().replace('-', '').trim(),
             memo: $(this).find('td').eq(0).contents().eq(2).text().trim(),
             status: {
               code: getRowStatusCode($(this).find('td').eq(1)),
@@ -104,7 +103,7 @@ function setDetailData($) {
             }
           },
           right: {
-            time: $(this).find('td').eq(2).contents().eq(0).text().replace('-','').trim(),
+            time: $(this).find('td').eq(2).contents().eq(0).text().replace('-', '').trim(),
             memo: $(this).find('td').eq(2).contents().eq(2).text().trim(),
             status: {
               code: getRowStatusCode($(this).find('td').eq(3)),
@@ -114,31 +113,17 @@ function setDetailData($) {
         }
         timeTable.row.push(row);
       }
-      detailData.timeTable = timeTable;
+      // detailData.timeTable = timeTable;
+      // sendToFirebase(portCode, timeTable)
       // putHtmlLog($(this));
     });
-
-    sendData.set(portCode, detailData);
+    sendData.set(portCode, timeTable);
   });
   // console.log('スクレイピング完了');
   return new Promise(function (resolve) {
     resolve()
   })
 };
-
-/**
- * ports変数から引数の港の運行ステータスを取得する
- */
-function getPortStatus(targetPortCode) {
-  let portStatus;
-  ports.forEach(function (val, key) {
-    if (val.portCode == targetPortCode) {
-      portStatus = val;
-      return false;
-    }
-  })
-  return portStatus;
-}
 
 /**
  * デバッグ用 htmlタグを出力
@@ -174,7 +159,7 @@ function getPortCode(portName) {
 function getRowStatusCode(statusTag) {
   // ステータスが「-」の場合は空白を返す
   if (statusTag.text().trim() == '-') return '';
-  console.log(statusTag.text)
+  // console.log(statusTag.text)
 
   const statusClass = statusTag.attr('class');
   switch (statusClass) {
@@ -209,30 +194,9 @@ function getStatusCode(arreaTag) {
 /**
  * DBへ登録
  */
-function sendFirebase(targetPort) {
-  const tableName = TABLE + '/' + targetPort;
-  // console.log('DB登録開始:' + tableName);
-  return new Promise(function (resolve, reject) {
-    firebase.database()
-      .ref(tableName)
-      .set(sendData.get(targetPort), function () {
-        // console.log('DB登録完了');
-        resolve();
-      })
-  });
-};
-
-/**
- * 一覧のステータスを取得して変数に格納しておく
- */
-function getStatusFromFirebase() {
-  tableName = 'anei/ports'
+function sendToFirebase(targetPort) {
+  const tableName = `${COMPANY}/${targetPort}/timeTable/`;
   return firebase.database()
     .ref(tableName)
-    .once('value')
-    .then(function (snapshot) {
-      snapshot.val().forEach(function (e, i) {
-        ports.set(e.portCode, e);
-      });
-    })
-}
+    .set(sendData.get(targetPort));
+};
