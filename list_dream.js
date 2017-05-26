@@ -87,7 +87,7 @@ function parseContents($) {
         text: statusText
       }
     }
-    sendData.ports.push(port);
+    // sendData.ports.push(port);
     sendData[portCode] = port;
   });
   return Promise.resolve(sendData);

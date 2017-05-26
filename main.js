@@ -14,24 +14,21 @@ const DreamList = require('./list_dream.js');
 const AneiDetail = require('./detail_anei.js');
 const YkfDetail = require('./detail_ykf.js');
 
-const topCompany = require('./top_company');
+// const topCompany = require('./top_company.js');
+const topPort = require('./top_port.js');
 const weather = require('./weather.js');
-const topPort = require('./top_port');
 
-const ports = require('./ports');
-
-const slack = require('./slack');
+// const slack = require('./slack');
 
 Promise.resolve()
   .then(() => console.log('main start'))
   .then(() => AneiList())
   .then(() => YkfList())
   .then(() => DreamList())
-  .then(() => weather())
   .then(() => AneiDetail())
   .then(() => YkfDetail())
-  .then(() => topCompany())
+  .then(() => weather())
+  // .then(() => topCompany())
   .then(() => topPort())
-  .then(() => ports())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))

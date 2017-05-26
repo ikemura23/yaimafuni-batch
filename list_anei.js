@@ -53,7 +53,7 @@ module.exports = function () {
             },
             comment: chips_comment
           }
-          sendData.ports.push(port);
+          // sendData.ports.push(port);
           sendData[port_code] = port;
 
         });

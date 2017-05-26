@@ -49,7 +49,7 @@ function run() {
               text: statusText
             }
           }
-          sendData.ports.push(port);
+          // sendData.ports.push(port);
           sendData[portCode] = port;
           //   console.log(portName + ' 完了');
         });
