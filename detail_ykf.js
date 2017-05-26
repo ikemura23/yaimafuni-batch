@@ -5,19 +5,12 @@ const sendError = require('./slack');
 
 const COMPANY = consts.YKF;
 const URL = 'http://www.yaeyama.co.jp/situation.php';
-const TABLE = COMPANY + '/detail/';
 let $;
-const ports = new Map();
-let baseData = {};
 
 module.exports = () => {
-  console.log('開始:' + COMPANY + '-詳細');
   return Promise.resolve()
-  .then(() => console.log('getStatusFromFirebase'))
-    .then(() => getStatusFromFirebase())
-    .then(() => console.log('getHtmlContents'))
+    .then(() => console.log(`開始 ${COMPANY} 詳細`))
     .then(() => getHtmlContents())
-    .then(() => console.log('perseAndSend'))
     .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
     .then(() => perseAndSend(consts.KOHAMA))    // 小浜
     .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
@@ -27,7 +20,7 @@ module.exports = () => {
     // .then(() => perseAndSend(consts.KOHAMA_TAKETOMI)) // 小浜-竹富
     // .then(() => perseAndSend(consts.KOHAMA_OOHARA)) // 小浜-大原
     // .then(() => perseAndSend(consts.UEHARA_HATOMA)) // 上原-鳩間
-    .then(() => console.log('完了:' + COMPANY + '-詳細'))
+    .then(() => console.log(`完了 ${COMPANY} 詳細`))
     .catch((error) => sendError(error.stack))
 }
 
@@ -46,18 +39,8 @@ function getHtmlContents() {
  * @param {タグ全体} $ 
  */
 function perseAndSend(portCode) {
-  // console.log('スクレイピング開始 ' + portCode);
   const selecotr = getSelectorString(portCode);
   // putHtmlLog(selecotr).find('td');
-
-  // const portStatus = getPortStatus(portCode);
-  // const detailData = {
-  //   portName: portStatus.portName,
-  //   portCode: portCode,
-  //   comment: portStatus.comment,
-  //   status: portStatus.status,
-  //   timeTable: {}
-  // }
 
   // 詳細テーブル用の変数
   let timeTable = {
@@ -70,7 +53,6 @@ function perseAndSend(portCode) {
 
   // tableタグをループしてパース
   $(selecotr).each(function (idx) {
-    // console.log(idx);
     // 2列目以下は不要なのでスキップ
     if (idx < 2) {
       return true;
@@ -104,12 +86,9 @@ function perseAndSend(portCode) {
     }
     timeTable.row.push(row);
   });
-  // detailData.timeTable = timeTable;
-
-  // console.log('スクレイピング完了 ' + portCode);
 
   // Firebaseへ登録
-  return saveToFirebase(portCode, timeTable);
+  return sendToFirebase(portCode, timeTable);
 };
 
 function putHtmlLog(value) {
@@ -181,52 +160,8 @@ function getStatusCode(arreaTag) {
   }
 }
 
-/**
- * DBへ登録
- */
-function saveToFirebase(portCode, sendData) {
-  const tableName = `${COMPANY}/${portCode}/timeTable/`;
-  // console.log('DB登録開始 ' + tableName);
-  // console.log(sendData);
-  return new Promise(function (resolve, reject) {
-    firebase.database()
-      .ref(tableName)
-      .set(sendData, function () {
-        // console.log('DB登録完了 ' + tableName);
-        resolve();
-      })
-  });
-};
-
-/**
- * 一覧のステータスを取得して変数に格納しておく
- */
-function getStatusFromFirebase() {
-  return firebase.database()
-    .ref('ykf')
-    .once('value')
-    .then(function (snapshot) {
-      baseData = snapshot.val();
-      // console.log(baseData);
-    })
-}
-
-/**
- * ports変数から引数の港の運行ステータスを取得する
- */
-function getPortStatus(targetPortCode) {
-  let portStatus;
-  ports.forEach(function (val, key) {
-    if (val.portCode == targetPortCode) {
-      portStatus = val;
-      return false;
-    }
-  })
-  return portStatus;
-}
-
 function convertRowStatusText(statusText) {
-  
+
   switch (statusText) {
     case '○':
       return '通常運行'
@@ -240,3 +175,13 @@ function convertRowStatusText(statusText) {
       return '注意'
   }
 }
+
+/**
+ * DBへ登録
+ */
+function sendToFirebase(portCode, sendData) {
+  const tableName = `${COMPANY}/${portCode}/timeTable/`;
+  return firebase.database()
+    .ref(tableName)
+    .set(sendData)
+};
