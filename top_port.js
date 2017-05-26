@@ -47,7 +47,7 @@ function readDatabase(path) {
  */
 function sendToFirebase(data) {
   return firebase.database()
-    .ref('port')
+    .ref('top_port')
     .set(data)
 }
 
