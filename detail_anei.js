@@ -3,8 +3,7 @@ const firebase = require("firebase");
 const consts = require('./consts.js');
 const sendError = require('./slack');
 
-const COMPANY = 'anei';
-const TABLE = COMPANY + '/detail';
+const COMPANY = consts.ANEI;
 const URL = 'http://www.aneikankou.co.jp';
 const sendData = new Map();
 let ports = new Map();
@@ -13,12 +12,10 @@ let ports = new Map();
  * メイン処理
  */
 module.exports = () => {
-  console.log('開始 ' + COMPANY + ' 詳細');
   return Promise.resolve()
-    // .then(() => console.log('getHtmlContents'))
+    .then(() => console.log(`開始 ${COMPANY} 詳細`))
     .then(() => getHtmlContents())
     .then($ => setDetailData($))
-    // .then(() => console.log('sendToFirebase'))
     .then(() => sendToFirebase(consts.TAKETOMI))
     .then(() => sendToFirebase(consts.KOHAMA))
     .then(() => sendToFirebase(consts.KUROSHIMA))
@@ -26,12 +23,8 @@ module.exports = () => {
     .then(() => sendToFirebase(consts.UEHARA))
     .then(() => sendToFirebase(consts.HATOMA))
     .then(() => sendToFirebase(consts.HATERUMA))
+    .catch((error) => sendError(error.stack))
     .then(() => console.log(`完了 ${COMPANY} 詳細`))
-  // .catch((error) => sendError(error.stack))
-  // .then(function() {
-  //   console.log('完了:' + COMPANY + '-詳細');
-  //     firebase.database().goOffline(); //プロセスが終わらない対策
-  // })
 }
 
 /**
@@ -59,16 +52,6 @@ function setDetailData($) {
 
     // 港id
     var portCode = getPortCode(portName);
-
-    // 詳細ステータスは自分で作らず、firebaseの一覧から取得して作成する
-    // const portStatus = getPortStatus(portCode);
-    // const detailData = {
-    //   portName: portName,
-    //   portCode: portCode,
-    //   comment: portStatus.comment,
-    //   status: portStatus.status,
-    //   timeTable: null
-    // }
 
     // 詳細テーブル用の変数
     let timeTable = {
@@ -113,9 +96,6 @@ function setDetailData($) {
         }
         timeTable.row.push(row);
       }
-      // detailData.timeTable = timeTable;
-      // sendToFirebase(portCode, timeTable)
-      // putHtmlLog($(this));
     });
     sendData.set(portCode, timeTable);
   });
