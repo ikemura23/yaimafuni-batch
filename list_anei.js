@@ -51,7 +51,7 @@ module.exports = function () {
               code: statusCode,
               text: statusText
             },
-            comment: chips_comment
+            comment: filter(chips_comment)
           }
           // sendData.ports.push(port);
           sendData[port_code] = port;
@@ -105,5 +105,18 @@ function getStatusCode(arreaTag) {
     return consts.NORMAL;
   } else {
     return consts.CATION;
+  }
+}
+
+/**
+ * 重要そうなコメントだけ表示するため精査する
+ * @param {string} comment 
+ */
+function filter(comment) {
+  switch (comment) {
+    case "全便平常運航":
+      return "";
+    default:
+      return comment;
   }
 }
