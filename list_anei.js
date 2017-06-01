@@ -116,6 +116,8 @@ function filter(comment) {
   switch (comment) {
     case "全便平常運航":
       return "";
+ case "通常運航。":
+      return "";
     default:
       return comment;
   }
