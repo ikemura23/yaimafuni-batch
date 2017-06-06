@@ -17,6 +17,7 @@ const YkfDetail = require('./detail_ykf.js');
 // const topCompany = require('./top_company.js');
 const topPort = require('./top_port.js');
 const weather = require('./weather.js');
+const tenkijp = require('./tenkijp.js');
 
 // const slack = require('./slack');
 
@@ -28,7 +29,7 @@ Promise.resolve()
   .then(() => AneiDetail())
   .then(() => YkfDetail())
   .then(() => weather())
-  // .then(() => topCompany())
   .then(() => topPort())
+  .then(() => tenkijp())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))
