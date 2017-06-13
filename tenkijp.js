@@ -10,10 +10,10 @@ module.exports = () => {
   return Promise.resolve()
     .then(() => getHtmlContents())
     .then($ => parseContents($))
+    // .then(() => console.log(sendData))
     .then(() => send())
-    // .catch((error) => sendError(error.stack))
+    .catch((error) => sendError(error.stack))
     .then(() => console.log('完了 天気詳細'))
-    .catch((e) => console.log(e.stack))
 }
 
 function getHtmlContents() {
@@ -24,28 +24,57 @@ function getHtmlContents() {
 }
 
 function parseContents($) {
-  if (!$("#bd-main > div:nth-child(3) > table:nth-child(3) > tbody").length) {
-    throw 'エラー、天気jpのページ構成が変わってるかも'
+  if (!$("table.leisurePinpointWeather").length) {
+    const errorMessage = 'エラー!! tenki.jpのコンテンツ取得に失敗した、サイト構成が変わったのでtenkijp.jsを確認せよ';
+    console.error(errorMessage)
+    throw new Error(errorMessage)
   }
   return Promise.all([
-    sendData.today = getWeatherData($, 3),
-    sendData.tomorrow = getWeatherData($, 4)
+    sendData.today = getWeatherData($, 0),    // 今日
+    sendData.tomorrow = getWeatherData($, 1)  // 明日
   ])
 }
 
+/**
+ * 指定インデックスからスクレイピング処理
+ * @param {cheero.contents} $ htmlコンテンツ
+ * @param {number} index 取得先のインデックス
+ */
 function getWeatherData($, index) {
-  hour = 0;
-  data = [];
-  for (var i = 3; i < 8; i++) {
+  const data = [];
+  /**
+   * #bd-main > div:nth-child(3) > table:nth-child(4)"
+   * この↑のselectorの取得方法だと失敗する。
+   * 天気タグの真上に「警報・注意報」が表示され、それによってtable:nth-child()の数値が増減する
+   * （実装当初は3だったが、後日には4になった）
+   * クラス名をピンポイントで絞って取得する方法に切り替える 2017/06/13
+   */
+  const element = $("table.leisurePinpointWeather").eq(index);
+  // console.log(element.find("thead p").text());  // 日付確認用 消さずに残しておく
+  for (i = 1; i < 5; i++) {
     data.push({
-      hour: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.hour > td:nth-child(${i-1}) > span`).text().trim(),
-      weather: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.weather > td:nth-child(${i}) > p`).text().trim(),
-      windBlow: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.windBlow > td:nth-child(${i}) > p`).text().trim(),
-      windSpeed: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.windSpeed > td:nth-child(${i}) > span`).text().trim()
+      hour: element.find("tr.hour td").eq(i).text().trim(),
+      weather:element.find("tr.weather td").eq(i).text().trim(),
+      windBlow: element.find("tr.weather td").eq(i).text().trim(),
+      windSpeed: element.find("tr.windSpeed td").eq(i).text().trim()
     })
   }
   return data;
 }
+
+// function getWeatherData($, index) {
+//   hour = 0;
+//   data = [];
+//   for (var i = 3; i < 8; i++) {
+//     data.push({
+//       hour: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.hour > td:nth-child(${i-1}) > span`).text().trim(),
+//       weather: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.weather > td:nth-child(${i}) > p`).text().trim(),
+//       windBlow: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.windBlow > td:nth-child(${i}) > p`).text().trim(),
+//       windSpeed: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.windSpeed > td:nth-child(${i}) > span`).text().trim()
+//     })
+//   }
+//   return data;
+// }
 
 /**
  * DBへ登録
