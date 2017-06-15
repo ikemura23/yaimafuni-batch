@@ -55,7 +55,7 @@ function getWeatherData($, index) {
     data.push({
       hour: element.find("tr.hour td").eq(i).text().trim(),
       weather:element.find("tr.weather td").eq(i).text().trim(),
-      windBlow: element.find("tr.weather td").eq(i).text().trim(),
+      windBlow: element.find("tr.windBlow td").eq(i).text().trim(),
       windSpeed: element.find("tr.windSpeed td").eq(i).text().trim()
     })
   }
