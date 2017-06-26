@@ -69,6 +69,7 @@ function parseContents($) {
 
     // 港コード
     const portCode = getPortCode(portName);
+    if (!portCode) return;
 
     // ステータス
     const statusText = $(this).find('span').text();
