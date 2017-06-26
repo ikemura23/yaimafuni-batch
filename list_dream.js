@@ -16,10 +16,11 @@ module.exports = () => {
     .then(() => console.log(`開始 ${COMPANY} 一覧`))
     .then(() => getHtmlContents())
     .then($ => parseContents($))
-    .then(data => convertData(data))
+    .then(data => divideUeharaHatoma(data))
     .then(data => sendToFirebase(data))
     .then(() => console.log(`完了 ${COMPANY} 一覧`))
     .catch((error) => sendError(error.stack))
+    // .catch((error) => console.error(error.stack))
 }
 
 /**
@@ -164,7 +165,7 @@ function getStatusCode(className) {
  * dreamのみ上原と鳩間が一つになっているので、他の会社に合わせて分離する
  * @param {オブジェクトリテラル} data パース済みデータ
  */
-function convertData(data) {
+function divideUeharaHatoma(data) {
   if (data.uehara_hatoma) {
     data['uehara'] = data.uehara_hatoma;
     data.uehara.portCode = 'uehara';
