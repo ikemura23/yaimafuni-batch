@@ -2,7 +2,7 @@ const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const sendError = require('./slack');
 
-const URL = 'http://www.tenki.jp/forecast/10/50/9410/47207.html';
+const URL = 'https://tenki.jp/forecast/10/50/9410/47207/3hours.html';
 const sendData = { today: [], tomorrow: [] };
 
 module.exports = () => {
@@ -24,7 +24,7 @@ function getHtmlContents() {
 }
 
 function parseContents($) {
-  if (!$("table.leisurePinpointWeather").length) {
+  if (!$("table#forecast-point-3h-today").length) {
     const errorMessage = 'エラー!! tenki.jpのコンテンツ取得に失敗した、サイト構成が変わったのでtenkijp.jsを確認せよ';
     console.error(errorMessage)
     throw new Error(errorMessage)
