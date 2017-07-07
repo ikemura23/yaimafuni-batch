@@ -24,14 +24,20 @@ function getHtmlContents() {
 }
 
 function parseContents($) {
-  if (!$("table#forecast-point-3h-today").length) {
+  const todayTableTagQuery = 'table#forecast-point-3h-today';
+  const tomorrowTableTagQuery = 'table#forecast-point-3h-tomorrow';
+
+  // コンテンツが取得できるか？ページ構成は変わってないか？
+  if (!$(todayTableTagQuery).length) {
+    // 取得失敗はエラーをなげる
     const errorMessage = 'エラー!! tenki.jpのコンテンツ取得に失敗した、サイト構成が変わったのでtenkijp.jsを確認せよ';
     console.error(errorMessage)
     throw new Error(errorMessage)
   }
+
   return Promise.all([
-    sendData.today = getWeatherData($, 0),    // 今日
-    sendData.tomorrow = getWeatherData($, 1)  // 明日
+    sendData.today = getWeatherData($, todayTableTagQuery),    // 今日
+    sendData.tomorrow = getWeatherData($, tomorrowTableTagQuery)  // 明日
   ])
 }
 
@@ -40,41 +46,28 @@ function parseContents($) {
  * @param {cheero.contents} $ htmlコンテンツ
  * @param {number} index 取得先のインデックス
  */
-function getWeatherData($, index) {
+function getWeatherData($, tableTagQuery) {
   const data = [];
   /**
    * #bd-main > div:nth-child(3) > table:nth-child(4)"
    * この↑のselectorの取得方法だと失敗する。
    * 天気タグの真上に「警報・注意報」が表示され、それによってtable:nth-child()の数値が増減する
    * （実装当初は3だったが、後日には4になった）
-   * クラス名をピンポイントで絞って取得する方法に切り替える 2017/06/13
+   * テーブルタグのIDを指定しピンポイントで絞って取得する方法する　2017/07/07
    */
-  const element = $("table.leisurePinpointWeather").eq(index);
-  // console.log(element.find("thead p").text());  // 日付確認用 消さずに残しておく
+  const element = $(tableTagQuery);
+  const windBlowQuery = element.find("tr.wind-direction td").length ? "tr.wind-direction td" : "tr.wind-blow td"
+  // console.log(element.find("tr.head td div p").text());  // 日付確認用 消さずに残しておく
   for (i = 1; i < 5; i++) {
     data.push({
       hour: element.find("tr.hour td").eq(i).text().trim(),
       weather:element.find("tr.weather td").eq(i).text().trim(),
-      windBlow: element.find("tr.windBlow td").eq(i).text().trim(),
-      windSpeed: element.find("tr.windSpeed td").eq(i).text().trim()
+      windBlow: element.find(windBlowQuery).eq(i).text().trim(),
+      windSpeed: element.find("tr.wind-speed td").eq(i).text().trim()
     })
   }
   return data;
 }
-
-// function getWeatherData($, index) {
-//   hour = 0;
-//   data = [];
-//   for (var i = 3; i < 8; i++) {
-//     data.push({
-//       hour: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.hour > td:nth-child(${i-1}) > span`).text().trim(),
-//       weather: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.weather > td:nth-child(${i}) > p`).text().trim(),
-//       windBlow: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.windBlow > td:nth-child(${i}) > p`).text().trim(),
-//       windSpeed: $(`#bd-main > div:nth-child(3) > table:nth-child(${index}) > tbody > tr.windSpeed > td:nth-child(${i}) > span`).text().trim()
-//     })
-//   }
-//   return data;
-// }
 
 /**
  * DBへ登録
