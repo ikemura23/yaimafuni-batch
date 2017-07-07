@@ -110,13 +110,25 @@ function getStatusCode(arreaTag) {
 
 /**
  * 重要そうなコメントだけ表示するため精査する
- * @param {string} comment 
+ * @param string comment 
  */
 function filter(comment) {
   switch (comment) {
     case "全便平常運航":
       return "";
- case "通常運航。":
+    case "通常運航。":
+      return "";
+    case "竹富航路、通常運航です。":
+      return "";
+    case "小浜航路、通常運航です。":
+      return "";
+    case "黒島航路、通常運航です。":
+      return "";
+    case "西表島上原航路、通常運航です。":
+      return "";
+    case "鳩間航路、通常運航です。":
+      return "";
+    case "西表島大原航路、通常運航です。":
       return "";
     default:
       return comment;
