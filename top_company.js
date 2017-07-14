@@ -21,13 +21,17 @@ function createTopCompanyStatus(company) {
  */
 function readFirebase(company) {
   return firebase.database()
-    .ref(`${company}/ports`)
+    .ref(`${company}`)
     .once('value')
     .then(function (snapshot) {
       const statuses = [];
       snapshot.forEach(function (element) {
         const portData = element.val();
         if (portData.portCode == undefined) return false; //全体コメントはスキップ
+        // ドリームのuehara, hatomaはuehara_hatomaを表示の都合で分割して作っているため、正式な運行カウントとして含まない
+        if (company == consts.DREAM && (portData.portCode == consts.UEHARA || portData.portCode == consts.HATOMA)) {
+          return false;
+        }
         statuses.push(portData.status.code); // 一旦配列に結果を保存
       });
       return Promise.resolve(statuses);
@@ -39,43 +43,20 @@ function readFirebase(company) {
  * @param {aneiの運行結果配列} statuses 
  */
 function createStatus(statuses, company) {
-  // console.log(statuses);
-
+  
   const data = {
-    comment: '',
-    cationFlag: false,
-    cancelFlag: false,
-    suspendFlag: false,
-    allNormalFlag: false
-  }
-
-  // 欠航 があるか？
-  if (statuses.indexOf(consts.CANCEL) > 0) {
-    data.comment += '欠航';
-    data.cancelFlag = true;
-  }
-
-  // 注意 があるか？
-  if (statuses.indexOf(consts.CATION) > 0) {
-    if (data.comment.length) data.comment += ',';
-    data.comment += '注意';
-    data.cationFlag = true;
-  }
-
-  // 運休 があるか？
-  if (statuses.indexOf(consts.SUSPEND) > 0) {
-    if (data.comment.length) data.comment += ',';
-    data.comment += '運休';
-    data.suspendFlag = true;
-  }
-
-  // すべて運行か？
-  if (data.comment.length == '') {
-    // 欠航も注意も未定もなし＝すべて運行
-    data.comment = '通常運行';
-    data.allNormalFlag = true;
-  } else {
-    data.comment += 'あり';
+    nomal: statuses.filter(function (value) {
+      return value == consts.NORMAL;
+    }).length,
+    cancel: statuses.filter(function (value) {
+      return value == consts.CANCEL;
+    }).length,
+    cation: statuses.filter(function (value) {
+      return value == consts.CATION;
+    }).length,
+    suspend: statuses.filter(function (value) {
+      return value == consts.SUSPEND;
+    }).length
   }
 
   sendData[company] = data;
@@ -101,5 +82,6 @@ module.exports = () => {
     .then(() => createTopCompanyStatus(consts.DREAM))
     .then(() => sendFirebase())
     .catch((error) => sendError(error.stack))
+    // .catch((error) => console.log(error))
     .then(() => console.log('完了 トップ 会社別'))
 }
