@@ -167,10 +167,19 @@ function getStatusCode(className) {
  */
 function divideUeharaHatoma(data) {
   if (data.uehara_hatoma) {
-    data['uehara'] = data.uehara_hatoma;
-    data.uehara.portCode = 'uehara';
-    data['hatoma'] = data.uehara_hatoma;
-    data.hatoma.portCode = 'hatoma';
+    data['uehara'] = {
+      portCode: consts.UEHARA,
+      portName: data.uehara_hatoma.portName,
+      comment: data.uehara_hatoma.comment,
+      status: data.uehara_hatoma.status
+    }
+
+    data['uehara'] = {
+      portCode: consts.HATOMA,
+      portName: data.uehara_hatoma.portName,
+      comment: data.uehara_hatoma.comment,
+      status: data.uehara_hatoma.status
+    }
   }
   return Promise.resolve(data);
 }
