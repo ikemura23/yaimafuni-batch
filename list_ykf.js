@@ -24,13 +24,9 @@ function log(val) {
 module.exports = () => {
   return Promise.resolve()
     .then(() => console.log(`開始: ${COMPANY} 一覧`))
-    .then(() => console.log('getHtmlContents'))
     .then(() => getHtmlContents())
-    .then(() => console.log('getUpdateDate'))
     .then(() => getUpdateDate())
-    .then(() => console.log('getStatusList'))
     .then(() => getStatusList())
-    .then(() => console.log('sendToServer'))
     .then(() => sendToServer())
     .then(() => console.log(`完了: ${COMPANY} 一覧`))
     .catch(process.on('unhandledRejection', console.dir))
@@ -97,66 +93,66 @@ function sendToServer() {
   })
 }
 
-function run() {
-  console.log('開始:' + COMPANY + ' 一覧');
-  return new Promise(function (resolve) {
-    client.fetch(URL)
-      .then(function (result) {
-        const $ = result.$;
-        if (!$) return null;
+// function run() {
+//   console.log('開始:' + COMPANY + ' 一覧');
+//   return new Promise(function (resolve) {
+//     client.fetch(URL)
+//       .then(function (result) {
+//         const $ = result.$;
+//         if (!$) return null;
 
-        const sendData = {
-          comment: '',
-          updateTime: $('div.unkou_time_top').html().trim(), // 更新日時
-          ports: []
-        }
+//         const sendData = {
+//           comment: '',
+//           updateTime: $('div.unkou_time_top').html().trim(), // 更新日時
+//           ports: []
+//         }
 
-        // 港別に取得してパース処理
-        $('#unkou_bg_top > div.unkou_joukyou > div').each(function () {
+//         // 港別に取得してパース処理
+//         $('#unkou_bg_top > div.unkou_joukyou > div').each(function () {
 
-          // 港名
-          let portName = $(this).find('div').eq(0).text();
+//           // 港名
+//           let portName = $(this).find('div').eq(0).text();
 
-          // 港コード
-          let portCode = getPortCode(portName);
+//           // 港コード
+//           let portCode = getPortCode(portName);
 
-          // ステータス取得
-          const unkou_item_display_txt = $(this).find('div.unkou_item_display_in > div.unkou_item_display_txt');
-          const kigou = unkou_item_display_txt.find('span').eq(0).text().trim(); // ○ , △ , ×
-          const statusText = unkou_item_display_txt.text().replace(kigou, '').trim(); // ○通常運行 -> 通常運行
-          const bikou = $(this).find('div.no_disp.unkou_item_display_bikou').text().trim(); //備考 あったりなかったりする
-          const statusCode = getStatusCode(kigou);
+//           // ステータス取得
+//           const unkou_item_display_txt = $(this).find('div.unkou_item_display_in > div.unkou_item_display_txt');
+//           const kigou = unkou_item_display_txt.find('span').eq(0).text().trim(); // ○ , △ , ×
+//           const statusText = unkou_item_display_txt.text().replace(kigou, '').trim(); // ○通常運行 -> 通常運行
+//           const bikou = $(this).find('div.no_disp.unkou_item_display_bikou').text().trim(); //備考 あったりなかったりする
+//           const statusCode = getStatusCode(kigou);
 
-          // 運行情報を作成
-          const port = {
-            portCode: portCode,
-            portName: portName,
-            comment: bikou,
-            status: {
-              code: statusCode,
-              text: statusText
-            }
-          }
-          // sendData.ports.push(port);
-          sendData[portCode] = port;
-          //   console.log(portName + ' 完了');
-        });
-        return sendData;
-      })
-      .then(function (data) {
-        if (!data) return;
-        // console.log('DB登録開始' + ':' + COMPANY);
-        return firebase.database().ref(TABLE).update(data, function () {
-          // console.log('DB登録完了' + ':' + COMPANY);
-        })
-      })
-      .catch((error) => sendError(error.stack))
-      .finally(function () {
-        console.log('完了' + ':' + COMPANY + ' 一覧');
-        resolve()
-      });
-  });
-}
+//           // 運行情報を作成
+//           const port = {
+//             portCode: portCode,
+//             portName: portName,
+//             comment: bikou,
+//             status: {
+//               code: statusCode,
+//               text: statusText
+//             }
+//           }
+//           // sendData.ports.push(port);
+//           sendData[portCode] = port;
+//           //   console.log(portName + ' 完了');
+//         });
+//         return sendData;
+//       })
+//       .then(function (data) {
+//         if (!data) return;
+//         // console.log('DB登録開始' + ':' + COMPANY);
+//         return firebase.database().ref(TABLE).update(data, function () {
+//           // console.log('DB登録完了' + ':' + COMPANY);
+//         })
+//       })
+//       .catch((error) => sendError(error.stack))
+//       .finally(function () {
+//         console.log('完了' + ':' + COMPANY + ' 一覧');
+//         resolve()
+//       });
+//   });
+// }
 
 // 港名から港コードを返す
 function getPortCode(portName) {
