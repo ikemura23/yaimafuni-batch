@@ -7,18 +7,18 @@ const config = require("./config.json");
 module.exports = function post(msg) {
   console.log('Post to Slack: ' + msg);
 
-  // const webhookUri = config.slack.webHookUrl;
-  // slack = new Slack();
-  // slack.setWebhook(webhookUri);
-  // slack.webhook({
-  //   channel: "#notification",
-  //   username: "yaimafuni-backend",
-  //   icon_emoji: ":ghost:",
-  //   text: getNowFormatDateTime() + '\n' + msg,
-  // }, function(err, response) {
-  //   if (err) console.log(err);
-  //   // console.log(response);
-  // });
+  const webhookUri = config.slack.webHookUrl;
+  slack = new Slack();
+  slack.setWebhook(webhookUri);
+  slack.webhook({
+    channel: "#notification",
+    username: "yaimafuni-backend",
+    icon_emoji: ":ghost:",
+    text: getNowFormatDateTime() + '\n' + msg,
+  }, function(err, response) {
+    if (err) console.log(err);
+    // console.log(response);
+  });
 }
 
 /**
