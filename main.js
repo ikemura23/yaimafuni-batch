@@ -19,17 +19,20 @@ const topPort = require('./top_port.js');
 const weather = require('./weather.js');
 const tenkijp = require('./tenkijp.js');
 
+const aneiListAndroid = require('./list_anei_android.js');
+
 // const slack = require('./slack');
 
 Promise.resolve()
   .then(() => console.log('main start'))
-  .then(() => AneiList())
-  .then(() => YkfList())
-  .then(() => DreamList())
-  .then(() => AneiDetail())
+  // .then(() => AneiList())
+  // .then(() => YkfList())
+  // .then(() => DreamList())
+  // .then(() => AneiDetail())
   // .then(() => YkfDetail())
-  .then(() => weather())
-  .then(() => topPort())
-  .then(() => tenkijp())
+  // .then(() => weather())
+  // .then(() => topPort())
+  // .then(() => tenkijp())
+  .then(() => aneiListAndroid())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))
