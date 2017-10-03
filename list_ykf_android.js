@@ -1,4 +1,3 @@
-const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const consts = require('./consts.js');
 const sendError = require('./slack');
@@ -8,7 +7,6 @@ const NCMB = require("ncmb");
 const ncmb = new NCMB(config.ncmb.apiKey, config.ncmb.clientKey);
 
 const COMPANY = consts.YKF;
-const TABLE_NAME = COMPANY;
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
 const sendData = {
@@ -72,10 +70,10 @@ function getListData() {
  */
 function send() {
     console.log(sendData);
-    const AneiClass = ncmb.DataStore("YkfLinersTest");
-    const anei = new AneiClass();
-
-    return anei
+    const DataStore = ncmb.DataStore("YkfLiners");
+    const dataStore = new DataStore();
+    
+    return dataStore
         .set("result_json", sendData)
         .save();
 }

@@ -1,4 +1,3 @@
-const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const consts = require('./consts.js');
 const sendError = require('./slack');
@@ -8,7 +7,6 @@ const NCMB = require("ncmb");
 const ncmb = new NCMB(config.ncmb.apiKey, config.ncmb.clientKey);
 
 const COMPANY = consts.DREAM;
-const TABLE_NAME = COMPANY;
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
 const sendData = {
@@ -40,7 +38,6 @@ function makeAllData() {
     sendData.mLiners.push(makeData(orig.taketomi));
     sendData.mLiners.push(makeData(orig.kohama));
     sendData.mLiners.push(makeData(orig.kuroshima));
-    sendData.mLiners.push(makeData(orig.hatoma));
     sendData.mLiners.push(makeData(orig.oohara));
     sendData.mLiners.push(makeData(orig.uehara_hatoma));
 }
@@ -79,10 +76,10 @@ function getListData() {
  */
 function send() {
     console.log(sendData);
-    const AneiClass = ncmb.DataStore("DreamLinersTest");
-    const anei = new AneiClass();
+    const DataStore = ncmb.DataStore("DreamLiners");
+    const dataStore = new DataStore();
 
-    return anei
+    return dataStore
         .set("result_json", sendData)
         .save();
 }

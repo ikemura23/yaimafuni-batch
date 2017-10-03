@@ -22,21 +22,25 @@ const tenkijp = require('./tenkijp.js');
 const aneiListAndroid = require('./list_anei_android.js');
 const ykfListAndroid = require('./list_ykf_android.js');
 const dreamListAndroid = require('./list_dream_android.js');
+const weatherAndroid = require('./weahter_android.js');
+const topAndroid = require('./top_android.js');
 
 // const slack = require('./slack');
 
 Promise.resolve()
   .then(() => console.log('main start'))
-  // .then(() => AneiList())
-  // .then(() => YkfList())
-  // .then(() => DreamList())
-  // .then(() => AneiDetail())
+  .then(() => AneiList())
+  .then(() => YkfList())
+  .then(() => DreamList())
+  .then(() => AneiDetail())
   // .then(() => YkfDetail())
-  // .then(() => weather())
-  // .then(() => topPort())
-  // .then(() => tenkijp())
-  // .then(() => aneiListAndroid())
+  .then(() => weather())
+  .then(() => topPort())
+  .then(() => tenkijp())
+  .then(() => aneiListAndroid())
   .then(() => ykfListAndroid())
   .then(() => dreamListAndroid())
+  .then(() => weatherAndroid())
+  .then(() => topAndroid())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))

@@ -73,7 +73,7 @@ function getListData() {
  */
 function send() {
     console.log(sendData);
-    const AneiClass = ncmb.DataStore("AnneiLinersTest");
+    const AneiClass = ncmb.DataStore("AnneiLiners");
     const anei = new AneiClass();
 
     return anei
