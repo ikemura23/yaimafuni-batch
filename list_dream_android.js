@@ -51,6 +51,14 @@ function makeData(origData) {
     else {
         portCode = origData.portCode.toUpperCase();
     }
+    let statusCode;
+    if (origData.status.code == consts.CATION) {
+        statusCode = 'CAUTION';
+    }
+    else {
+        statusCode = origData.status.code.toUpperCase();
+    }
+
     return {
         port: portCode,
         status: origData.status.code.toUpperCase(),

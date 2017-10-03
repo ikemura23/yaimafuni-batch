@@ -45,9 +45,17 @@ function makeAllData() {
 
 function makeData(origData) {
     // console.log(origData)
+    let statusCode;
+    if (origData.status.code == consts.CATION) {
+        statusCode = 'CAUTION';
+    }
+    else {
+        statusCode = origData.status.code.toUpperCase();
+    }
+    
     return {
         port: origData.portCode.toUpperCase(),
-        status: origData.status.code.toUpperCase(),
+        status: statusCode,
         text: (origData.status.text + ' ' + origData.comment).trim(),
     }
 }

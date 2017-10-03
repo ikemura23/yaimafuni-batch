@@ -1,7 +1,42 @@
 {
-    "date": "10月3日(火)",
-    "temperature": "33℃[+1] 28℃[0]",
-    "wave": "1メートル後1.5メートル",
-    "weather": "晴れ",
-    "wind": "東の風後北東の風"
+    "mCompany": "ANNEI",
+    "mLiners": [
+        {
+            "port": "TAKETOMI",
+            "status": "normal",
+            "text": "通常運航 竹富島航路、通常運航です。"
+        },
+        {
+            "port": "KOHAMA",
+            "status": "normal",
+            "text": "通常運航 小浜島航路、通常運航です。"
+        },
+        {
+            "port": "KUROSHIMA",
+            "status": "normal",
+            "text": "通常運航"
+        },
+        {
+            "port": "OOHARA",
+            "status": "normal",
+            "text": "通常運航"
+        },
+        {
+            "port": "UEHARA",
+            "status": "normal",
+            "text": "通常運航"
+        },
+        {
+            "port": "HATOMA",
+            "status": "normal",
+            "text": "通常運航 鳩間島航路、通常運航です。"
+        },
+        {
+            "port": "HATERUMA",
+            "status": "other",
+            "text": "全便未定 波照間島航路運航未定（07：40頃決定）"
+        }
+    ],
+    "mTitle": "波照間航路運航未定、その他通常運航。",
+    "mUpdateTime": "2017年10月04日　06:05時点"
 }
