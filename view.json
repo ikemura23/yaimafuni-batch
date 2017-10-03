@@ -1,0 +1,37 @@
+{
+    "mCompany": "DREAM",
+    "mLiners": [
+        {
+            "port": "TAKETOMI",
+            "status": "NORMAL",
+            "text": "通常運航 "
+        },
+        {
+            "port": "KOHAMA",
+            "status": "NORMAL",
+            "text": "通常運航 "
+        },
+        {
+            "port": "KUROSHIMA",
+            "status": "NORMAL",
+            "text": "通常運航 "
+        },
+        {
+            "port": "HATOMA",
+            "status": "SUSPEND",
+            "text": "運休 "
+        },
+        {
+            "port": "OOHARA",
+            "status": "NORMAL",
+            "text": "通常運航 "
+        },
+        {
+            "port": "HATOMA_UEHARA",
+            "status": "SUSPEND",
+            "text": "運休 "
+        }
+    ],
+    "mTitle": "",
+    "mUpdateTime": "2017年10月3日 7時09分（火）"
+}

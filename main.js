@@ -20,6 +20,8 @@ const weather = require('./weather.js');
 const tenkijp = require('./tenkijp.js');
 
 const aneiListAndroid = require('./list_anei_android.js');
+const ykfListAndroid = require('./list_ykf_android.js');
+const dreamListAndroid = require('./list_dream_android.js');
 
 // const slack = require('./slack');
 
@@ -33,6 +35,8 @@ Promise.resolve()
   // .then(() => weather())
   // .then(() => topPort())
   // .then(() => tenkijp())
-  .then(() => aneiListAndroid())
+  // .then(() => aneiListAndroid())
+  .then(() => ykfListAndroid())
+  .then(() => dreamListAndroid())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))

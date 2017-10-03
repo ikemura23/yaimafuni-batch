@@ -7,12 +7,12 @@ const config = require("./config.json");
 const NCMB = require("ncmb");
 const ncmb = new NCMB(config.ncmb.apiKey, config.ncmb.clientKey);
 
-const COMPANY = consts.ANEI;
+const COMPANY = consts.YKF;
 const TABLE_NAME = COMPANY;
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
 const sendData = {
-    mCompany: 'ANNEI',
+    mCompany: 'YKF',
     mLiners: [],
     mTitle: '',
     mUpdateTime: ''
@@ -43,7 +43,6 @@ function makeAllData() {
     sendData.mLiners.push(makeData(orig.oohara));
     sendData.mLiners.push(makeData(orig.uehara));
     sendData.mLiners.push(makeData(orig.hatoma));
-    sendData.mLiners.push(makeData(orig.hateruma));
 }
 
 function makeData(origData) {
@@ -73,7 +72,7 @@ function getListData() {
  */
 function send() {
     console.log(sendData);
-    const AneiClass = ncmb.DataStore("AnneiLinersTest");
+    const AneiClass = ncmb.DataStore("YkfLinersTest");
     const anei = new AneiClass();
 
     return anei

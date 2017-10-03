@@ -7,12 +7,12 @@ const config = require("./config.json");
 const NCMB = require("ncmb");
 const ncmb = new NCMB(config.ncmb.apiKey, config.ncmb.clientKey);
 
-const COMPANY = consts.ANEI;
+const COMPANY = consts.DREAM;
 const TABLE_NAME = COMPANY;
 // client.debug = true; // cheerio-httpcliのデバッグ出力切り替え
 
 const sendData = {
-    mCompany: 'ANNEI',
+    mCompany: 'DREAM',
     mLiners: [],
     mTitle: '',
     mUpdateTime: ''
@@ -40,16 +40,22 @@ function makeAllData() {
     sendData.mLiners.push(makeData(orig.taketomi));
     sendData.mLiners.push(makeData(orig.kohama));
     sendData.mLiners.push(makeData(orig.kuroshima));
-    sendData.mLiners.push(makeData(orig.oohara));
-    sendData.mLiners.push(makeData(orig.uehara));
     sendData.mLiners.push(makeData(orig.hatoma));
-    sendData.mLiners.push(makeData(orig.hateruma));
+    sendData.mLiners.push(makeData(orig.oohara));
+    sendData.mLiners.push(makeData(orig.uehara_hatoma));
 }
 
 function makeData(origData) {
     // console.log(origData)
+    let portCode;
+    if (origData.portCode == 'uehara_hatoma') {
+        portCode = 'HATOMA_UEHARA';
+    }
+    else {
+        portCode = origData.portCode.toUpperCase();
+    }
     return {
-        port: origData.portCode.toUpperCase(),
+        port: portCode,
         status: origData.status.code.toUpperCase(),
         text: (origData.status.text + ' ' + origData.comment).trim(),
     }
@@ -73,7 +79,7 @@ function getListData() {
  */
 function send() {
     console.log(sendData);
-    const AneiClass = ncmb.DataStore("AnneiLinersTest");
+    const AneiClass = ncmb.DataStore("DreamLinersTest");
     const anei = new AneiClass();
 
     return anei
