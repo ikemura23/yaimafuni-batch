@@ -40,6 +40,7 @@ function getHtmlContents() {
     .then(function (result) {
       return new Promise(function (resolve) {
         $ = result.$;
+        // console.log($.html())
         resolve();
       })
     })
@@ -60,12 +61,16 @@ function getUpdateDate() {
  * 一覧ステータスの取得
  */
 function getStatusList() {
+  // console.log($('#operation_status div.status div').text())
   return new Promise(function (resolve) {
-    $('#operation_status div.status div.kouro').each(function () {
+    $('#operation_status div.status div').each(function () {
       const portName = $(this).contents().eq(0).text().trim();  // 港名(竹富, 西表大原, 小浜-竹富 ...)
       const portCode = getPortCode(portName); // 港コード (taketomi, kohama ...)
-      const origStatus = $(this).contents().eq(2).text().trim();  // ステータス文字  〇
+      const origStatus = $(this).contents().eq(2).text().trim();  // ステータス文字  〇 ×
       const status = getStatusCode(origStatus); // ステータスコード (normal, cancel ...)
+      
+      if (portCode == undefined) return;
+
       console.log(`${portName} ${portCode} ${origStatus} ${status.code} ${status.text}`)
 
       const port = {
@@ -186,7 +191,7 @@ function getStatusCode(kigou) {
   if (kigou == '△') {
     statu.code = "cation";
     statu.text = "注意";
-  } else if (kigou == '✕') {
+  } else if (kigou == '×') {
     statu.code = "cancel";
     statu.text = "欠航";
   } else if (kigou == '〇') {
