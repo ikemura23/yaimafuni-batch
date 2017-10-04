@@ -122,26 +122,57 @@ function filter(comment) {
       return "";
     case "竹富航路、通常運航です":
       return "";
+    case "竹富島航路、通常運航。":
+      return "";
     case "小浜航路、通常運航です。":
       return "";
     case "小浜航路、通常運航です":
+      return "";
+    case "小浜島航路、通常運航。":
       return "";
     case "黒島航路、通常運航です。":
       return "";
     case "黒島航路、通常運航です":
       return "";
+    case "黒島航路、通常運航。":
+      return "";
     case "西表島上原航路、通常運航です。":
       return "";
     case "西表島上原航路、通常運航です":
+      return "";
+    case "西表島上原航路、通常運航。":
+      return "";
+    case "西表島上原航路、欠航。":
       return "";
     case "鳩間航路、通常運航です。":
       return "";
     case "鳩間航路、通常運航です":
       return "";
+    case "鳩間航路、通常運航。":
+      return "";
+    case "鳩間島航路、通常運航。":
+      return "";
+    case "鳩間航路、欠航。":
+      return "";
+    case "鳩間島航路、欠航。":
+      return "";
     case "西表島大原航路、通常運航です。":
       return "";
     case "西表島大原航路、通常運航です":
       return "";
+    case "西表島大原航路、通常運航。":
+      return "";
+    case "波照間島航路、通常運航。":
+      return "";
+    case "波照間島航路、通常運航":
+      return "";
+    case "波照間島航路、運航。":
+      return "";
+    case "波照間島航路、運航":
+      return "";
+    case "波照間島航路、欠航。":
+      return "";
+
     default:
       return comment;
   }

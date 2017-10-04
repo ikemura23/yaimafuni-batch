@@ -43,7 +43,7 @@ function readFirebase(company) {
  * @param {aneiの運行結果配列} statuses 
  */
 function createStatus(statuses, company) {
-  
+  console.log(company)
   const data = {
     nomal: statuses.filter(function (value) {
       return value == consts.NORMAL;

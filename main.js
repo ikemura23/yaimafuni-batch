@@ -12,9 +12,9 @@ const YkfList = require('./list_ykf.js');
 const DreamList = require('./list_dream.js');
 
 const AneiDetail = require('./detail_anei.js');
-const YkfDetail = require('./detail_ykf.js');
+// const YkfDetail = require('./detail_ykf.js'); // リニューアルされたので動かない
 
-// const topCompany = require('./top_company.js');
+const topCompany = require('./top_company.js');
 const topPort = require('./top_port.js');
 const weather = require('./weather.js');
 const tenkijp = require('./tenkijp.js');
@@ -33,9 +33,9 @@ Promise.resolve()
   .then(() => YkfList())
   .then(() => DreamList())
   .then(() => AneiDetail())
-  // .then(() => YkfDetail())
   .then(() => weather())
   .then(() => topPort())
+  .then(() => topCompany())
   .then(() => tenkijp())
   .then(() => aneiListAndroid())
   .then(() => ykfListAndroid())

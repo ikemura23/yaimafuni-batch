@@ -31,12 +31,15 @@ module.exports = () => {
 
 function makeSendData() {
     if (!orig) return;
+    // console.log(orig);
     sendData.company_anei_status_type = makeData(orig.anei);
     sendData.company_ykf_status_type = makeData(orig.ykf);
     sendData.company_dream_status_type = makeData(orig.dream);
 }
 
 function makeData(params) {
+    // console.log(params);
+
     if (params.cancel > 0) {
         return 'cancel';
     }
