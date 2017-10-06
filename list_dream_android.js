@@ -43,7 +43,7 @@ function makeAllData() {
 }
 
 function makeData(origData) {
-    // console.log(origData)
+    console.log(origData)
     let portCode;
     if (origData.portCode == 'uehara_hatoma') {
         portCode = 'HATOMA_UEHARA';
@@ -61,7 +61,7 @@ function makeData(origData) {
 
     return {
         port: portCode,
-        status: origData.status.code.toUpperCase(),
+        status: statusCode.toUpperCase(),
         text: (origData.status.text + ' ' + origData.comment).trim(),
     }
 }
