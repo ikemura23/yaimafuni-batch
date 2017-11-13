@@ -12,7 +12,7 @@ const YkfList = require('./list_ykf.js');
 const DreamList = require('./list_dream.js');
 
 const AneiDetail = require('./detail_anei.js');
-// const YkfDetail = require('./detail_ykf.js'); // リニューアルされたので動かない
+const YkfDetail = require('./detail_ykf.js'); // リニューアルされたので動かない
 
 const topCompany = require('./top_company.js');
 const topPort = require('./top_port.js');
@@ -29,18 +29,19 @@ const topAndroid = require('./top_android.js');
 
 Promise.resolve()
   .then(() => console.log('main start'))
-  .then(() => AneiList())
-  .then(() => YkfList())
-  .then(() => DreamList())
-  .then(() => AneiDetail())
-  .then(() => weather())
-  .then(() => topPort())
-  .then(() => topCompany())
-  .then(() => tenkijp())
-  .then(() => aneiListAndroid())
-  .then(() => ykfListAndroid())
-  .then(() => dreamListAndroid())
-  .then(() => weatherAndroid())
-  .then(() => topAndroid())
+  // .then(() => AneiList())
+  // .then(() => YkfList())
+  // .then(() => DreamList())
+  // .then(() => AneiDetail())
+  .then(() => YkfDetail())
+  // .then(() => weather())
+  // .then(() => topPort())
+  // .then(() => topCompany())
+  // .then(() => tenkijp())
+  // .then(() => aneiListAndroid())
+  // .then(() => ykfListAndroid())
+  // .then(() => dreamListAndroid())
+  // .then(() => weatherAndroid())
+  // .then(() => topAndroid())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))

@@ -13,7 +13,7 @@ module.exports = () => {
     .then(() => console.log(`開始 ${COMPANY} 詳細`))
     .then(() => getHtmlContents())
     // .then(() => makeData())
-    .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
+    .then(() => perseAndSend())  // 竹富
     // .then(() => perseAndSend(consts.KOHAMA))    // 小浜
     // .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
     // .then(() => perseAndSend(consts.OOHARA))    // 大原
@@ -48,9 +48,28 @@ function getHtmlContents() {
  * 引数の港をパースしてDBに登録
  * @param {タグ全体} $ 
  */
-function perseAndSend(portCode) {
-  const selecotr = getSelectorString(portCode);
+function perseAndSend() {
+  const selecotr = '#operationstatus div.local table';
 
+  // tableタグをループしてパース
+  $(selecotr).each(function (idx) {
+    // console.log(idx)
+    // putHtmlLog($(this));
+
+    // 港ごとにループ
+    if (idx == 4) {
+      createTimelineOfPort($(this));
+    }
+
+  });
+};
+
+function createTimelineOfPort(data) {
+
+  // 港コード
+  const portCode = getPortCode(data.find('h3').text());
+  console.log(data.find('h3').text());
+  console.log(portCode)
   // 詳細テーブル用の変数
   let timeTable = {
     header: {
@@ -60,101 +79,78 @@ function perseAndSend(portCode) {
     row: []
   };
 
-  // tableタグをループしてパース
-  $(selecotr).each(function (idx) {
+  // trタグでループ
+  data.find('tr').each(function (idx) {
     console.log(idx)
     putHtmlLog($(this));
 
-
-    const portCode = getPortCode($(this).find('h3').text());
-    createTimelineOfPort($(this), portCode);
-
-    // 1列目は不要なのでスキップ
-    if (idx < 1) {
+    // 0行名は見出しなのでスキップ
+    if (idx == 0) {
       return true;
-    } else if (idx == 1) {
-      //ヘッダーをとる処理
+    }
+    else if (idx == 1) {
+      //ヘッダーの港名
       timeTable.header.left = $(this).find('td').eq(0).text().trim();
       timeTable.header.right = $(this).find('td').eq(1).text().trim();
       return true;
     }
 
-    // //ボディ部分
-    // //<span>○</span>10:00
-    // //<span>○</span>10:15   
+    // 以下、ボディ処理
+
     const td = $(this).find('td');
-    console.log('contents');
-console.log(td.eq(0).contents().eq(0).text());
-console.log(td.eq(0).contents().eq(1).text());
-console.log(td.eq(0).contents().eq(2).text());
-console.log(td.eq(0).contents().eq(3).text());
-    let row = {
+
+    // 左
+    const leftKigou = td.eq(0).contents().eq(0).text().substring(0, 1);
+    const leftTime = td.eq(0).contents().eq(0).text().substring(1).trim();
+
+    // 右
+    const rightKigou = td.eq(1).contents().eq(0).text().substring(0, 1);
+    const righTime = td.eq(1).contents().eq(0).text().substring(1).trim();
+
+    // row変数で組み立てる
+    const row = {
       left: {
-        time: td.eq(0).contents().eq(1).text(),
+        time: leftTime,
         status: {
-          code: getRowStatusCode(td.eq(0).contents().eq(0).text()),
-          text: convertRowStatusText(td.eq(0).contents().eq(0).text())
+          code: getRowStatusCode(leftKigou),
+          text: convertRowStatusText(leftKigou)
         }
       },
       right: {
-        time: td.eq(1).contents().eq(2).text(),
+        time: righTime,
         status: {
-          code: getRowStatusCode(td.eq(1).contents().eq(0).text()),
-          text: convertRowStatusText(td.eq(1).contents().eq(0).text().trim())
+          code: getRowStatusCode(rightKigou),
+          text: convertRowStatusText(rightKigou)
         }
       }
     }
-    // console.log(row)
+    console.log(row)
+    // 送信用変数に追加
     timeTable.row.push(row);
-  });
-  console.log(portCode)
-  console.log(timeTable)
-  return Promise.resolve();
-  // Firebaseへ登録
-  // return sendToFirebase(portCode, timeTable);
-};
-
-function createTimelineOfPort(data, portCode) {
-  data.find('tr').each(function (idx) {
-
-    console.log(idx)
-    putHtmlLog($(this));
   })
+
+  console.log(timeTable)
+  // Firebaseへ登録
+  return sendToFirebase(portCode, timeTable);
 }
+
+/**
+ * DBへ登録
+ */
+function sendToFirebase(portCode, sendData) {
+  
+  const tableName = `${COMPANY}/${portCode}/timeTable/`;
+  console.log('送信開始' + tableName)
+  return firebase.database()
+    .ref(tableName)
+    .set(sendData, function () {
+      console.log('送信完了');
+    })
+};
 
 function putHtmlLog(value) {
   if (!value.html()) return;
   console.log(value.html().trim().replace(/\t/g, ''));
-}
-
-/**
- * 指定した航路のSelectorを返す
- * @param {航路名} route 
- */
-function getSelectorString(route) {
-  switch (route) {
-    case consts.TAKETOMI:
-
-      return '#operationstatus div.local table';
-    case consts.KOHAMA:
-      return '#unkou_id2 > table > tbody > tr';
-    case consts.KOHAMA_TAKETOMI:
-      return '#unkou_id3 > table > tbody > tr';
-    case consts.KUROSHIMA:
-      return '#unkou_id4 > table > tbody > tr';
-    case consts.KOHAMA_OOHARA:
-      return '#unkou_id5 > table > tbody > tr';
-    case consts.OOHARA:
-      return '#unkou_id6 > table > tbody > tr';
-    case consts.UEHARA:
-      return '#unkou_id7 > table > tbody > tr';
-    case consts.HATOMA:
-      return '#unkou_id8 > table > tbody > tr';
-    case consts.UEHARA_HATOMA:
-      return '#unkou_id9 > table > tbody > tr';
-    default:
-      return '';
-  }
 }
 
 /**
@@ -207,16 +203,6 @@ function convertRowStatusText(statusText) {
       return '注意'
   }
 }
-
-/**
- * DBへ登録
- */
-function sendToFirebase(portCode, sendData) {
-  const tableName = `${COMPANY}/${portCode}/timeTable/`;
-  return firebase.database()
-    .ref(tableName)
-    .set(sendData)
-};
 
 // 港名から港コードを返す
 function getPortCode(portName) {
