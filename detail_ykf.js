@@ -13,7 +13,7 @@ module.exports = () => {
     .then(() => console.log(`開始 ${COMPANY} 詳細`))
     .then(() => getHtmlContents())
     // .then(() => makeData())
-    .then(() => perseAndSend())  // 竹富
+    .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
     // .then(() => perseAndSend(consts.KOHAMA))    // 小浜
     // .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
     // .then(() => perseAndSend(consts.OOHARA))    // 大原
@@ -27,6 +27,9 @@ module.exports = () => {
     .then(() => console.log(`完了 ${COMPANY} 詳細`))
 }
 
+/**
+ * HTMLコンテンツを取得してクラス変数に保持
+ */
 function getHtmlContents() {
   return client.fetch(URL)
     .then(function (result) {
@@ -48,8 +51,10 @@ function getHtmlContents() {
  * 引数の港をパースしてDBに登録
  * @param {タグ全体} $ 
  */
-function perseAndSend() {
+function perseAndSend(portCode) {
+  // console.log(portCode);
   const selecotr = '#operationstatus div.local table';
+  const targetIndex = getPortIndex(portCode);
 
   // tableタグをループしてパース
   $(selecotr).each(function (idx) {
@@ -57,18 +62,22 @@ function perseAndSend() {
     // putHtmlLog($(this));
 
     // 港ごとにループ
-    if (idx == 4) {
+    if (targetIndex == idx) {
       createTimelineOfPort($(this));
     }
 
   });
+  return Promise.resolve();
 };
 
+/**
+ * スクレイピングして送信する
+ */
 function createTimelineOfPort(data) {
 
   // 港コード
   const portCode = getPortCode(data.find('h3').text());
-  console.log(data.find('h3').text());
+  // console.log(data.find('h3').text());
   console.log(portCode)
   // 詳細テーブル用の変数
   let timeTable = {
@@ -81,8 +90,8 @@ function createTimelineOfPort(data) {
 
   // trタグでループ
   data.find('tr').each(function (idx) {
-    console.log(idx)
-    putHtmlLog($(this));
+    // console.log(idx)
+    // putHtmlLog($(this));
 
     // 0行名は見出しなのでスキップ
     if (idx == 0) {
@@ -124,7 +133,7 @@ function createTimelineOfPort(data) {
         }
       }
     }
-    console.log(row)
+    // console.log(row)
     // 送信用変数に追加
     timeTable.row.push(row);
   })
@@ -138,16 +147,19 @@ function createTimelineOfPort(data) {
  * DBへ登録
  */
 function sendToFirebase(portCode, sendData) {
-  
+
   const tableName = `${COMPANY}/${portCode}/timeTable/`;
   console.log('送信開始' + tableName)
   return firebase.database()
     .ref(tableName)
-    .set(sendData, function () {
+    .set(sendData, () => {
       console.log('送信完了');
     })
 };
 
+/**
+ * ログ出力用
+ */
 function putHtmlLog(value) {
   if (!value.html()) return;
   console.log(value.html().trim().replace(/\t/g, ''));
@@ -221,5 +233,40 @@ function getPortCode(portName) {
     return consts.HATOMA;
   } else if (portName.toString().includes("波照間")) {
     return consts.HATERUMA;
+  }
+}
+
+// 指定した港からスクレイピングのインデックスを返す
+function getPortIndex(portCode) {
+  switch (portCode) {
+    case consts.TAKETOMI:
+      //竹富
+      return 0;
+    case consts.KOHAMA:
+      //小浜
+      return 1
+    case consts.KUROSHIMA:
+      //黒島
+      return 2
+    case consts.OOHARA:
+      //大原
+      return 3
+    case consts.UEHARA:
+      //上原
+      return 4
+    case consts.HATOMA:
+      //鳩間
+      return 5
+    case consts.KOHAMA_TAKETOMI:
+      //小浜-竹富
+      return 6
+    case consts.KOHAMA_OOHARA:
+      //小浜-大原
+      return 7
+    case consts.UEHARA_HATOMA:
+      //上原-鳩間
+      return 8
+    default:
+      return 0
   }
 }
