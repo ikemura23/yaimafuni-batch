@@ -86,7 +86,7 @@ function createTimelineOfPort(data) {
     // 以下、ボディ処理
 
     const td = $(this).find('td');
-    console.log(td.text());
+    // console.log(td.text());
 
     // 左
     const leftKigou = td.eq(0).contents().eq(0).text().substring(0, 1);
@@ -129,12 +129,10 @@ function createTimelineOfPort(data) {
 function sendToFirebase(portCode, sendData) {
 
   const tableName = `${COMPANY}/${portCode}/timeTable/`;
-  console.log('送信開始' + tableName)
+  // console.log('送信開始' + tableName)
   return firebase.database()
     .ref(tableName)
-    .set(sendData, () => {
-      console.log('送信完了');
-    })
+    .set(sendData)
 };
 
 /**
