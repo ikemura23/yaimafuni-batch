@@ -1,7 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const sendError = require('./slack');
-
+client.setBrowser('chrome');
 const URL = 'https://tenki.jp/forecast/10/50/9410/47207/3hours.html';
 const sendData = { today: [], tomorrow: [] };
 

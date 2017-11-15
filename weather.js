@@ -1,7 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const sendError = require('./slack');
-
+client.setBrowser('chrome');
 const URL = 'http://weather.yahoo.co.jp/weather/jp/47/9410.html';
 const TABLE = "weather";
 const sendData = { today: '', tomorrow: '' };

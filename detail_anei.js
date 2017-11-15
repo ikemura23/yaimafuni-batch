@@ -2,7 +2,7 @@ const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const consts = require('./consts.js');
 const sendError = require('./slack');
-
+client.setBrowser('chrome');
 const COMPANY = consts.ANEI;
 const URL = 'http://www.aneikankou.co.jp';
 const sendData = new Map();
