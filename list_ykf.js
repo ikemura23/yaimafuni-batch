@@ -66,9 +66,11 @@ function getStatusList() {
     $('#operation_status div.status div').each(function () {
       const portName = $(this).contents().eq(0).text().trim();  // 港名(竹富, 西表大原, 小浜-竹富 ...)
       const portCode = getPortCode(portName); // 港コード (taketomi, kohama ...)
+      // クラス名でステータスを判定する方法もある 通常運行(青):kouro 一部欠航(黄色)：kouroy
       const origStatus = $(this).contents().eq(2).text().trim();  // ステータス文字  〇 ×
       const status = getStatusCode(origStatus); // ステータスコード (normal, cancel ...)
-      
+      const comment = origStatus.length > 1 ? origStatus : '';
+
       if (portCode == undefined) return;
 
       console.log(`${portName} ${portCode} ${origStatus} ${status.code} ${status.text}`)
@@ -76,7 +78,7 @@ function getStatusList() {
       const port = {
         portCode: portCode,
         portName: portName,
-        comment: '',
+        comment: comment,
         status: {
           code: status.code,
           text: status.text
