@@ -2,7 +2,7 @@ const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const consts = require('./consts.js');
 const sendError = require('./slack');
-
+client.setBrowser('chrome');
 const COMPANY = consts.DREAM;
 const TABLE = COMPANY + '/';
 const URL = 'http://ishigaki-dream.co.jp/';
