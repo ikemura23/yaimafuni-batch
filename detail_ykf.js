@@ -14,15 +14,15 @@ module.exports = () => {
     .then(() => getHtmlContents())
     // .then(() => makeData())
     .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
-    // .then(() => perseAndSend(consts.KOHAMA))    // 小浜
-    // .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
-    // .then(() => perseAndSend(consts.OOHARA))    // 大原
-    // .then(() => perseAndSend(consts.UEHARA))    // 上原
-    // .then(() => perseAndSend(consts.HATOMA))    // 鳩間
-    // .then(() => perseAndSend(consts.KOHAMA_TAKETOMI)) // 小浜-竹富
-    // .then(() => perseAndSend(consts.KOHAMA_OOHARA)) // 小浜-大原
-    // .then(() => perseAndSend(consts.UEHARA_HATOMA)) // 上原-鳩間
-    // .catch((error) => sendError(error.stack))
+    .then(() => perseAndSend(consts.KOHAMA))    // 小浜
+    .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
+    .then(() => perseAndSend(consts.OOHARA))    // 大原
+    .then(() => perseAndSend(consts.UEHARA))    // 上原
+    .then(() => perseAndSend(consts.HATOMA))    // 鳩間
+    .then(() => perseAndSend(consts.KOHAMA_TAKETOMI)) // 小浜-竹富
+    .then(() => perseAndSend(consts.KOHAMA_OOHARA)) // 小浜-大原
+    .then(() => perseAndSend(consts.UEHARA_HATOMA)) // 上原-鳩間
+    .catch((error) => sendError(error.stack))
     .catch(process.on('unhandledRejection', console.dir))
     .then(() => console.log(`完了 ${COMPANY} 詳細`))
 }
@@ -52,22 +52,41 @@ function getHtmlContents() {
  * @param {タグ全体} $ 
  */
 function perseAndSend(portCode) {
+  // return new Promise(function (resolve) {
+    const selecotr = '#operationstatus div.local table';
+    const targetIndex = getPortIndex(portCode);
+    return createTimelineOfPort($(selecotr).eq(targetIndex));
+    // tableタグをループしてパース
+    
+  //   $(selecotr).each(function (idx) {
+      
+      
+  //     // console.log(idx)
+  //     // putHtmlLog($(this));
+
+  //     // 港ごとにループ
+  //     if (targetIndex == idx) {
+  //       createTimelineOfPort($(this));
+  //     }
+  //   });
+  // })
   // console.log(portCode);
-  const selecotr = '#operationstatus div.local table';
-  const targetIndex = getPortIndex(portCode);
+  // const selecotr = '#operationstatus div.local table';
+  // const targetIndex = getPortIndex(portCode);
 
-  // tableタグをループしてパース
-  $(selecotr).each(function (idx) {
-    // console.log(idx)
-    // putHtmlLog($(this));
+  // // tableタグをループしてパース
+  // $(selecotr).each(function (idx) {
+  //   // console.log(idx)
+  //   // putHtmlLog($(this));
 
-    // 港ごとにループ
-    if (targetIndex == idx) {
-      createTimelineOfPort($(this));
-    }
+  //   // 港ごとにループ
+  //   // if (targetIndex == idx) {
+  //   //   createTimelineOfPort($(this));
+  //   // }
 
-  });
-  return Promise.resolve();
+  // });
+  // return Promise.resolve();
+  // resolve();
 };
 
 /**
@@ -107,6 +126,7 @@ function createTimelineOfPort(data) {
     // 以下、ボディ処理
 
     const td = $(this).find('td');
+    console.log(td.text());
 
     // 左
     const leftKigou = td.eq(0).contents().eq(0).text().substring(0, 1);
@@ -138,7 +158,7 @@ function createTimelineOfPort(data) {
     timeTable.row.push(row);
   })
 
-  console.log(timeTable)
+  // console.log(timeTable)
   // Firebaseへ登録
   return sendToFirebase(portCode, timeTable);
 }
@@ -176,7 +196,7 @@ function getRowStatusCode(statusRawText) {
       return consts.CATION;
     case '×':
       return consts.CANCEL;
-    case '○':
+    case '〇':
       return consts.NORMAL;
     case '':
       return '';
