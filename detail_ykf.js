@@ -12,7 +12,6 @@ module.exports = () => {
   return Promise.resolve()
     .then(() => console.log(`開始 ${COMPANY} 詳細`))
     .then(() => getHtmlContents())
-    // .then(() => makeData())
     .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
     .then(() => perseAndSend(consts.KOHAMA))    // 小浜
     .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
@@ -28,7 +27,7 @@ module.exports = () => {
 }
 
 /**
- * HTMLコンテンツを取得してクラス変数に保持
+ * HTMLコンテンツを取得して$（クラス変数）に保持
  */
 function getHtmlContents() {
   return client.fetch(URL)
@@ -40,53 +39,14 @@ function getHtmlContents() {
     })
 }
 
-// function makeData() {
-//   $('#operation_status div.status div').each(function () {
-
-//   });
-//   return Promise.resolve();
-// }
-
 /**
  * 引数の港をパースしてDBに登録
  * @param {タグ全体} $ 
  */
 function perseAndSend(portCode) {
-  // return new Promise(function (resolve) {
     const selecotr = '#operationstatus div.local table';
     const targetIndex = getPortIndex(portCode);
     return createTimelineOfPort($(selecotr).eq(targetIndex));
-    // tableタグをループしてパース
-    
-  //   $(selecotr).each(function (idx) {
-      
-      
-  //     // console.log(idx)
-  //     // putHtmlLog($(this));
-
-  //     // 港ごとにループ
-  //     if (targetIndex == idx) {
-  //       createTimelineOfPort($(this));
-  //     }
-  //   });
-  // })
-  // console.log(portCode);
-  // const selecotr = '#operationstatus div.local table';
-  // const targetIndex = getPortIndex(portCode);
-
-  // // tableタグをループしてパース
-  // $(selecotr).each(function (idx) {
-  //   // console.log(idx)
-  //   // putHtmlLog($(this));
-
-  //   // 港ごとにループ
-  //   // if (targetIndex == idx) {
-  //   //   createTimelineOfPort($(this));
-  //   // }
-
-  // });
-  // return Promise.resolve();
-  // resolve();
 };
 
 /**
