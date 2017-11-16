@@ -198,7 +198,7 @@ function getStatusCode(kigou) {
     statu.text = "欠航";
   } else if (kigou == '〇') {
     statu.code = "normal";
-    statu.text = "運行";
+    statu.text = "通常運行";
   } else {
     statu.code = "cation";
     statu.text = "注意";
