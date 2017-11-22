@@ -1,0 +1,57 @@
+{
+    "taketomi": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 600,
+        "adult_round_trip_fare": 1140,
+        "child_one_way_fare": 300,
+        "child_round_trip_fare": 570,
+        "disability_one_way_fare": 0,
+        "disability_round_trip_fare": 0,
+        "url": "http://ishigaki-dream.co.jp/#service",
+        "tell":"0980-84-3178"
+    },
+    "kohama": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1060,
+        "adult_round_trip_fare": 2010,
+        "child_one_way_fare": 530,
+        "child_round_trip_fare": 1010,
+        "disability_one_way_fare": 0,
+        "disability_round_trip_fare": 0,
+        "url": "http://ishigaki-dream.co.jp/#service",
+        "tell":"0980-84-3178"
+    },
+    "kuroshima": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1150,
+        "adult_round_trip_fare": 2190,
+        "child_one_way_fare": 580,
+        "child_round_trip_fare": 1100,
+        "disability_one_way_fare": 0,
+        "disability_round_trip_fare": 0,
+        "url": "http://ishigaki-dream.co.jp/#service",
+        "tell":"0980-84-3178"
+    },
+    "oohara": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1570,
+        "adult_round_trip_fare": 2980,
+        "child_one_way_fare": 790,
+        "child_round_trip_fare": 1500,
+        "disability_one_way_fare": 0,
+        "disability_round_trip_fare": 0,
+        "url": "http://ishigaki-dream.co.jp/#service",
+        "tell":"0980-84-3178"
+    },
+    "uehara_hatoma": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1420,
+        "adult_round_trip_fare": 0,
+        "child_one_way_fare": 710,
+        "child_round_trip_fare": 0,
+        "disability_one_way_fare": 0,
+        "disability_round_trip_fare": 0,
+        "url": "http://ishigaki-dream.co.jp/#service",
+        "tell":"0980-84-3178"
+    }
+}

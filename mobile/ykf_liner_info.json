@@ -1,0 +1,68 @@
+{
+    "taketomi": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 600,
+        "adult_round_trip_fare": 1150,
+        "child_one_way_fare": 310,
+        "child_round_trip_fare": 590,
+        "disability_one_way_fare": 310,
+        "disability_round_trip_fare": 620,
+        "url": "https://www.yaeyama.co.jp/operation.html",
+        "tell":"0980-82-5010"
+    },
+    "kohama": {
+        "driving_time": "約25~30分",
+        "adult_one_way_fare": 1060,
+        "adult_round_trip_fare": 2020,
+        "child_one_way_fare": 540,
+        "child_round_trip_fare": 1020,
+        "disability_one_way_fare": 540,
+        "disability_round_trip_fare": 1080,
+        "url": "https://www.yaeyama.co.jp/operation.html",
+        "tell":"0980-82-5010"
+    },
+    "kuroshima": {
+        "driving_time": "約25~30分",
+        "adult_one_way_fare": 1150,
+        "adult_round_trip_fare": 2190,
+        "child_one_way_fare": 580,
+        "child_round_trip_fare": 1100,
+        "disability_one_way_fare": 580,
+        "disability_round_trip_fare": 1160,
+        "url": "https://www.yaeyama.co.jp/operation.html",
+        "tell":"0980-82-5010"
+    },
+    "oohara": {
+        "driving_time": "約35~40分",
+        "adult_one_way_fare": 1570,
+        "adult_round_trip_fare": 2980,
+        "child_one_way_fare": 790,
+        "child_round_trip_fare": 1500,
+        "disability_one_way_fare": 790,
+        "disability_round_trip_fare": 1580,
+        "url": "https://www.yaeyama.co.jp/operation.html",
+        "tell":"0980-82-5010"
+    },
+    "uehara": {
+        "driving_time": "約40~45分",
+        "adult_one_way_fare": 2060,
+        "adult_round_trip_fare": 3910,
+        "child_one_way_fare": 1030,
+        "child_round_trip_fare": 1960,
+        "disability_one_way_fare": 1030,
+        "disability_round_trip_fare": 2060,
+        "url": "https://www.yaeyama.co.jp/operation.html",
+        "tell":"0980-82-5010"
+    },
+    "hatoma": {
+        "driving_time": "約40~45分",
+        "adult_one_way_fare": 2060,
+        "adult_round_trip_fare": 3910,
+        "child_one_way_fare": 1030,
+        "child_round_trip_fare": 1960,
+        "disability_one_way_fare": 1030,
+        "disability_round_trip_fare": 2060,
+        "url": "https://www.yaeyama.co.jp/operation.html",
+        "tell":"0980-82-5010"
+    }
+}

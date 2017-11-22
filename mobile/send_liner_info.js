@@ -7,11 +7,13 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-const dbRef = firebase.database().ref("anei_liner_info");
+const table = "anei_liner_info"
+
+const dbRef = firebase.database().ref(table);
 
 request('https://yaima-funi.firebaseio.com/', function (error, response, body) {
     if (!error && response.statusCode == 200) {
-        var asJson = require("./anei_liner_detail.json")
+        var asJson = require(`./${table}.json`)
         dbRef.set(asJson)
         console.log("success!");
     }
