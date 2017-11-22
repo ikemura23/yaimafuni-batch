@@ -1,6 +1,4 @@
 {
-    "tell":"0980-83-0055",
-    "url":"http://www.aneikankou.co.jp/",
     "taketomi": {
         "driving_time": "約10〜15分",
         "adult_one_way_fare": 600,
@@ -9,7 +7,8 @@
         "child_round_trip_fare": 590,
         "disability_one_way_fare": 310,
         "disability_round_trip_fare": 620,
-        "url": "http://www.aneikankou.co.jp/water_routes/detail/taketomi"
+        "url": "http://www.aneikankou.co.jp/water_routes/detail/taketomi",
+        "tell": "0980-83-0055"
     },
     "kohama": {
         "driving_time": "直行の場合約２５～３０分、竹富島経由の場合約４０分",
@@ -19,7 +18,8 @@
         "child_round_trip_fare": 1020,
         "disability_one_way_fare": 540,
         "disability_round_trip_fare": 1080,
-        "url": "http://www.aneikankou.co.jp/water_routes/detail/kohama"
+        "url": "http://www.aneikankou.co.jp/water_routes/detail/kohama",
+        "tell": "0980-83-0055"
     },
     "kuroshima": {
         "driving_time": "約２５～３０分",
@@ -29,7 +29,8 @@
         "child_round_trip_fare": 1100,
         "disability_one_way_fare": 580,
         "disability_round_trip_fare": 1160,
-        "url": "http://www.aneikankou.co.jp/water_routes/detail/kuroshima"
+        "url": "http://www.aneikankou.co.jp/water_routes/detail/kuroshima",
+        "tell": "0980-83-0055"
     },
     "oohara": {
         "driving_time": "直行の場合約３５～４０分、竹富島経由の場合約５０～５５分",
@@ -39,7 +40,8 @@
         "child_round_trip_fare": 1500,
         "disability_one_way_fare": 790,
         "disability_round_trip_fare": 1580,
-        "url": "http://www.aneikankou.co.jp/water_routes/detail/ohara"
+        "url": "http://www.aneikankou.co.jp/water_routes/detail/ohara",
+        "tell": "0980-83-0055"
     },
     "uehara": {
         "driving_time": "直行の場合約４０～４５分、鳩間島経由の場合約５５～６０分",
@@ -49,7 +51,8 @@
         "child_round_trip_fare": 1960,
         "disability_one_way_fare": 1030,
         "disability_round_trip_fare": 2060,
-        "url": "http://www.aneikankou.co.jp/water_routes/detail/uehara"
+        "url": "http://www.aneikankou.co.jp/water_routes/detail/uehara",
+        "tell": "0980-83-0055"
     },
     "hatoma": {
         "driving_time": "直行の場合約４０～４５分、上原港経由の場合約７０分",
@@ -59,7 +62,8 @@
         "child_round_trip_fare": 1960,
         "disability_one_way_fare": 1030,
         "disability_round_trip_fare": 2060,
-        "url": "http://www.aneikankou.co.jp/water_routes/detail/hatoma"
+        "url": "http://www.aneikankou.co.jp/water_routes/detail/hatoma",
+        "tell": "0980-83-0055"
     },
     "hateruma": {
         "driving_time": "小型高速船（約６０・大原港経由便は約８０分）　ぱいじま２（約８０分）",
@@ -69,6 +73,7 @@
         "child_round_trip_fare": 2930,
         "disability_one_way_fare": 1550,
         "disability_round_trip_fare": 3100,
-        "url": "http://www.aneikankou.co.jp/water_routes/detail/hateruma"
+        "url": "http://www.aneikankou.co.jp/water_routes/detail/hateruma",
+        "tell": "0980-83-0055"
     }
 }
