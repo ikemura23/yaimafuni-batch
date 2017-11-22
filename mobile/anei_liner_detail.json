@@ -1,0 +1,79 @@
+{
+    "taketomi": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1000,
+        "adult_round_trip_fare": 1000,
+        "child_one_way_fare": 1000,
+        "child_round_trip_fare": 1000,
+        "disability_one_way_fare": 1000,
+        "disability_round_trip_fare": 1000,
+        "url": "http://www.google.com",
+        "tell":"00099990000"
+    },
+    "kohama": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1000,
+        "adult_round_trip_fare": 1000,
+        "child_one_way_fare": 1000,
+        "child_round_trip_fare": 1000,
+        "disability_one_way_fare": 1000,
+        "disability_round_trip_fare": 1000,
+        "url": "http://www.google.com",
+        "tell":"00099990000"
+    },
+    "kuroshima": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1000,
+        "adult_round_trip_fare": 1000,
+        "child_one_way_fare": 1000,
+        "child_round_trip_fare": 1000,
+        "disability_one_way_fare": 1000,
+        "disability_round_trip_fare": 1000,
+        "url": "http://www.google.com",
+        "tell":"00099990000"
+    },
+    "oohara": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1000,
+        "adult_round_trip_fare": 1000,
+        "child_one_way_fare": 1000,
+        "child_round_trip_fare": 1000,
+        "disability_one_way_fare": 1000,
+        "disability_round_trip_fare": 1000,
+        "url": "http://www.google.com",
+        "tell":"00099990000"
+    },
+    "uehara": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1000,
+        "adult_round_trip_fare": 1000,
+        "child_one_way_fare": 1000,
+        "child_round_trip_fare": 1000,
+        "disability_one_way_fare": 1000,
+        "disability_round_trip_fare": 1000,
+        "url": "http://www.google.com",
+        "tell":"00099990000"
+    },
+    "hatoma": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1000,
+        "adult_round_trip_fare": 1000,
+        "child_one_way_fare": 1000,
+        "child_round_trip_fare": 1000,
+        "disability_one_way_fare": 1000,
+        "disability_round_trip_fare": 1000,
+        "url": "http://www.google.com",
+        "tell":"00099990000"
+    },
+    "hateruma": {
+        "driving_time": "約10〜15分",
+        "adult_one_way_fare": 1000,
+        "adult_round_trip_fare": 1000,
+        "child_one_way_fare": 1000,
+        "child_round_trip_fare": 1000,
+        "disability_one_way_fare": 1000,
+        "disability_round_trip_fare": 1000,
+        "url": "http://www.google.com",
+        "tell":"00099990000"
+    }
+}
