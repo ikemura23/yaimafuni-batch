@@ -7,18 +7,40 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-const table = "anei_liner_info"
-
-const dbRef = firebase.database().ref(table);
+request('https://yaima-funi.firebaseio.com/', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        var asJson = require(`./anei_liner_info.json`)
+        firebase.database().ref('anei_liner_info').set(asJson)
+        console.log("success! anei");
+    }
+    else {
+        console.log("error! anei");
+        console.log(error);
+    }
+    firebase.database().goOffline()
+})
 
 request('https://yaima-funi.firebaseio.com/', function (error, response, body) {
     if (!error && response.statusCode == 200) {
-        var asJson = require(`./${table}.json`)
-        dbRef.set(asJson)
-        console.log("success!");
+        var asJson = require(`./ykf_liner_info.json`)
+        firebase.database().ref('ykf_liner_info').set(asJson)
+        console.log("success! ykf");
     }
     else {
-        console.log("error!");
+        console.log("error! ykf");
+        console.log(error);
+    }
+    firebase.database().goOffline()
+})
+
+request('https://yaima-funi.firebaseio.com/', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        var asJson = require(`./dream_liner_info.json`)
+        firebase.database().ref('dream_liner_info').set(asJson)
+        console.log("success! dream");
+    }
+    else {
+        console.log("error! dream");
         console.log(error);
     }
     firebase.database().goOffline()
