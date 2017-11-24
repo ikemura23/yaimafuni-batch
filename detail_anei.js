@@ -175,7 +175,7 @@ function getStatusCode(arreaTag) {
  * DBへ登録
  */
 function sendToFirebase(targetPort) {
-  const tableName = `${COMPANY}/${targetPort}/timeTable/`;
+  const tableName = `${COMPANY}_timeTable/${targetPort}`;
   return firebase.database()
     .ref(tableName)
     .set(sendData.get(targetPort));

@@ -128,7 +128,7 @@ function createTimelineOfPort(data) {
  */
 function sendToFirebase(portCode, sendData) {
 
-  const tableName = `${COMPANY}/${portCode}/timeTable/`;
+  const tableName = `${COMPANY}_timeTable/${portCode}`;
   // console.log('送信開始' + tableName)
   return firebase.database()
     .ref(tableName)
