@@ -174,7 +174,7 @@ function divideUeharaHatoma(data) {
       status: data.uehara_hatoma.status
     }
 
-    data['uehara'] = {
+    data['hatoma'] = {
       portCode: consts.HATOMA,
       portName: data.uehara_hatoma.portName,
       comment: data.uehara_hatoma.comment,
