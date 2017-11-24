@@ -56,10 +56,8 @@ function perse(portCode) {
  */
 function createTimelineOfPort(portCode, data) {
 
-  // 港コード
-  // const portCode = getPortCode(data.find('h3').text());
   // console.log(data.find('h3').text());
-  console.log(portCode + '開始')
+  console.log(portCode + ' 開始')
   // 詳細テーブル用の変数
   let timeTable = {
     header: {
@@ -122,10 +120,8 @@ function createTimelineOfPort(portCode, data) {
 
   // console.log(timeTable)
   sendData[portCode] = timeTable
-  console.log(portCode + '終了')
+  console.log(portCode + ' 終了')
   return Promise.resolve()
-  // Firebaseへ登録
-  // return sendToFirebase(portCode, timeTable);
 }
 
 /**
