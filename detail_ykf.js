@@ -7,20 +7,22 @@ const COMPANY = consts.YKF;
 const URL = 'https://www.yaeyama.co.jp/operation.html';
 let $;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const sendData = {};
 
 module.exports = () => {
   return Promise.resolve()
     .then(() => console.log(`開始 ${COMPANY} 詳細`))
     .then(() => getHtmlContents())
-    .then(() => perseAndSend(consts.TAKETOMI))  // 竹富
-    .then(() => perseAndSend(consts.KOHAMA))    // 小浜
-    .then(() => perseAndSend(consts.KUROSHIMA)) // 黒島
-    .then(() => perseAndSend(consts.OOHARA))    // 大原
-    .then(() => perseAndSend(consts.UEHARA))    // 上原
-    .then(() => perseAndSend(consts.HATOMA))    // 鳩間
-    .then(() => perseAndSend(consts.KOHAMA_TAKETOMI)) // 小浜-竹富
-    .then(() => perseAndSend(consts.KOHAMA_OOHARA)) // 小浜-大原
-    .then(() => perseAndSend(consts.UEHARA_HATOMA)) // 上原-鳩間
+    .then(() => perse(consts.TAKETOMI))  // 竹富
+    .then(() => perse(consts.KOHAMA))    // 小浜
+    .then(() => perse(consts.KUROSHIMA)) // 黒島
+    .then(() => perse(consts.OOHARA))    // 大原
+    .then(() => perse(consts.UEHARA))    // 上原
+    .then(() => perse(consts.HATOMA))    // 鳩間
+    .then(() => perse(consts.KOHAMA_TAKETOMI)) // 小浜-竹富
+    .then(() => perse(consts.KOHAMA_OOHARA)) // 小浜-大原
+    .then(() => perse(consts.UEHARA_HATOMA)) // 上原-鳩間
+    .then(() => sendToFirebase())
     .catch((error) => sendError(error.stack))
     .catch(process.on('unhandledRejection', console.dir))
     .then(() => console.log(`完了 ${COMPANY} 詳細`))
@@ -43,21 +45,21 @@ function getHtmlContents() {
  * 引数の港をパースしてDBに登録
  * @param {タグ全体} $ 
  */
-function perseAndSend(portCode) {
-    const selecotr = '#operationstatus div.local table';
-    const targetIndex = getPortIndex(portCode);
-    return createTimelineOfPort($(selecotr).eq(targetIndex));
+function perse(portCode) {
+  const selecotr = '#operationstatus div.local table';
+  const targetIndex = getPortIndex(portCode);
+  return createTimelineOfPort(portCode, $(selecotr).eq(targetIndex));
 };
 
 /**
  * スクレイピングして送信する
  */
-function createTimelineOfPort(data) {
+function createTimelineOfPort(portCode, data) {
 
   // 港コード
-  const portCode = getPortCode(data.find('h3').text());
+  // const portCode = getPortCode(data.find('h3').text());
   // console.log(data.find('h3').text());
-  console.log(portCode)
+  console.log(portCode + '開始')
   // 詳細テーブル用の変数
   let timeTable = {
     header: {
@@ -119,17 +121,20 @@ function createTimelineOfPort(data) {
   })
 
   // console.log(timeTable)
+  sendData[portCode] = timeTable
+  console.log(portCode + '終了')
+  return Promise.resolve()
   // Firebaseへ登録
-  return sendToFirebase(portCode, timeTable);
+  // return sendToFirebase(portCode, timeTable);
 }
 
 /**
  * DBへ登録
  */
-function sendToFirebase(portCode, sendData) {
+function sendToFirebase() {
 
-  const tableName = `${COMPANY}_timeTable/${portCode}`;
-  // console.log('送信開始' + tableName)
+  const tableName = `${COMPANY}_timeTable/`;
+  console.log('送信開始' + tableName)
   return firebase.database()
     .ref(tableName)
     .set(sendData)
@@ -195,24 +200,24 @@ function convertRowStatusText(statusText) {
 }
 
 // 港名から港コードを返す
-function getPortCode(portName) {
-  // 港id
-  if (portName.toString().includes("竹富")) {
-    return consts.TAKETOMI;
-  } else if (portName.toString().includes("小浜")) {
-    return consts.KOHAMA;
-  } else if (portName.toString().includes("黒島")) {
-    return consts.KUROSHIMA;
-  } else if (portName.toString().includes("大原")) {
-    return consts.OOHARA;
-  } else if (portName.toString().includes("上原")) {
-    return consts.UEHARA;
-  } else if (portName.toString().includes("鳩間")) {
-    return consts.HATOMA;
-  } else if (portName.toString().includes("波照間")) {
-    return consts.HATERUMA;
-  }
-}
+// function getPortCode(portName) {
+//   // 港id
+//   if (portName.toString().includes("竹富")) {
+//     return consts.TAKETOMI;
+//   } else if (portName.toString().includes("小浜")) {
+//     return consts.KOHAMA;
+//   } else if (portName.toString().includes("黒島")) {
+//     return consts.KUROSHIMA;
+//   } else if (portName.toString().includes("大原")) {
+//     return consts.OOHARA;
+//   } else if (portName.toString().includes("上原")) {
+//     return consts.UEHARA;
+//   } else if (portName.toString().includes("鳩間")) {
+//     return consts.HATOMA;
+//   } else if (portName.toString().includes("波照間")) {
+//     return consts.HATERUMA;
+//   }
+// }
 
 // 指定した港からスクレイピングのインデックスを返す
 function getPortIndex(portCode) {
