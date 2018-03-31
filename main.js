@@ -9,7 +9,7 @@ console.log('main init')
 
 const AneiList = require('./list_anei.js');
 const YkfList = require('./list_ykf.js');
-const DreamList = require('./list_dream.js');
+// const DreamList = require('./list_dream.js');
 
 const AneiDetail = require('./detail_anei.js');
 const YkfDetail = require('./detail_ykf.js'); // リニューアルされたので動かない
@@ -21,7 +21,7 @@ const tenkijp = require('./tenkijp.js');
 
 const aneiListAndroid = require('./list_anei_android.js');
 const ykfListAndroid = require('./list_ykf_android.js');
-const dreamListAndroid = require('./list_dream_android.js');
+// const dreamListAndroid = require('./list_dream_android.js');
 const weatherAndroid = require('./weahter_android.js');
 const topAndroid = require('./top_android.js');
 
@@ -31,7 +31,7 @@ Promise.resolve()
   .then(() => console.log('main start'))
   .then(() => AneiList())
   .then(() => YkfList())
-  .then(() => DreamList())
+  // .then(() => DreamList())
   .then(() => AneiDetail())
   .then(() => YkfDetail())
   .then(() => weather())
@@ -40,7 +40,7 @@ Promise.resolve()
   .then(() => tenkijp())
   .then(() => aneiListAndroid())
   .then(() => ykfListAndroid())
-  .then(() => dreamListAndroid())
+  // .then(() => dreamListAndroid())
   .then(() => weatherAndroid())
   .then(() => topAndroid())
   .then(() => firebase.database().goOffline())
