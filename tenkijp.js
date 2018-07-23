@@ -1,80 +1,94 @@
-const client = require('cheerio-httpcli');
+const puppeteer = require('puppeteer')
+const url = 'https://tenki.jp/forecast/10/50/9410/47207/3hours.html'
 const firebase = require("firebase");
 const sendError = require('./slack');
-client.setBrowser('chrome');
-const URL = 'https://tenki.jp/forecast/10/50/9410/47207/3hours.html';
-const sendData = { today: [], tomorrow: [] };
 
-module.exports = () => {
-  console.log('開始 天気詳細');
-  return Promise.resolve()
-    .then(() => getHtmlContents())
-    .then($ => parseContents($))
-    // .then(() => console.log(sendData))
-    .then(() => send())
-    .catch((error) => sendError(error.stack))
-    .then(() => console.log('完了 天気詳細'))
-}
+module.exports = (async () => {
+  try {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+    await page.goto(url) // ページへ移動
 
-function getHtmlContents() {
-  return client.fetch(URL)
-    .then(function (result) {
-      return result.$;
-    })
-}
+    const today = await getToday(page)
+    const tomorrow = await getTomorrow(page)
 
-function parseContents($) {
-  const todayTableTagQuery = 'table#forecast-point-3h-today';
-  const tomorrowTableTagQuery = 'table#forecast-point-3h-tomorrow';
+    const sendData = { today: today, tomorrow: tomorrow };
+    await send(sendData)
 
-  // コンテンツが取得できるか？ページ構成は変わってないか？
-  if (!$(todayTableTagQuery).length) {
-    // 取得失敗はエラーをなげる
-    const errorMessage = 'エラー!! tenki.jpのコンテンツ取得に失敗した、サイト構成が変わったのでtenkijp.jsを確認せよ';
-    console.error(errorMessage)
-    throw new Error(errorMessage)
+    browser.close()
+  } catch (e) {
+    console.error(e)
+    sendError(error.stack, "tenkijpのスクレイピングでエラー発生!")
+    browser.close()
   }
+})
 
-  return Promise.all([
-    sendData.today = getWeatherData($, todayTableTagQuery),    // 今日
-    sendData.tomorrow = getWeatherData($, tomorrowTableTagQuery)  // 明日
-  ])
+async function getData(page, itemSelector) {
+  return datas = await page.evaluate((selector) => {
+    const list = Array.from(document.querySelectorAll(selector));
+    return list.map(data => data.textContent.trim());
+  }, itemSelector);
 }
 
 /**
- * 指定インデックスからスクレイピング処理
- * @param {cheero.contents} $ htmlコンテンツ
- * @param {number} index 取得先のインデックス
+ * 今日
+ * @param {Page} page 
  */
-function getWeatherData($, tableTagQuery) {
-  const data = [];
-  /**
-   * #bd-main > div:nth-child(3) > table:nth-child(4)"
-   * この↑のselectorの取得方法だと失敗する。
-   * 天気タグの真上に「警報・注意報」が表示され、それによってtable:nth-child()の数値が増減する
-   * （実装当初は3だったが、後日には4になった）
-   * テーブルタグのIDを指定しピンポイントで絞って取得する方法する　2017/07/07
-   */
-  const element = $(tableTagQuery);
-  const windBlowQuery = element.find("tr.wind-direction td").length ? "tr.wind-direction td" : "tr.wind-blow td"
-  // console.log(element.find("tr.head td div p").text());  // 日付確認用 消さずに残しておく
-  for (i = 1; i < 5; i++) {
-    data.push({
-      hour: element.find("tr.hour td").eq(i).text().trim(),
-      weather:element.find("tr.weather td").eq(i).text().trim(),
-      windBlow: element.find(windBlowQuery).eq(i).text().trim(),
-      windSpeed: element.find("tr.wind-speed td").eq(i).text().trim()
+async function getToday(page) {
+  const hour = await getData(page, "#forecast-point-3h-today > tbody > tr.hour > td")
+  // console.log(hour) //=> [ '03', '06', '09', '12', '15', '18', '21', '24' ]
+  const weatehr = await getData(page, "#forecast-point-3h-today > tbody > tr.weather > td")
+  // console.log(weatehr) //=> [ '雨', '曇り', '晴れ', '晴れ', '晴れ', '曇り', '曇り', '曇り' ]
+  const windDirection = await getData(page, "#forecast-point-3h-today > tbody > tr.wind-direction > td > p")
+  // console.log(windDirection) //=> [ '南西', '南', '南東', '南東', '東南東', '東南東', '東南東', '南東' ]
+  const windSpeed = await getData(page, "#forecast-point-3h-today > tbody > tr.wind-speed > td")
+  // console.log(windSpeed) //=> [ '5', '5', '5', '5', '5', '5', '5', '4' ]
+  const datas = []
+
+  for (i = 1; i < 6; i++) {
+    datas.push({
+      hour: hour[i],
+      weatehr: weatehr[i],
+      windBlow: windDirection[i],
+      windSpeed: windSpeed[i]
     })
   }
-  return data;
+  console.log(datas)
+  return datas
 }
 
+/**
+ * 明日
+ * @param {page}} page 
+ */
+async function getTomorrow(page) {
+
+  const hour = await getData(page, "#forecast-point-3h-tomorrow > tbody > tr.hour > td")
+  // console.log(hour) //=> [ '03', '06', '09', '12', '15', '18', '21', '24' ]
+  const weatehr = await getData(page, "#forecast-point-3h-tomorrow > tbody > tr.weather > td")
+  // console.log(weatehr) //=> [ '雨', '曇り', '晴れ', '晴れ', '晴れ', '曇り', '曇り', '曇り' ]
+  const windDirection = await getData(page, "#forecast-point-3h-tomorrow > tbody > tr.wind-blow > td > p") //todayとtrクラス名が違う
+  // console.log(windDirection) //=> [ '南西', '南', '南東', '南東', '東南東', '東南東', '東南東', '南東' ]
+  const windSpeed = await getData(page, "#forecast-point-3h-tomorrow > tbody > tr.wind-speed > td")
+  // console.log(windSpeed) //=> [ '5', '5', '5', '5', '5', '5', '5', '4' ]
+  const datas = []
+  for (i = 1; i < 6; i++) {
+    datas.push({
+      hour: hour[i],
+      weatehr: weatehr[i],
+      windBlow: windDirection[i],
+      windSpeed: windSpeed[i]
+    })
+  }
+  console.log(datas)
+  return datas
+}
 /**
  * DBへ登録
  */
-function send(data) {
+async function send(data) {
   return Promise.all([
-    firebase.database().ref('weather/today/table').set(sendData.today),
-    firebase.database().ref('weather/tomorrow/table').set(sendData.tomorrow)
+    firebase.database().ref('weather/today/table').set(data.today),
+    firebase.database().ref('weather/tomorrow/table').set(data.tomorrow)
   ])
 };
