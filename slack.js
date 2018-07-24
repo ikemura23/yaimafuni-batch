@@ -4,8 +4,8 @@ const config = require("./config.json");
 /**
  * 引数をSlack#notificasionに投稿
  */
-module.exports = function post(msg) {
-  console.log('Post to Slack: ' + msg);
+module.exports = function post(msg, comment = "") {
+  console.log(`Post to Slack: ${comment} ${msg}`);
 
   const webhookUri = config.slack.webHookUrl;
   slack = new Slack();
@@ -14,8 +14,8 @@ module.exports = function post(msg) {
     channel: "#notification",
     username: "yaimafuni-backend",
     icon_emoji: ":ghost:",
-    text: getNowFormatDateTime() + '\n' + msg,
-  }, function(err, response) {
+    text: getNowFormatDateTime() + '\n' + comment + '\n' + msg,
+  }, function (err, response) {
     if (err) console.log(err);
     // console.log(response);
   });
@@ -34,7 +34,7 @@ function getNowFormatDateTime() {
       " " + padZero(date.getHours()) + ':' +
       padZero(date.getMinutes()) + ':' +
       padZero(date.getSeconds());
-  } catch (error) {}
+  } catch (error) { }
   return res;
 }
 
