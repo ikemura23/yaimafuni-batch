@@ -10,8 +10,8 @@ console.log('main init')
 const AneiList = require('./list/list_anei.js');
 const YkfList = require('./list/list_ykf.js');
 
-const AneiDetail = require('./detail_anei.js');
-const YkfDetail = require('./detail_ykf.js');
+const AneiDetail = require('./detail/detail_anei.js');
+const YkfDetail = require('./detail/detail_ykf.js');
 
 const topCompany = require('./top/top_company.js');
 const topPort = require('./top/top_port.js');
