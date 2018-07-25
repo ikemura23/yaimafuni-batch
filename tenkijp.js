@@ -9,7 +9,7 @@ module.exports = (async () => {
   try {
     const browser = await puppeteer.launch(LAUNCH_OPTION)
     const page = await browser.newPage()
-    await page.goto(url) // ページへ移動
+    await page.goto(url, { waitUntil: 'networkidle' }) // ページへ移動＋表示されるまで待機
 
     const today = await getToday(page)
     const tomorrow = await getTomorrow(page)
