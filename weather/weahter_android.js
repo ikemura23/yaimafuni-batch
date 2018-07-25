@@ -1,6 +1,5 @@
 const firebase = require("firebase");
-const consts = require('./consts.js');
-const sendError = require('./slack');
+// const sendError = require('../slack');
 
 const config = require("./config/config.js");
 const NCMB = require("ncmb");
