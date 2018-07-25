@@ -1,7 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
-const consts = require('./consts.js');
-const sendError = require('./slack');
+const consts = require('../consts.js');
+const sendError = require('../slack');
 client.setBrowser('chrome');
 const COMPANY = consts.ANEI;
 const TABLE_NAME = COMPANY;

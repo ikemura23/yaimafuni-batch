@@ -7,8 +7,8 @@ firebase.initializeApp(firebaseConfig);
 
 console.log('main init')
 
-const AneiList = require('./list_anei.js');
-const YkfList = require('./list_ykf.js');
+const AneiList = require('./list/list_anei.js');
+const YkfList = require('./list/list_ykf.js');
 
 const AneiDetail = require('./detail_anei.js');
 const YkfDetail = require('./detail_ykf.js');
@@ -18,8 +18,8 @@ const topPort = require('./top_port.js');
 const weather = require('./weather/weather.js');
 const tenkijp = require('./weather/tenkijp.js');
 
-const aneiListAndroid = require('./list_anei_android.js');
-const ykfListAndroid = require('./list_ykf_android.js');
+const aneiListAndroid = require('./list/list_anei_android.js');
+const ykfListAndroid = require('./list/list_ykf_android.js');
 const weatherAndroid = require('./weather/weahter_android.js');
 const topAndroid = require('./top_android.js');
 

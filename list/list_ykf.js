@@ -1,7 +1,7 @@
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
-const PORT = require('./consts.js');
-const sendError = require('./slack');
+const PORT = require('../consts.js');
+const sendError = require('../slack');
 client.setBrowser('chrome');
 const COMPANY = 'ykf';
 const TABLE = COMPANY + '/';
