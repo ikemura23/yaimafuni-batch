@@ -1,8 +1,8 @@
 const firebase = require("firebase");
-const consts = require('./consts.js');
-const sendError = require('./slack');
+const consts = require('../consts.js');
+const sendError = require('../slack');
 
-const config = require("./config/config.js");
+const config = require("../config/config.js");
 const NCMB = require("ncmb");
 const ncmb = new NCMB(config.ncmb.apiKey, config.ncmb.clientKey);
 

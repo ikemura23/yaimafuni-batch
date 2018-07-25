@@ -13,15 +13,15 @@ const YkfList = require('./list/list_ykf.js');
 const AneiDetail = require('./detail_anei.js');
 const YkfDetail = require('./detail_ykf.js');
 
-const topCompany = require('./top_company.js');
-const topPort = require('./top_port.js');
+const topCompany = require('./top/top_company.js');
+const topPort = require('./top/top_port.js');
 const weather = require('./weather/weather.js');
 const tenkijp = require('./weather/tenkijp.js');
 
 const aneiListAndroid = require('./list/list_anei_android.js');
 const ykfListAndroid = require('./list/list_ykf_android.js');
 const weatherAndroid = require('./weather/weahter_android.js');
-const topAndroid = require('./top_android.js');
+const topAndroid = require('./top/top_android.js');
 
 // const slack = require('./slack');
 

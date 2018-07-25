@@ -1,5 +1,5 @@
 const firebase = require("firebase");
-const consts = require('./consts.js');
+const consts = require('../consts.js');
 
 let anei = {};
 let ykf = {};

@@ -1,6 +1,6 @@
 const firebase = require("firebase");
-const consts = require('./consts.js');
-const sendError = require('./slack');
+const consts = require('../consts.js');
+const sendError = require('../slack');
 
 const TABLE = 'top_company/';
 const sendData = {};
