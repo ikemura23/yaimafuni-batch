@@ -18,9 +18,9 @@ module.exports = (async () => {
     await send(sendData)
 
     browser.close()
-  } catch (e) {
-    console.error(e)
-    sendError(error.stack, "tenkijpのスクレイピングでエラー発生!")
+  } catch (err) {
+    console.error(err)
+    sendError(err.stack, "tenkijpのスクレイピングでエラー発生!")
     browser.close()
   }
 })
