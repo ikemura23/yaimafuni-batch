@@ -14,7 +14,7 @@ function run() {
         return perseAndSend(result.$);
       })
       .then(sendData => saveToFirebase(sendData))
-      .catch((error) => sendError(error))
+      .catch((error) => sendError(err.stack, "weather.yahoo(石垣)のスクレイピングでエラー発生!"))
       .finally(function() {
         console.log('完了 天気');
         resolve();
