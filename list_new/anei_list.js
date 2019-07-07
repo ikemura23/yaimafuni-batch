@@ -9,6 +9,7 @@ const config = require("../config/config");
 const firebase = require("firebase");
 
 module.exports = async () => {
+  console.log('開始:' + consts.ANEI + ' 一覧');
   try {
     const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
@@ -90,6 +91,9 @@ module.exports = async () => {
     console.error(error.stack, "安栄一覧でエラー");
     sendError(error.stack, "安栄一覧のスクレイピングでエラー発生!");
     browser.close();
+  }
+  finally {
+    console.log('終了:' + consts.ANEI + ' 一覧');
   }
 };
 
