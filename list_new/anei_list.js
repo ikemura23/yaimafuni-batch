@@ -6,6 +6,7 @@ const LAUNCH_OPTION = process.env.DYNO
 const URL = "http://www.aneikankou.co.jp";
 const consts = require("../consts.js");
 const config = require("../config/config");
+const firebase = require("firebase");
 
 module.exports = async () => {
   try {
@@ -70,12 +71,24 @@ module.exports = async () => {
       };
       sendData[portCode] = data;
     });
-    console.log(sendData);
+
+    // DB登録
+    await firebase
+      .database()
+      .ref(consts.ANEI)
+      .update(sendData, e => {
+        if (e) {
+          console.error("update error");
+        } else {
+          console.log("update complete!");
+        }
+      });
+    // console.log(sendData);
 
     browser.close();
-  } catch (e) {
+  } catch (error) {
     console.error(error.stack, "安栄一覧でエラー");
-    sendError(err.stack, "安栄一覧のスクレイピングでエラー発生!")
+    sendError(error.stack, "安栄一覧のスクレイピングでエラー発生!");
     browser.close();
   }
 };
