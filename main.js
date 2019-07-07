@@ -7,7 +7,7 @@ firebase.initializeApp(firebaseConfig);
 
 console.log('main init')
 
-// const AneiList = require('./list/list_anei.js');
+const aneiList = require('./list_new/anei_list.js');
 const YkfList = require('./list/list_ykf.js');
 
 const AneiDetail = require('./detail/detail_anei.js');
@@ -23,13 +23,12 @@ const aneiListAndroid = require('./list/list_anei_android.js');
 const ykfListAndroid = require('./list/list_ykf_android.js');
 const weatherAndroid = require('./weather/weahter_android.js');
 const topAndroid = require('./top/top_android.js');
-const aneiList = require('./list_new/anei_list.js');
 
 // const slack = require('./slack');
 
 Promise.resolve()
   .then(() => console.log('main start'))
-  // .then(() => AneiList())
+  .then(() => aneiList())
   .then(() => YkfList())
   .then(() => AneiDetail())
   .then(() => YkfDetail())
@@ -42,6 +41,5 @@ Promise.resolve()
   .then(() => ykfListAndroid())
   .then(() => weatherAndroid())
   .then(() => topAndroid())
-  .then(() => aneiList())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))
