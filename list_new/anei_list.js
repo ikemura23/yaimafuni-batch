@@ -4,26 +4,29 @@ const LAUNCH_OPTION = process.env.DYNO
   ? { args: ["--no-sandbox", "--disable-setuid-sandbox"] }
   : { headless: true };
 const URL = "http://www.aneikankou.co.jp";
-const consts = require('../consts.js');
+const consts = require("../consts.js");
+const config = require("../config/config");
 
 module.exports = async () => {
   try {
     const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
-    page.setUserAgent(
-      "Mozilla /5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B5110e Safari/601.1"
-    );
+    page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
-    await page.screenshot({ path: "graph.png" });
+    // await page.screenshot({ path: "graph.png" });
+
     // 全体アナウンス＋更新日時を取得
     const annaunce = await getAnnaunce(page);
     // console.log(annaunce);
 
+    // 港名を取得
     const portNames = await getData(
       page,
       "#situation > div > ul.route > li.chips-btn > a > div.area > span.name"
     );
     // console.log(portNames);
+
+    // 各港の運行ステータスを取得
     const statusTexts = await getData(
       page,
       "#situation > div > ul.route > li.chips-btn > a > div.area > span:nth-child(2)"
@@ -34,16 +37,18 @@ module.exports = async () => {
       "#situation > div > ul.route > li.chips-btn > a > div.area > span:nth-child(2)"
     );
     // console.log(statusClasses);
+
+    // 各港のコメントを取得
     const chipsComments = await getData(
       page,
       "#situation > div > ul.route > li.chips-btn > div.route-chips > div > p"
     );
     // console.log(chipsComments);
 
+    // 送信用の変数
     const sendData = {
       comment: annaunce.comment,
-      updateTime: annaunce.updateTime,
-      ports: []
+      updateTime: annaunce.updateTime
     };
 
     // 送信用データを作成する
@@ -51,7 +56,7 @@ module.exports = async () => {
       const portName = portNames[i];
       const portCode = getPortCode(portName);
       const statusText = statusTexts[i];
-      const statusCode = getStatusCode(statusText);
+      const statusCode = getStatusCode(statusClasses[i]);
       const comment = chipsComments[i];
 
       const data = {
@@ -61,7 +66,7 @@ module.exports = async () => {
           code: statusCode,
           text: statusText
         },
-        comment: comentFilter(comment)
+        comment: comentFilter(comment) // 特定のコメントは表示させないようにする、ただの通常運行とか
       };
       sendData[portCode] = data;
     });
@@ -69,13 +74,10 @@ module.exports = async () => {
 
     browser.close();
   } catch (e) {
-    console.error(e);
-    // sendError(error.stack, "tenkijpのスクレイピングでエラー発生!");
+    console.error(error.stack, "安栄一覧でエラー");
+    sendError(err.stack, "安栄一覧のスクレイピングでエラー発生!")
     browser.close();
   }
-  //    finally {
-  //     browser.close();
-  //   }
 };
 
 async function getAnnaunce(page) {
@@ -111,8 +113,6 @@ async function getClass(page, itemSelector) {
   return Promise.all(
     elements.map(async element => {
       return await (await element.getProperty("className")).jsonValue(); //  flag triangle
-      // [ 'flag', 'triangle' ]という配列になるので、後者のみを返す
-      // return value.split(/\s/)[1];
     })
   );
 }
@@ -139,10 +139,9 @@ function getPortCode(portName) {
 
 /**
  * タグのcssクラス名からステータスコードを取得
- * @param {港単体タグ} arreaTag 
+ * @param {港単体タグ} arreaTag
  */
 function getStatusCode(className) {
-
   if (className == "flag triangle") {
     return consts.CATION;
   } else if (className == "flag out") {
@@ -156,7 +155,7 @@ function getStatusCode(className) {
 
 /**
  * 重要そうなコメントだけ表示するため精査する
- * @param string comment 
+ * @param string comment
  */
 function comentFilter(comment) {
   switch (comment) {
