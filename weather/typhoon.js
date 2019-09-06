@@ -47,9 +47,27 @@ async function getData2(page, itemSelector) {
 }
 
 async function getData3(page,itemSelector) {
-  const nodes = await page.$(itemSelector)
-  const node = await nodes.$$("h3")
-  console.log(node.text)
+  const beforeNodes = await page.$$(itemSelector)
+  const nodes = beforeNodes.filter((_, i) => i != 0 && i != beforeNodes.length-1)
+  // const ns = await nodes.$$eval("h3", nds => nds.map(n => n.innerText))
+
+  for (const node of nodes) {
+    // const label = await page.evaluate(el => el.innerHTML, "h3");
+    const label = await node.$eval('h3', nd => nd.innerText)
+    const data = {
+      name : await node.$eval('h3', nd => nd.innerText),
+      dateTime : await node.$eval('.date-time', nd => nd.innerText),
+      img : await node.$eval('img', nd => nd.src),
+      scale : await node.$eval('tr:nth-child(1) > td', nd => nd.innerText),
+      intensity : await node.$eval('tr:nth-child(2) > td', nd => nd.innerText),
+      pressure : await node.$eval('tr:nth-child(3) > td', nd => nd.innerText),
+      area : await node.$eval('tr:nth-child(4) > td', nd => nd.innerText),
+      maxWindSpeedNearCenter : await node.$eval('tr:nth-child(5) > td', nd => nd.innerText),
+    }
+    console.log(data)
+  }
+    // const h3 = data.$("h3")
+
 }
 
 /**
