@@ -11,48 +11,38 @@ module.exports = (async () => {
     const page = await browser.newPage()
     await page.goto(url, { waitUntil: 'domcontentloaded' }) // ページへ移動＋表示されるまで待機
 
-    const today = await getSection(page)
+    const sendData = await getSection(page)
 
-    // const sendData = { today: today, tomorrow: tomorrow };
-    // await send(sendData)
+    await send(sendData)
 
     browser.close()
   } catch (err) {
     console.error(err)
-    sendError(err.stack, "tenkijpのスクレイピングでエラー発生!")
+    sendError(err.stack, "台風:tenkijpのスクレイピングでエラー発生!")
     browser.close()
   }
 })
 
+/**
+ * 台風のセクションを取得、1番目は気象予報士の見解なので、スキップ
+ * ２番めから台風情報なので、２番め以降をとる
+ * 
+ * @param {Page} page 
+ */
+async function getSection(page) {
+  // 最初と最後は不要データなので除外する [ '気象予報士の見解（日直予報士：台風関連記事）', '台風13号(レンレン)', '台風14号(カジキ)', '台風を知る' ]
+  const datas = await getData(page, "body > section > section.section-wrap")
+  return datas
+}
+
+/**
+ * スクレイピング処理
+ */
 async function getData(page, itemSelector) {
-  return datas = await page.evaluate((selector) => {
-    const list = Array.from(document.querySelectorAll(selector));
-    return list.map(data => data.textContent.trim());
-  }, itemSelector);
-}
-
-async function getData2(page, itemSelector) {
-  const nodes = await page.$$eval(itemSelector, list => {
-    const datas = list.filter((_, i) => i != 0 && i != list.length-1)
-    console.log(datas.length)
-    datas.forEach(data => {
-      console.log(data.textContent)
-    });
-    return {
-
-    }
-  })
-
-  console.log(nodes)
-}
-
-async function getData3(page,itemSelector) {
   const beforeNodes = await page.$$(itemSelector)
   const nodes = beforeNodes.filter((_, i) => i != 0 && i != beforeNodes.length-1)
-  // const ns = await nodes.$$eval("h3", nds => nds.map(n => n.innerText))
 
   for (const node of nodes) {
-    // const label = await page.evaluate(el => el.innerHTML, "h3");
     const label = await node.$eval('h3', nd => nd.innerText)
     const data = {
       name : await node.$eval('h3', nd => nd.innerText),
@@ -64,51 +54,15 @@ async function getData3(page,itemSelector) {
       area : await node.$eval('tr:nth-child(4) > td', nd => nd.innerText),
       maxWindSpeedNearCenter : await node.$eval('tr:nth-child(5) > td', nd => nd.innerText),
     }
-    console.log(data)
+    // console.log(data)
+    return data
   }
-    // const h3 = data.$("h3")
-
-}
-
-/**
- * 台風のセクションを取得、1番目は気象予報士の見解なので、スキップ
- * ２番めから台風情報なので、２番め以降をとる
- * 
- * @param {Page} page 
- */
-async function getSection(page) {
-  const datas = await getData3(page, "body > section > section.section-wrap")
-  // 最初と最後は不要データなので除外する [ '気象予報士の見解（日直予報士：台風関連記事）', '台風13号(レンレン)', '台風14号(カジキ)', '台風を知る' ]
-  // const data = notFilterData.filter((d, i) => i != 0 && i != notFilterData.length-1)
-
-  // const data2 = await getData2(page, "body > section > section.section-wrap")
-  // // console.log(hour) //=> [ '03', '06', '09', '12', '15', '18', '21', '24' ]
-  // const weather = await getData(page, "#forecast-point-3h-today > tbody > tr.weather > td")
-  // // console.log(weather) //=> [ '雨', '曇り', '晴れ', '晴れ', '晴れ', '曇り', '曇り', '曇り' ]
-  // const windDirection = await getData(page, "#forecast-point-3h-today > tbody > tr.wind-direction > td > p")
-  // // console.log(windDirection) //=> [ '南西', '南', '南東', '南東', '東南東', '東南東', '東南東', '南東' ]
-  // const windSpeed = await getData(page, "#forecast-point-3h-today > tbody > tr.wind-speed > td")
-  // // console.log(windSpeed) //=> [ '5', '5', '5', '5', '5', '5', '5', '4' ]
-  // const datas = []
-
-  // for (i = 1; i < 6; i++) {
-  //   datas.push({
-  //     hour: hour[i],
-  //     weather: weather[i],
-  //     windBlow: windDirection[i],
-  //     windSpeed: windSpeed[i]
-  //   })
-  // }
-  // console.log(data)
-  return datas
 }
 
 /**
  * DBへ登録
  */
 async function send(data) {
-  return Promise.all([
-    firebase.database().ref('weather/today/table').set(data.today),
-    firebase.database().ref('weather/tomorrow/table').set(data.tomorrow)
-  ])
-};
+  console.log(data)
+  return firebase.database().ref('weather/typhoon_tenkijp_compact').set(data)
+}
