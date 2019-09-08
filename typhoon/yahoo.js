@@ -76,5 +76,5 @@ async function getData(page, itemSelector) {
  */
 async function send(data) {
   console.log(data)
-  return firebase.database().ref('weather/typhoon_yahoo').set(data)
+  return firebase.database().ref('typhoon/yahoo').set(data)
 }

@@ -64,5 +64,5 @@ async function getData(page, itemSelector) {
  */
 async function send(data) {
   console.log(data)
-  return firebase.database().ref('weather/typhoon_tenkijp_compact').set(data)
+  return firebase.database().ref('typhoon/tenkijp').set(data)
 }
