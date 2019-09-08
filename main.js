@@ -15,9 +15,9 @@ const YkfDetail = require('./detail/detail_ykf.js');
 
 const topCompany = require('./top/top_company.js');
 const topPort = require('./top/top_port.js');
-const weather = require('./weather/weather.js');
 const yahoo = require('./weather/yahoo.js');
 const tenkijp = require('./weather/tenkijp.js');
+const tyhoon = require('./typhoon/tenkijp.js');
 
 const aneiListAndroid = require('./list/list_anei_android.js');
 const ykfListAndroid = require('./list/list_ykf_android.js');
@@ -32,7 +32,7 @@ Promise.resolve()
   .then(() => YkfList())
   .then(() => AneiDetail())
   .then(() => YkfDetail())
-  // .then(() => weather())
+  .then(() => tyhoon())
   .then(() => yahoo())
   .then(() => topPort())
   .then(() => topCompany())
