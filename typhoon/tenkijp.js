@@ -6,6 +6,7 @@ const sendError = require('../slack');
 const LAUNCH_OPTION = process.env.DYNO ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : { headless: true };
 
 module.exports = (async () => {
+  console.log('開始 : 台風 tenkijp');
   try {
     const browser = await puppeteer.launch(LAUNCH_OPTION)
     const page = await browser.newPage()
@@ -16,7 +17,9 @@ module.exports = (async () => {
     await send(sendData)
 
     browser.close()
+    console.log('完了 : 台風 tenkijp');
   } catch (err) {
+    console.log('異常 : 台風 tenkijp');
     console.error(err)
     sendError(err.stack, "台風:tenkijpのスクレイピングでエラー発生!")
     browser.close()
@@ -63,6 +66,6 @@ async function getData(page, itemSelector) {
  * DBへ登録
  */
 async function send(data) {
-  console.log(data)
+  // console.log(data)
   return firebase.database().ref('typhoon/tenkijp').set(data)
 }
