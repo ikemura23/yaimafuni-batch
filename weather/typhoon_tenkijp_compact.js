@@ -41,7 +41,7 @@ async function getData(page, itemSelector) {
   const beforeNodes = await page.$$(itemSelector)
   // 最初と最後は不要データなので除外する [ '気象予報士の見解（日直予報士：台風関連記事）', '台風13号(レンレン)', '台風14号(カジキ)', '台風を知る' ]
   const nodes = beforeNodes.filter((_, i) => i != 0 && i != beforeNodes.length-1)
-
+  const datas = []
   for (const node of nodes) {
     const data = {
       name : await node.$eval('h3', nd => nd.innerText),
@@ -54,8 +54,9 @@ async function getData(page, itemSelector) {
       maxWindSpeedNearCenter : await node.$eval('tr:nth-child(5) > td', nd => nd.innerText),
     }
     // console.log(data)
-    return data
+    datas.push(data)
   }
+  return datas
 }
 
 /**
