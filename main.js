@@ -9,6 +9,7 @@ console.log('main init')
 
 const aneiList = require('./list_new/anei_list.js');
 const YkfList = require('./list/list_ykf.js');
+const ykfTime = require('./list_new/ykf_time_and_announce.js');
 
 const AneiDetail = require('./detail/detail_anei.js');
 const YkfDetail = require('./detail/detail_ykf.js');
@@ -29,6 +30,7 @@ const topAndroid = require('./top/top_android.js');
 Promise.resolve()
   .then(() => console.log('main start'))
   .then(() => aneiList())
+  .then(() => ykfTime())
   .then(() => YkfList())
   .then(() => AneiDetail())
   .then(() => YkfDetail())
