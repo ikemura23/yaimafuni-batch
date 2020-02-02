@@ -8,7 +8,7 @@ firebase.initializeApp(firebaseConfig);
 console.log('main init')
 
 const aneiList = require('./list_new/anei_list.js');
-const YkfList = require('./list/list_ykf.js');
+const YkfList = require('./list_new/ykf_list.js');
 const ykfTime = require('./list_new/ykf_time_and_announce.js');
 
 const AneiDetail = require('./detail/detail_anei.js');
