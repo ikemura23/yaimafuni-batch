@@ -6,7 +6,7 @@ const LAUNCH_OPTION = process.env.DYNO
 const URL = "https://www.yaeyama.co.jp/operation.html";
 const consts = require("../consts.js");
 const config = require("../config/config");
-const firebase = require("firebase");
+const firebase = require("../lib/firebase_repository");
 
 const COMPANY = consts.YKF;
 
@@ -30,12 +30,15 @@ module.exports = async () => {
     };
 
     // 送信開始
-    await sendToFirebase(data);
+    await firebase.update(consts.YKF, data);
 
     browser.close();
   } catch (error) {
     console.error(error.stack, "異常: YKF 時間+アナウンスでエラー");
-    sendError(error.stack, "異常: YKF 時間+アナウンスのスクレイピングでエラー発生!");
+    sendError(
+      error.stack,
+      "異常: YKF 時間+アナウンスのスクレイピングでエラー発生!"
+    );
     browser.close();
   } finally {
     console.log("終了:" + COMPANY + " 時間+アナウンス");
@@ -72,14 +75,15 @@ async function getData(page, itemSelector) {
 // 送信開始
 async function sendToFirebase(data) {
   console.log(data);
-  return await firebase
-    .database()
-    .ref(consts.YKF)
-    .update(data, e => {
-      if (e) {
-        console.error("send error");
-      } else {
-        console.log("send complete!");
-      }
-    }); 
+  await firebase.update(consts.YKF, data);
+  // return await firebase(consts.YKF,data)
+  //   .database()
+  //   .ref(consts.YKF)
+  //   .update(data, e => {
+  //     if (e) {
+  //       console.error("send error");
+  //     } else {
+  //       console.log("send complete!");
+  //     }
+  //   });
 }
