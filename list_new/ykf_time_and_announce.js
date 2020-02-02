@@ -71,19 +71,3 @@ async function getData(page, itemSelector) {
     return item.textContent;
   });
 }
-
-// 送信開始
-async function sendToFirebase(data) {
-  console.log(data);
-  await firebase.update(consts.YKF, data);
-  // return await firebase(consts.YKF,data)
-  //   .database()
-  //   .ref(consts.YKF)
-  //   .update(data, e => {
-  //     if (e) {
-  //       console.error("send error");
-  //     } else {
-  //       console.log("send complete!");
-  //     }
-  //   });
-}
