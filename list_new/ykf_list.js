@@ -6,7 +6,7 @@ const LAUNCH_OPTION = process.env.DYNO
 const URL = "https://www.yaeyama.co.jp/";
 const consts = require("../consts.js");
 const config = require("../config/config");
-const firebase = require("firebase");
+const firebase = require("../lib/firebase_repository");
 
 const COMPANY = consts.YKF;
 
@@ -24,7 +24,7 @@ module.exports = async () => {
     const sendData = makeSendData(listRaw);
 
     // 送信開始
-    await sendToFirebase(sendData);
+    await firebase.update(consts.YKF, sendData);
 
     browser.close();
   } catch (error) {
@@ -57,7 +57,6 @@ async function getDataList(page, itemSelector) {
  * 生データから送信用の値を作成する
  */
 async function makeSendData(list) {
-  console.log(list);
   const sendData = list.map(text => {
     const portName = text.slice(0, -1);
     const statusRaw = text.slice(-1);
@@ -67,23 +66,7 @@ async function makeSendData(list) {
       status: getStatusCode(statusRaw)
     };
   });
-  // console.log(sendData);
   return sendData;
-}
-
-// 送信開始
-async function sendToFirebase(data) {
-  console.log(data);
-  return await firebase
-    .database()
-    .ref(consts.YKF)
-    .update(data, e => {
-      if (e) {
-        console.error("send error");
-      } else {
-        console.log("send complete!");
-      }
-    });
 }
 
 // 港名から港コードを返す
