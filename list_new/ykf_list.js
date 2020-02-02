@@ -18,15 +18,13 @@ module.exports = async () => {
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
-    const list = await getList(page);
-
-    // 送信用の変数
-    const data = {
-  
-    };
+    // スクレイピングした生の値
+    const listRaw = await getList(page);
+    // 送信用に変換
+    const sendData = makeSendData(listRaw);
 
     // 送信開始
-    await sendToFirebase(data);
+    await sendToFirebase(sendData);
 
     browser.close();
   } catch (error) {
@@ -42,11 +40,10 @@ module.exports = async () => {
  * リスト取得
  */
 async function getList(page) {
-  const portData = await getDataList(
+  return await getDataList(
     page,
     "#operation_status > div:nth-child(2) > div > div > div > div"
   );
-  console.log(portData);
 }
 
 async function getDataList(page, itemSelector) {
@@ -56,20 +53,22 @@ async function getDataList(page, itemSelector) {
   }, itemSelector));
 }
 
-async function getDataClass(page, itemSelector) {
-  const element = await page.$(itemSelector);
-  const clazz = await (await element.getProperty("className")).jsonValue();
-  // const span = elements.map(el => el.getE)
-  return clazz;
-}
-
 /**
- * pageからセレククターで指定された値を取得して返す
+ * 生データから送信用の値を作成する
  */
-async function getData(page, itemSelector) {
-  return await page.$eval(itemSelector, item => {
-    return item.textContent;
+async function makeSendData(list) {
+  console.log(list);
+  const sendData = list.map(text => {
+    const portName = text.slice(0, -1);
+    const statusRaw = text.slice(-1);
+    return {
+      portCode: getPortCode(portName),
+      portName: portName,
+      status: getStatusCode(statusRaw)
+    };
   });
+  // console.log(sendData);
+  return sendData;
 }
 
 // 送信開始
@@ -89,26 +88,25 @@ async function sendToFirebase(data) {
 
 // 港名から港コードを返す
 function getPortCode(portName) {
-  const searchPorts = ['竹富','小浜','黒島','西表大原','西表上原','鳩間','小浜-竹富','']
   // 港id
   if (portName === "竹富") {
-    return PORT.TAKETOMI;
+    return consts.TAKETOMI;
   } else if (portName === "小浜") {
-    return PORT.KOHAMA;
+    return consts.KOHAMA;
   } else if (portName === "小浜-竹富") {
-    return PORT.KOHAMA_TAKETOMI;u
+    return consts.KOHAMA_TAKETOMI;
   } else if (portName === "黒島") {
-    return PORT.KUROSHIMA;
+    return consts.KUROSHIMA;
   } else if (portName === "小浜-大原") {
-    return PORT.KOHAMA_OOHARA;
+    return consts.KOHAMA_OOHARA;
   } else if (portName === "西表大原") {
-    return PORT.OOHARA;
+    return consts.OOHARA;
   } else if (portName === "西表上原") {
-    return PORT.UEHARA;
+    return consts.UEHARA;
   } else if (portName === "上原-鳩間") {
-    return PORT.UEHARA_HATOMA;
+    return consts.UEHARA_HATOMA;
   } else if (portName === "鳩間") {
-    return PORT.HATOMA;
+    return consts.HATOMA;
   }
 }
 
