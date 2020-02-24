@@ -20,10 +20,10 @@ const yahoo = require('./weather/yahoo.js');
 const tenkijp = require('./weather/tenkijp.js');
 const tyhoon = require('./typhoon/tenkijp.js');
 
-const aneiListAndroid = require('./list/list_anei_android.js');
-const ykfListAndroid = require('./list/list_ykf_android.js');
-const weatherAndroid = require('./weather/weahter_android.js');
-const topAndroid = require('./top/top_android.js');
+// const aneiListAndroid = require('./list/list_anei_android.js');
+// const ykfListAndroid = require('./list/list_ykf_android.js');
+// const weatherAndroid = require('./weather/weahter_android.js');
+// const topAndroid = require('./top/top_android.js');
 
 // const slack = require('./slack');
 
