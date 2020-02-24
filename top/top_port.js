@@ -3,7 +3,7 @@ const consts = require('../consts.js');
 
 let anei = {};
 let ykf = {};
-let dream = {};
+// let dream = {}; TODO: dreamを削除する
 
 let taketomi= {};
 let kohama= {};
@@ -23,8 +23,8 @@ module.exports = () => {
     .then(data => anei = data)
     .then(() => readDatabase(consts.YKF))
     .then(data => ykf = data)
-    .then(() => readDatabase(consts.DREAM))
-    .then(data => dream = data)
+    // .then(() => readDatabase(consts.DREAM))
+    // .then(data => dream = data)
     .then(() => createSendData())
     .then(data => sendToFirebase(data))
     .then(() => console.log('完了 港別の作成'))
@@ -59,37 +59,37 @@ function createSendData() {
   const taketomi = {
     anei: anei.taketomi,
     ykf: ykf.taketomi,
-    dream: dream.taketomi
+    // dream: dream.taketomi
   }
   // 小浜
   const kohama = {
     anei: anei.kohama,
     ykf: ykf.kohama,
-    dream: dream.kohama
+    // dream: dream.kohama
   }
   // 黒島
   const kuroshima = {
     anei: anei.kuroshima,
     ykf: ykf.kuroshima,
-    dream: dream.kuroshima
+    // dream: dream.kuroshima
   }
   // 大原
   const oohara = {
     anei: anei.oohara,
     ykf: ykf.oohara,
-    dream: dream.oohara
+    // dream: dream.oohara
   }
   // 上原
   const uehara = {
     anei: anei.uehara,
     ykf: ykf.uehara,
-    dream: dream.uehara_hatoma
+    // dream: dream.uehara_hatoma
   }
   // 鳩間
   const hatoma = {
     anei: anei.hatoma,
     ykf: ykf.hatoma,
-    dream: dream.uehara_hatoma
+    // dream: dream.uehara_hatoma
   }
   // 波照間
   const hateruma = {
