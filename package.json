@@ -14,7 +14,7 @@
   "dependencies": {
     "cheerio-httpcli": "^0.7.3",
     "firebase": "^5.8.1",
-    "ncmb": "^3.0.0",
+    "ncmb": "^3.0.2",
     "puppeteer": "^1.11.0",
     "slack-node": "^0.1.8"
   }
