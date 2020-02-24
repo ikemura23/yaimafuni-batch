@@ -11,8 +11,8 @@ const aneiList = require('./list_new/anei_list.js');
 const YkfList = require('./list_new/ykf_list.js');
 const ykfTime = require('./list_new/ykf_time_and_announce.js');
 
-const AneiDetail = require('./detail/detail_anei.js');
-const YkfDetail = require('./detail/detail_ykf.js');
+// const AneiDetail = require('./detail/detail_anei.js');
+// const YkfDetail = require('./detail/detail_ykf.js');
 
 const topCompany = require('./top/top_company.js');
 const topPort = require('./top/top_port.js');
@@ -32,16 +32,16 @@ Promise.resolve()
   .then(() => aneiList())
   .then(() => ykfTime())
   .then(() => YkfList())
-  .then(() => AneiDetail())
-  .then(() => YkfDetail())
+  // .then(() => AneiDetail())
+  // .then(() => YkfDetail())
   .then(() => tyhoon())
   .then(() => yahoo())
   .then(() => topPort())
   .then(() => topCompany())
   .then(() => tenkijp())
-  .then(() => aneiListAndroid())
-  .then(() => ykfListAndroid())
-  .then(() => weatherAndroid())
-  .then(() => topAndroid())
+  // .then(() => aneiListAndroid())
+  // .then(() => ykfListAndroid())
+  // .then(() => weatherAndroid())
+  // .then(() => topAndroid())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))
