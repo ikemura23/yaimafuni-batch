@@ -47,17 +47,17 @@ async function getData(page, itemSelector) {
  */
 async function getToday(page) {
   const date = await getData(page, "div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.date")
-  console.log(date)
+  // console.log(date)
   const weather = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.pict")
-  console.log(weather)
+  // console.log(weather)
   const wind = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > dl > dd:nth-child(2)")
-  console.log(wind)
+  // console.log(wind)
   const wave = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > dl > dd:nth-child(4)")
-  console.log(wave)
+  // console.log(wave)
   const temperatureHight = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > ul > li.high")
-  console.log(temperatureHight)
+  // console.log(temperatureHight)
   const temperatureLow = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > ul > li.low")
-  console.log(temperatureLow)
+  // console.log(temperatureLow)
 
   //返却データ作成
   const data = {
@@ -70,7 +70,7 @@ async function getToday(page) {
     wave: wave,
     wind: wind
   }
-  console.log(data)
+  // console.log(data)
   return data
 }
 
@@ -82,15 +82,15 @@ async function getTomorrow(page) {
   const date = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.date")
   console.log(date)
   const weather = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.pict")
-  console.log(weather)
+  // console.log(weather)
   const wind = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > dl > dd:nth-child(2)")
-  console.log(wind)
+  // console.log(wind)
   const wave = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > dl > dd:nth-child(4)")
-  console.log(wave)
+  // console.log(wave)
   const temperatureHight = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > ul > li.high")
-  console.log(temperatureHight)
+  // console.log(temperatureHight)
   const temperatureLow = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > ul > li.low")
-  console.log(temperatureLow)
+  // console.log(temperatureLow)
 
   //返却データ作成
   const data = {
@@ -103,7 +103,7 @@ async function getTomorrow(page) {
     wave: wave,
     wind: wind
   }
-  console.log(data)
+  // console.log(data)
   return data
 }
 /**
