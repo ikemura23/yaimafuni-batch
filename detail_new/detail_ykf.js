@@ -40,28 +40,37 @@ module.exports = async () => {
  * リスト取得
  */
 async function getRawData(page) {
-  console.log("getRawData")
-  const nodes = await page.$$("#operationstatus > div > div.local")
+  console.log("getRawData");
+  const nodes = await page.$$("#operationstatus > div > div.local");
 
   const datas = [];
   for (const node of nodes) {
     // 港名
-    const portName = await node.$eval('h3', nd => nd.innerText);
+    const portName = await node.$eval("h3", nd => nd.innerText);
     // ヘッダー左
-    const leftPortName = await node.$eval('tr:nth-child(2) > td:nth-child(1)', nd => nd.innerText);
+    const leftPortName = await node.$eval(
+      "tr:nth-child(2) > td:nth-child(1)",
+      nd => nd.innerText
+    );
     // ヘッダー右
-    const rightPortName = await node.$eval('tr:nth-child(2) > td:nth-child(2)', nd => nd.innerText);
-    
+    const rightPortName = await node.$eval(
+      "tr:nth-child(2) > td:nth-child(2)",
+      nd => nd.innerText
+    );
+    // 時刻ごとのステータス
+    const row = [];
+
     const data = {
       portCode: getPortCode(portName),
       header: {
         left: leftPortName,
         right: rightPortName
       },
-    }
+      row: []
+    };
     console.log(data);
-    datas.push(data)
-  };
+    datas.push(data);
+  }
 
   return datas;
 
