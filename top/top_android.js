@@ -1,3 +1,4 @@
+// TODO: このファイルは削除対象
 const firebase = require("firebase");
 const consts = require('../consts.js');
 const sendError = require('../slack');

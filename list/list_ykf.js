@@ -1,3 +1,4 @@
+// TODO: このファイルは削除対象
 const client = require('cheerio-httpcli');
 const firebase = require("firebase");
 const PORT = require('../consts.js');
