@@ -40,39 +40,58 @@ module.exports = async () => {
  * リスト取得
  */
 async function getRawData(page) {
+  const SELECTOR = {
+    TAKETOMI: "#operationstatus > div > div:nth-child(4) > table > tbody > tr"
+  };
   console.log("getRawData");
-  const nodes = await page.$$("#operationstatus > div > div.local");
+  const trNodes = await page.$$(SELECTOR.TAKETOMI);
+  console.log(trNodes.length);
+  // const datas = [];
+  // for (const node of nodes) {
+  // 港名
+  const portName = await trNodes[0].$eval("h3", nd => nd.innerText);
+  console.log(portName);
+  // ヘッダー左
+  const leftPortName = await trNodes[1].$eval(
+    "td:nth-child(1)",
+    nd => nd.innerText
+  );
+  // ヘッダー右
+  const rightPortName = await trNodes[1].$eval(
+    "td:nth-child(2)",
+    nd => nd.innerText
+  );
+  // 時刻ごとのステータス
+  // const trNodes = await page.$$(`${SELECTOR.TAKETOMI}  > tr`);
+  console.log(
+    `leftPortName: ${leftPortName} , rightPortName: ${rightPortName}`
+  );
 
-  const datas = [];
-  for (const node of nodes) {
-    // 港名
-    const portName = await node.$eval("h3", nd => nd.innerText);
-    // ヘッダー左
-    const leftPortName = await node.$eval(
-      "tr:nth-child(2) > td:nth-child(1)",
-      nd => nd.innerText
-    );
-    // ヘッダー右
-    const rightPortName = await node.$eval(
-      "tr:nth-child(2) > td:nth-child(2)",
-      nd => nd.innerText
-    );
-    // 時刻ごとのステータス
-    const row = [];
+  // const rows = [];
+  // for (const tr of trNodes) {
+  //   const trLeft = await tr.$eval("td:nth-child(1)", nd => nd.innerText);
+  //   const trLright = await tr.$eval("td:nth-child(2)", nd => nd.innerText);
+  //   const row = {
+  //     left: trLeft,
+  //     right: trLright
+  //   };
+  //   // console.log(tr);
+  //   rows.push(row);
+  // }
 
-    const data = {
-      portCode: getPortCode(portName),
-      header: {
-        left: leftPortName,
-        right: rightPortName
-      },
-      row: []
-    };
-    console.log(data);
-    datas.push(data);
-  }
+  const data = {
+    portCode: getPortCode(portName),
+    header: {
+      left: leftPortName,
+      right: rightPortName
+    }
+    // row: rows
+  };
+  console.log(data);
+  // datas.push(data);
+  // }
 
-  return datas;
+  return data;
 
   // return await getDataList(page, "#operationstatus > div > div.local");
 }
