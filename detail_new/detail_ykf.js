@@ -18,10 +18,10 @@ module.exports = async () => {
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
-    // スクレイピングした生の値、9件取得できるはず
-    const listRaw = await getRawData(page);
+    // スクレイピングした値、9件取得できるはず
+    const listRaw = await getDataList(page);
     // 送信用に変換
-    const sendData = await convertSendData(page, listRaw);
+    // const sendData = await convertSendData(page, listRaw);
 
     // 送信開始
     // await firebase.update(consts.YKF, sendData);
@@ -39,12 +39,30 @@ module.exports = async () => {
 /**
  * リスト取得
  */
-async function getRawData(page) {
-  const SELECTOR = {
-    TAKETOMI: "#operationstatus > div > div:nth-child(4) > table > tbody > tr"
-  };
+async function getDataList(page) {
+  // Selectorを作成、4〜12までが各港の時間別ステータスになる
+  const selectors = [];
+  for (let i = 4; i < 13; i++) {
+    selectors.push(
+      `#operationstatus > div > div:nth-child(${i}) > table > tbody > tr`
+    );
+  }
+  console.log(selectors);
+  // 港ごとに処理
+  const dataList = [];
+  for (const selector of selectors) {
+    const data = await getRawData(page, selector);
+    dataList.push(data);
+  }
+  return dataList;
+}
+
+/**
+ * 港単体のデータ取得
+ */
+async function getRawData(page, itemSelector) {
   console.log("getRawData");
-  const trNodes = await page.$$(SELECTOR.TAKETOMI);
+  const trNodes = await page.$$(itemSelector);
 
   // 港名
   const portName = await trNodes[0].$eval("h3", nd => nd.innerText);
@@ -85,13 +103,6 @@ async function getRawData(page) {
   console.log(data);
 
   return data;
-}
-
-async function getDataList(page, itemSelector) {
-  return (datas = await page.evaluate(selector => {
-    const list = Array.from(document.querySelectorAll(selector));
-    return list.map(data => data.textContent.trim());
-  }, itemSelector));
 }
 
 /**
