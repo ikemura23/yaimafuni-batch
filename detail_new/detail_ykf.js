@@ -19,12 +19,10 @@ module.exports = async () => {
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
     // スクレイピングした値、9件取得できるはず
-    const listRaw = await getDataList(page);
-    // 送信用に変換
-    // const sendData = await convertSendData(page, listRaw);
+    const data = await getDataList(page);
 
     // 送信開始
-    // await firebase.update(consts.YKF, sendData);
+    await sendToFirebase(data);
 
     browser.close();
   } catch (error) {
@@ -49,10 +47,10 @@ async function getDataList(page) {
   }
   console.log(selectors);
   // 港ごとに処理
-  const dataList = [];
+  const dataList = {};
   for (const selector of selectors) {
     const data = await getRawData(page, selector);
-    dataList.push(data);
+    dataList[data.portCode] = data
   }
   return dataList;
 }
@@ -61,7 +59,6 @@ async function getDataList(page) {
  * 港単体のデータ取得
  */
 async function getRawData(page, itemSelector) {
-  console.log("getRawData");
   const trNodes = await page.$$(itemSelector);
 
   // 港名
@@ -100,10 +97,18 @@ async function getRawData(page, itemSelector) {
     },
     row: rows
   };
-  console.log(data);
-
+  // console.log(data);
   return data;
 }
+
+/**
+ * DBへ登録
+ */
+async function sendToFirebase(data) {
+  const tableName = `${COMPANY}_timeTable/`;
+  console.log('送信開始' + tableName)
+  return await firebase.update(tableName, data);
+};
 
 /**
  * 生データから送信用の値を作成する
