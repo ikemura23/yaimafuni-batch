@@ -45,11 +45,9 @@ async function getRawData(page) {
   };
   console.log("getRawData");
   const trNodes = await page.$$(SELECTOR.TAKETOMI);
-  console.log(trNodes.length);
 
   // 港名
   const portName = await trNodes[0].$eval("h3", nd => nd.innerText);
-  console.log(portName);
   // ヘッダー左
   const leftPortName = await trNodes[1].$eval(
     "td:nth-child(1)",
@@ -61,15 +59,10 @@ async function getRawData(page) {
     nd => nd.innerText
   );
   // 時刻ごとのステータス
-  // const trNodes = await page.$$(`${SELECTOR.TAKETOMI}  > tr`);
-  console.log(
-    `leftPortName: ${leftPortName} , rightPortName: ${rightPortName}`
-  );
-
   // trタグの0〜1行目は港名なので除外する
   const timeTable = trNodes.filter((_, i) => i > 1);
-  // 時間ステータス
   const rows = [];
+  // 時刻ステータスのループ
   for (const time of timeTable) {
     const trLeft = await time.$eval("td:nth-child(1)", nd => nd.innerText);
     const trLright = await time.$eval("td:nth-child(2)", nd => nd.innerText);
@@ -92,8 +85,6 @@ async function getRawData(page) {
   console.log(data);
 
   return data;
-
-  // return await getDataList(page, "#operationstatus > div > div.local");
 }
 
 async function getDataList(page, itemSelector) {
