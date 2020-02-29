@@ -1,3 +1,4 @@
+// YKF 詳細
 const puppeteer = require("puppeteer");
 // Heroku環境かどうかの判断
 const LAUNCH_OPTION = process.env.DYNO
@@ -45,7 +46,7 @@ async function getDataList(page) {
       `#operationstatus > div > div:nth-child(${i}) > table > tbody > tr`
     );
   }
-  console.log(selectors);
+
   // 港ごとに処理
   const dataList = {};
   for (const selector of selectors) {
@@ -73,6 +74,7 @@ async function getRawData(page, itemSelector) {
     "td:nth-child(2)",
     nd => nd.innerText
   );
+  
   // 時刻ごとのステータス
   // trタグの0〜1行目は港名なので除外する
   const timeTable = trNodes.filter((_, i) => i > 1);
@@ -83,6 +85,7 @@ async function getRawData(page, itemSelector) {
     const trLright = await time.$eval("td:nth-child(2)", nd => nd.innerText);
 
     const row = {
+      portCode: getPortCode(portName),
       left: trLeft,
       right: trLright
     };
@@ -109,54 +112,6 @@ async function sendToFirebase(data) {
   console.log('送信開始' + tableName)
   return await firebase.update(tableName, data);
 };
-
-/**
- * 生データから送信用の値を作成する
- */
-async function convertSendData(page, nodes) {
-  // console.log(nodes)
-  // raws.map(raw => console.log(raw))
-  if (nodes) return;
-  nodes.foreach(node => console.log(node.textContent));
-
-  // const sendData = list.map(text => {
-  //   const portName = text.slice(0, -1);
-  //   const statusRaw = text.slice(-1);
-  //   return {
-  //     portCode: getPortCode(portName),
-  //     portName: portName,
-  //     status: getStatusCode(statusRaw)
-  //   };
-  // });
-  return sendData;
-}
-
-function getSendDataTemplete() {
-  const timeTable = {
-    header: {
-      left: "",
-      right: ""
-    },
-    row: []
-  };
-
-  const row = {
-    left: {
-      time: leftTime,
-      status: {
-        code: "normal",
-        text: "通常運行"
-      }
-    },
-    right: {
-      time: righTime,
-      status: {
-        code: "normal",
-        text: "通常運行"
-      }
-    }
-  };
-}
 
 // 港名から港コードを返す
 function getPortCode(portName) {
