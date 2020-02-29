@@ -51,7 +51,7 @@ async function getDataList(page) {
   const dataList = {};
   for (const selector of selectors) {
     const data = await getRawData(page, selector);
-    dataList[data.portCode] = data
+    dataList[data.portCode] = data;
   }
   return dataList;
 }
@@ -74,21 +74,40 @@ async function getRawData(page, itemSelector) {
     "td:nth-child(2)",
     nd => nd.innerText
   );
-  
+
   // 時刻ごとのステータス
   // trタグの0〜1行目は港名なので除外する
   const timeTable = trNodes.filter((_, i) => i > 1);
   const rows = [];
   // 時刻ステータスのループ
   for (const time of timeTable) {
+    // 左の行
     const trLeft = await time.$eval("td:nth-child(1)", nd => nd.innerText);
-    const trLright = await time.$eval("td:nth-child(2)", nd => nd.innerText);
+    const leftWords = trLeft.split(" ");
 
+    // 右の行
+    const trRight = await time.$eval("td:nth-child(2)", nd => nd.innerText);
+    const rightWords = trRight.split(" ");
+
+    // 行データ生成
     const row = {
       portCode: getPortCode(portName),
-      left: trLeft,
-      right: trLright
+      left: {
+        time: leftWords[1],
+        status: {
+          code: getRowStatusCode(leftWords[0]),
+          text: getRowStatusText(leftWords[0])
+        }
+      },
+      right: {
+        time: rightWords[1],
+        status: {
+          code: getRowStatusCode(rightWords[0]),
+          text: getRowStatusText(rightWords[0])
+        }
+      }
     };
+    // 配列に追加
     rows.push(row);
   }
   // 返却データ作成
@@ -109,9 +128,9 @@ async function getRawData(page, itemSelector) {
  */
 async function sendToFirebase(data) {
   const tableName = `${COMPANY}_timeTable/`;
-  console.log('送信開始' + tableName)
+  console.log("送信開始" + tableName);
   return await firebase.update(tableName, data);
-};
+}
 
 // 港名から港コードを返す
 function getPortCode(portName) {
@@ -137,24 +156,38 @@ function getPortCode(portName) {
   }
 }
 
-// 記号から運行ステータスを判別
-function getStatusCode(kigou) {
-  const statu = {
-    code: "",
-    text: ""
-  };
-  if (kigou == "△") {
-    statu.code = "cation";
-    statu.text = "注意";
-  } else if (kigou == "×") {
-    statu.code = "cancel";
-    statu.text = "欠航";
-  } else if (kigou == "〇") {
-    statu.code = "normal";
-    statu.text = "通常運行";
-  } else {
-    statu.code = "cation";
-    statu.text = "注意";
+/**
+ * 記号からステータスを取得
+ */
+function getRowStatusCode(statusRawText) {
+  switch (statusRawText) {
+    case "△":
+      return consts.CATION;
+    case "×":
+      return consts.CANCEL;
+    case "〇":
+      return consts.NORMAL;
+    case "":
+      return "";
+    default:
+      return consts.CATION;
   }
-  return statu;
+}
+
+/**
+ * 記号からステータス文字を取得
+ */
+function getRowStatusText(statusRawText) {
+  switch (statusRawText) {
+    case "○":
+      return "通常運行";
+    case "〇":
+      return "通常運行";
+    case "×":
+      return "欠航";
+    case "":
+      return "";
+    default:
+      return "注意";
+  }
 }
