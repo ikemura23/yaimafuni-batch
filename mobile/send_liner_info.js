@@ -31,16 +31,3 @@ request('https://yaima-funi.firebaseio.com/', function (error, response, body) {
     }
     firebase.database().goOffline()
 })
-
-request('https://yaima-funi.firebaseio.com/', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        var asJson = require(`./dream_liner_info.json`)
-        firebase.database().ref('dream_liner_info').set(asJson)
-        console.log("success! dream");
-    }
-    else {
-        console.log("error! dream");
-        console.log(error);
-    }
-    firebase.database().goOffline()
-})
