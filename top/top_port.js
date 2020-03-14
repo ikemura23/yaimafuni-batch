@@ -1,16 +1,7 @@
+// 港別の運行ステータスの値をまとめているだけ
+
 const firebase = require("firebase");
 const consts = require('../consts.js');
-
-// let anei = {};
-// let ykf = {};
-
-// let taketomi= {};
-// let kohama= {};
-// let kuroshima= {};
-// let oohara= {};
-// let uehara= {};
-// let hatoma= {};
-// let hateruma= {};
 
 /**
  * メイン処理
@@ -25,16 +16,6 @@ const sendData = await createSendData(annei, ykf)
 await sendToFirebase(sendData)
 
 console.log('完了 港別の作成')
-
-  // return Promise.resolve()
-  //   .then(() => console.log('開始 港別の作成 '))
-  //   .then(() => readDatabase(consts.ANEI))
-  //   .then(data => anei = data)
-  //   .then(() => readDatabase(consts.YKF))
-  //   .then(data => ykf = data)
-  //   .then(() => createSendData())
-  //   .then(data => sendToFirebase(data))
-  //   .then(() => console.log('完了 港別の作成'))
 })
 
 /**
@@ -96,7 +77,7 @@ async function createSendData(anei, ykf) {
   const hateruma = {
     anei: anei.hateruma
   }
-  return Promise.resolve({
+  return {
     taketomi,
     kohama,
     kuroshima,
@@ -104,5 +85,5 @@ async function createSendData(anei, ykf) {
     uehara,
     hatoma,
     hateruma
-  })
+  }
 }
