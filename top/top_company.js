@@ -4,22 +4,24 @@ const sendError = require('../slack');
 
 const TABLE = 'top_company/';
 const sendData = {};
+
 /*
 firebaseから一覧を読み込む
 読み込み完了後、1社ずつステータスを判定して結果を変数に格納
 （安永：通常運行、YKF：欠航あり）
 変数をDBに登録
 */
-
-function createTopCompanyStatus(company) {
-  return readFirebase(company)
-    .then((statuses) => createStatus(statuses, company));
+async function createTopCompanyStatus(company) {
+  console.log(`createTopCompanyStatus: ${company}`)
+  const statuses = await readFirebase(company)
+  console.log(statuses)
+  await createStatus(statuses, company)
 }
 
 /**
  * DBから 会社名/list/ports を取得して status.code のみを取得
  */
-function readFirebase(company) {
+async function readFirebase(company) {
   return firebase.database()
     .ref(`${company}`)
     .once('value')
@@ -39,7 +41,7 @@ function readFirebase(company) {
  * @param {aneiの運行結果配列} statuses 
  */
 function createStatus(statuses, company) {
-  console.log(company)
+  console.log(`createStatus: ${company} start`)
   const data = {
     nomal: statuses.filter(function (value) {
       return value == consts.NORMAL;
@@ -54,29 +56,31 @@ function createStatus(statuses, company) {
       return value == consts.SUSPEND;
     }).length
   }
-
   sendData[company] = data;
+  console.log(`createStatus: ${company} end`)
 }
 
 /**
  * firebaseへ送信
  */
-function sendFirebase() {
-  // console.log('DB登録開始');
-  // console.log(sendData)
+async function sendFirebase() {
+  console.log('DB登録開始');
+  console.log(sendData)
   return firebase.database().ref(TABLE).update(sendData)
 }
 
 /**
  * 外部からの呼び出し用メソッド
  */
-module.exports = () => {
-  return Promise.resolve()
-    .then(() => console.log('開始 トップ 会社別'))
-    .then(() => createTopCompanyStatus(consts.ANEI))
-    .then(() => createTopCompanyStatus(consts.YKF))
-    .then(() => sendFirebase())
-    .catch((error) => sendError(error.stack))
-    // .catch((error) => console.log(error))
-    .then(() => console.log('完了 トップ 会社別'))
+module.exports = async () => {
+  console.log('開始 トップ 会社別')
+  try {
+    await createTopCompanyStatus(consts.ANEI)
+    await createTopCompanyStatus(consts.YKF)
+    await sendFirebase()
+  } catch (error) {
+    await sendError(error.stack)
+  }
+
+  console.log('完了 トップ 会社別')
 }
