@@ -19,14 +19,14 @@ module.exports = async () => {
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
-    const info = await getData(page);
+    const data = await getData(page);
     // console.log(info);
 
     // スクレイピングした値、9件取得できるはず
     // const data = await getDataList(page);
 
     // 送信開始
-    // await sendToFirebase(data);
+    await sendToFirebase(data);
 
     browser.close();
   } catch (error) {
@@ -40,48 +40,64 @@ module.exports = async () => {
 
 async function getData(page) {
   // 更新日時
-  const updateTime = await getUpdateTime(page);
-  console.log(updateTime);
+  // const updateTime = await getUpdateTime(page);
+  // console.log(updateTime);
 
   // アナウンス ※ここは表示されない日があるので要注意
-  const announce = await getAnnounce(page);
-  console.log(announce);
+  // const announce = await getAnnounce(page);
+  // console.log(announce);
 
   // 竹富
   const taketomi = await getTaketomiStatus(page);
-  console.log(taketomi);
+  // console.log(taketomi);
 
   // 小浜
   const kohama = await getKohamaStatus(page);
-  console.log(kohama);
+  // console.log(kohama);
 
   // 黒島
   const kuroshima = await getKuroshimaStatus(page);
-  console.log(kuroshima);
+  // console.log(kuroshima);
 
   // 大原
   const oohara = await getOoharaStatus(page);
-  console.log(oohara);
+  // console.log(oohara);
 
   // 上原
   const uehara = await getUeharaStatus(page);
-  console.log(uehara);
+  // console.log(uehara);
 
   // 鳩間
   const hatoma = await getHatomaStatus(page);
-  console.log(hatoma);
+  // console.log(hatoma);
 
   // 小浜-竹富
   const kohamaTaketomi = await getKohamaTaketomiStatus(page);
-  console.log(kohamaTaketomi);
+  // console.log(kohamaTaketomi);
 
   // 小浜-大原
   const kohamaOohara = await getKohamaOoharaStatus(page);
-  console.log(kohamaOohara);
+  // console.log(kohamaOohara);
 
   // 上原-鳩間
   const ueharaHatoma = await getUeharaHatomaStatus(page);
-  console.log(ueharaHatoma);
+  // console.log(ueharaHatoma);
+
+  // 送信用データ生成
+  const sendData = {
+    // comment: announce,
+    // updateTime: updateTime,
+    taketomi: taketomi,
+    kohama: kohama,
+    kuroshima: kuroshima,
+    oohara: oohara,
+    uehara: uehara,
+    hatoma: hatoma,
+    kohama_oohara: kohamaOohara,
+    kohama_taketomi: kohamaTaketomi,
+    uehara_hatoma: ueharaHatoma
+  };
+  return sendData;
 }
 /**
  * 更新時刻 （2020年02月14日の運航状況）
@@ -254,14 +270,11 @@ async function getStatusData(page, itemSelector) {
   }
   // 返却データ作成
   const data = {
-    portCode: getPortCode(portName),
-    data: {
-      header: {
-        left: leftPortName,
-        right: rightPortName
-      },
-      row: rows
-    }
+    header: {
+      left: leftPortName,
+      right: rightPortName
+    },
+    row: rows
   };
   // console.log(data);
   return data;
