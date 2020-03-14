@@ -21,7 +21,7 @@ module.exports = async () => {
     // スクレイピングした生の値
     const listRaw = await getList(page);
     // 送信用に変換
-    const sendData = makeSendData(listRaw);
+    const sendData = await makeSendData(listRaw);
 
     // 送信開始
     await firebase.update(consts.YKF, sendData);
@@ -57,16 +57,40 @@ async function getDataList(page, itemSelector) {
  * 生データから送信用の値を作成する
  */
 async function makeSendData(list) {
-  const sendData = list.map(text => {
+  console.log(`makeSendData: start ${list}`);
+
+  const returnData = {};
+  for (const text of list) {
     const portName = text.slice(0, -1);
-    const statusRaw = text.slice(-1);
-    return {
-      portCode: getPortCode(portName),
+    const portCode = getPortCode(portName);
+    const statusText = text.slice(-1); // 記号文字、◯や△や☓など
+    // console.log(portName);
+    // console.log(statusRaw);
+    // console.log(getStatusCode(statusRaw));
+    const portData = {
+      comment: "",
+      portCode: portCode,
       portName: portName,
-      status: getStatusCode(statusRaw)
+      status: getStatusCode(statusText)
     };
-  });
-  return sendData;
+    returnData[portCode] = portData;
+  }
+  // const sendData = list.map(text => {
+  //   const portName = text.slice(0, -1);
+  //   const statusRaw = text.slice(-1);
+  //   console.log(portName);
+  //   console.log(statusRaw);
+  //   console.log(getStatusCode(statusRaw));
+  //   const retData = {
+  //     portCode: getPortCode(portName),
+  //     portName: portName,
+  //     status: getStatusCode(statusRaw)
+  //   };
+  //   console.log(retData);
+  // return retData;
+  // });
+  console.log(`makeSendData: end ${returnData}`);
+  return returnData;
 }
 
 // 港名から港コードを返す
@@ -95,6 +119,7 @@ function getPortCode(portName) {
 
 // 記号から運行ステータスを判別
 function getStatusCode(kigou) {
+  // console.log(kigou
   const statu = {
     code: "",
     text: ""
@@ -112,5 +137,6 @@ function getStatusCode(kigou) {
     statu.code = "cation";
     statu.text = "注意";
   }
+  // console.log(statu)
   return statu;
 }
