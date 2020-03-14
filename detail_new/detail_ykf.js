@@ -20,7 +20,7 @@ module.exports = async () => {
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
     const info = await getData(page);
-    console.log(info);
+    // console.log(info);
 
     // スクレイピングした値、9件取得できるはず
     // const data = await getDataList(page);
@@ -41,12 +41,25 @@ module.exports = async () => {
 async function getData(page) {
   // 更新日時
   const updateTime = await getUpdateTime(page);
+  console.log(updateTime)
+
+  // アナウンス ※ここは表示されない日があるので要注意
+  const announce = await getAnnounce(page);
+  console.log(announce)
+
 }
 /**
  * 更新時刻 （2020年02月14日の運航状況）
  */
 async function getUpdateTime(page) {
   return await getTextContent(page, "#operationstatus > div > div.statusdate");
+}
+
+/**
+ * 今日のアナウンスを取得
+ */
+async function getAnnounce(page) {
+  return await getTextContent(page, "#operationstatus > div > div:nth-child(5)");
 }
 
 /**
