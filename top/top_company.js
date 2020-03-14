@@ -7,7 +7,7 @@ const sendData = {};
 /*
 firebaseから一覧を読み込む
 読み込み完了後、1社ずつステータスを判定して結果を変数に格納
-（安永：通常運行、YKF：欠航あり、ドリーム：未定あり）
+（安永：通常運行、YKF：欠航あり）
 変数をDBに登録
 */
 
@@ -28,10 +28,6 @@ function readFirebase(company) {
       snapshot.forEach(function (element) {
         const portData = element.val();
         if (portData.portCode == undefined) return false; //全体コメントはスキップ
-        // ドリームのuehara, hatomaはuehara_hatomaを表示の都合で分割して作っているため、正式な運行カウントとして含まない
-        if (company == consts.DREAM && (portData.portCode == consts.UEHARA || portData.portCode == consts.HATOMA)) {
-          return false;
-        }
         statuses.push(portData.status.code); // 一旦配列に結果を保存
       });
       return Promise.resolve(statuses);

@@ -1,7 +1,7 @@
 exports.ANEI = "anei";
 exports.YKF = "ykf";
 
-// anei ykf dream共通
+// anei ykf共通
 exports.TAKETOMI = "taketomi";
 exports.KOHAMA = "kohama";
 exports.KUROSHIMA = "kuroshima";
