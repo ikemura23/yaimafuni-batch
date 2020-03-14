@@ -1,36 +1,46 @@
 const firebase = require("firebase");
 const consts = require('../consts.js');
 
-let anei = {};
-let ykf = {};
+// let anei = {};
+// let ykf = {};
 
-let taketomi= {};
-let kohama= {};
-let kuroshima= {};
-let oohara= {};
-let uehara= {};
-let hatoma= {};
-let hateruma= {};
+// let taketomi= {};
+// let kohama= {};
+// let kuroshima= {};
+// let oohara= {};
+// let uehara= {};
+// let hatoma= {};
+// let hateruma= {};
 
 /**
  * メイン処理
  */
 module.exports = (async () => {
-  return Promise.resolve()
-    .then(() => console.log('開始 港別の作成 '))
-    .then(() => readDatabase(consts.ANEI))
-    .then(data => anei = data)
-    .then(() => readDatabase(consts.YKF))
-    .then(data => ykf = data)
-    .then(() => createSendData())
-    .then(data => sendToFirebase(data))
-    .then(() => console.log('完了 港別の作成'))
+
+  console.log('開始 港別の作成 ')
+
+const annei = await readDatabase(consts.ANEI)
+const ykf = await readDatabase(consts.YKF)
+const sendData = await createSendData(annei, ykf)
+await sendToFirebase(sendData)
+
+console.log('完了 港別の作成')
+
+  // return Promise.resolve()
+  //   .then(() => console.log('開始 港別の作成 '))
+  //   .then(() => readDatabase(consts.ANEI))
+  //   .then(data => anei = data)
+  //   .then(() => readDatabase(consts.YKF))
+  //   .then(data => ykf = data)
+  //   .then(() => createSendData())
+  //   .then(data => sendToFirebase(data))
+  //   .then(() => console.log('完了 港別の作成'))
 })
 
 /**
  * firebaeから取得した値を返す
  */
-function readDatabase(path) {
+async function readDatabase(path) {
   return firebase.database()
     .ref(path)
     .once('value')
@@ -42,7 +52,7 @@ function readDatabase(path) {
 /**
  * firebaseへ送信
  */
-function sendToFirebase(data) {
+async function sendToFirebase(data) {
   return firebase.database()
     .ref('top_port')
     .set(data)
@@ -51,7 +61,7 @@ function sendToFirebase(data) {
 /**
  * 送信用の変数を作成して返す
  */
-function createSendData() {
+async function createSendData(anei, ykf) {
   // 竹富
   const taketomi = {
     anei: anei.taketomi,
