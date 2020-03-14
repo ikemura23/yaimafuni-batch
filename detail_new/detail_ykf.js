@@ -41,16 +41,47 @@ module.exports = async () => {
 async function getData(page) {
   // 更新日時
   const updateTime = await getUpdateTime(page);
-  console.log(updateTime)
+  console.log(updateTime);
 
   // アナウンス ※ここは表示されない日があるので要注意
   const announce = await getAnnounce(page);
-  console.log(announce)
+  console.log(announce);
+
+  // 竹富
+  const taketomi = await getTaketomiStatus(page);
+  console.log(taketomi);
 
   // 小浜
-  const kohama = await getKohamaStatus(page)
-  console.log(kohama)
+  const kohama = await getKohamaStatus(page);
+  console.log(kohama);
 
+  // 黒島
+  const kuroshima = await getKuroshimaStatus(page);
+  console.log(kuroshima);
+
+  // 大原
+  const oohara = await getOoharaStatus(page);
+  console.log(oohara);
+
+  // 上原
+  const uehara = await getUeharaStatus(page);
+  console.log(uehara);
+
+  // 鳩間
+  const hatoma = await getHatomaStatus(page);
+  console.log(hatoma);
+
+  // 小浜-竹富
+  const kohamaTaketomi = await getKohamaTaketomiStatus(page);
+  console.log(kohamaTaketomi);
+
+  // 小浜-大原
+  const kohamaOohara = await getKohamaOoharaStatus(page);
+  console.log(kohamaOohara);
+
+  // 上原-鳩間
+  const ueharaHatoma = await getUeharaHatomaStatus(page);
+  console.log(ueharaHatoma);
 }
 /**
  * 更新時刻 （2020年02月14日の運航状況）
@@ -63,15 +94,100 @@ async function getUpdateTime(page) {
  * 今日のアナウンスを取得
  */
 async function getAnnounce(page) {
-  return await getTextContent(page, "#operationstatus > div > div:nth-child(5)");
+  return await getTextContent(
+    page,
+    "#operationstatus > div > div:nth-child(5)"
+  );
 }
 
 /**
  * 竹富航路
  */
+async function getTaketomiStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(7) > table > tbody > tr"
+  );
+}
+
+/**
+ * 小浜航路
+ */
 async function getKohamaStatus(page) {
-  return await getStatusData(page, "#operationstatus > div > div:nth-child(7) > table > tbody > tr");
-} 
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(8) > table > tbody > tr"
+  );
+}
+
+/**
+ * 黒島航路
+ */
+async function getKuroshimaStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(9) > table > tbody > tr"
+  );
+}
+
+/**
+ * 西表大原航路
+ */
+async function getOoharaStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(10) > table > tbody > tr"
+  );
+}
+
+/**
+ * 西表上原航路
+ */
+async function getUeharaStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(11) > table > tbody > tr"
+  );
+}
+/**
+ * 鳩間航路
+ */
+async function getHatomaStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(12) > table > tbody > tr"
+  );
+}
+
+/**
+ * 小浜-竹富航路
+ */
+async function getKohamaTaketomiStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(13) > table > tbody > tr"
+  );
+}
+
+/**
+ * 小浜-大原航路
+ */
+async function getKohamaOoharaStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(14) > table > tbody > tr"
+  );
+}
+
+/**
+ * 上原-鳩間航路
+ */
+async function getUeharaHatomaStatus(page) {
+  return await getStatusData(
+    page,
+    "#operationstatus > div > div:nth-child(15) > table > tbody > tr"
+  );
+}
 
 /**
  * 要素単体のElementプロパティのtextContentを取得する
