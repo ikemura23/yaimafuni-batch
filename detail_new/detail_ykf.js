@@ -22,16 +22,13 @@ module.exports = async () => {
     const data = await getData(page);
     // console.log(info);
 
-    // スクレイピングした値、9件取得できるはず
-    // const data = await getDataList(page);
-
     // 送信開始
     await sendToFirebase(data);
 
     browser.close();
   } catch (error) {
     console.error(error.stack, `${COMPANY}一覧でエラー`);
-    // sendError(error.stack, `${COMPANY}一覧のスクレイピングでエラー発生!`);
+    sendError(error.stack, `${COMPANY}一覧のスクレイピングでエラー発生!`);
     browser.close();
   } finally {
     console.log(`終了: ${COMPANY} 詳細`);
@@ -85,8 +82,6 @@ async function getData(page) {
 
   // 送信用データ生成
   const sendData = {
-    // comment: announce,
-    // updateTime: updateTime,
     taketomi: taketomi,
     kohama: kohama,
     kuroshima: kuroshima,
