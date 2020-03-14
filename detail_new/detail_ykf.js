@@ -19,21 +19,43 @@ module.exports = async () => {
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
+    const info = await getData(page);
+    console.log(info);
+
     // スクレイピングした値、9件取得できるはず
-    const data = await getDataList(page);
+    // const data = await getDataList(page);
 
     // 送信開始
-    await sendToFirebase(data);
+    // await sendToFirebase(data);
 
     browser.close();
   } catch (error) {
     console.error(error.stack, `${COMPANY}一覧でエラー`);
-    sendError(error.stack, `${COMPANY}一覧のスクレイピングでエラー発生!`);
+    // sendError(error.stack, `${COMPANY}一覧のスクレイピングでエラー発生!`);
     browser.close();
   } finally {
     console.log(`終了: ${COMPANY} 詳細`);
   }
 };
+
+async function getData(page) {
+  // 更新日時
+  const updateTime = await getUpdateTime(page);
+}
+/**
+ * 更新時刻 （2020年02月14日の運航状況）
+ */
+async function getUpdateTime(page) {
+  return await getTextContent(page, "#operationstatus > div > div.statusdate");
+}
+
+/**
+ * 要素単体のElementプロパティのtextContentを取得する
+ */
+async function getTextContent(page, itemSelector) {
+  const element = await page.$(itemSelector);
+  return await (await element.getProperty("textContent")).jsonValue();
+}
 
 /**
  * リスト取得
@@ -50,8 +72,8 @@ async function getDataList(page) {
   // 港ごとに処理
   const dataList = {};
   for (const selector of selectors) {
-    const data = await getRawData(page, selector);
-    dataList[data.portCode] = data;
+    const convertData = await getRawData(page, selector);
+    dataList[convertData.portCode] = convertData.data;
   }
   return dataList;
 }
@@ -91,8 +113,8 @@ async function getRawData(page, itemSelector) {
 
     // 行データ生成
     const row = {
-      portCode: getPortCode(portName),
       left: {
+        memo: "",
         time: leftWords[1],
         status: {
           code: getRowStatusCode(leftWords[0]),
@@ -100,6 +122,7 @@ async function getRawData(page, itemSelector) {
         }
       },
       right: {
+        memo: "",
         time: rightWords[1],
         status: {
           code: getRowStatusCode(rightWords[0]),
@@ -113,11 +136,13 @@ async function getRawData(page, itemSelector) {
   // 返却データ作成
   const data = {
     portCode: getPortCode(portName),
-    header: {
-      left: leftPortName,
-      right: rightPortName
-    },
-    row: rows
+    data: {
+      header: {
+        left: leftPortName,
+        right: rightPortName
+      },
+      row: rows
+    }
   };
   // console.log(data);
   return data;
