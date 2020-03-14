@@ -47,6 +47,10 @@ async function getData(page) {
   const announce = await getAnnounce(page);
   console.log(announce)
 
+  // 小浜
+  const kohama = await getKohamaStatus(page)
+  console.log(kohama)
+
 }
 /**
  * 更新時刻 （2020年02月14日の運航状況）
@@ -63,6 +67,13 @@ async function getAnnounce(page) {
 }
 
 /**
+ * 竹富航路
+ */
+async function getKohamaStatus(page) {
+  return await getRawData(page, "#operationstatus > div > div:nth-child(7) > table > tbody > tr");
+} 
+
+/**
  * 要素単体のElementプロパティのtextContentを取得する
  */
 async function getTextContent(page, itemSelector) {
@@ -73,14 +84,14 @@ async function getTextContent(page, itemSelector) {
 /**
  * リスト取得
  */
-async function getDataList(page) {
+async function getDataList(page,itemSelector) {
   // Selectorを作成、4〜12までが各港の時間別ステータスになる
-  const selectors = [];
-  for (let i = 4; i < 13; i++) {
-    selectors.push(
-      `#operationstatus > div > div:nth-child(${i}) > table > tbody > tr`
-    );
-  }
+  // const selectors = [];
+  // for (let i = 4; i < 13; i++) {
+  //   selectors.push(
+  //     `#operationstatus > div > div:nth-child(${i}) > table > tbody > tr`
+  //   );
+  // }
 
   // 港ごとに処理
   const dataList = {};
