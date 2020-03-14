@@ -1,6 +1,7 @@
 const firebase = require("firebase");
 const consts = require("../consts.js");
 const sendError = require("../slack");
+const firebase2 = require("../lib/firebase_repository");
 
 const TABLE = "top_company/";
 const sendData = {};
@@ -13,8 +14,11 @@ firebaseから一覧を読み込む
 */
 async function createTopCompanyStatus(company) {
   console.log(`createTopCompanyStatus: ${company}`);
-  const statuses = await readFirebase(company);
-  console.log(statuses);
+  // まずfirebaseから一覧データを取得
+  const readData = await readFirebase(company);
+  // status codeだけを取得
+  const statuses = convertPostStatusList(readData);
+  // 判定開始
   await createStatus(statuses, company);
 }
 
@@ -22,19 +26,25 @@ async function createTopCompanyStatus(company) {
  * DBから 会社名/list/ports を取得して status.code のみを取得
  */
 async function readFirebase(company) {
-  return firebase
-    .database()
-    .ref(`${company}`)
-    .once("value")
-    .then(function(snapshot) {
-      const statuses = [];
-      snapshot.forEach(function(element) {
-        const portData = element.val();
-        if (portData.portCode == undefined) return false; //全体コメントはスキップ
-        statuses.push(portData.status.code); // 一旦配列に結果を保存
-      });
-      return Promise.resolve(statuses);
-    });
+  // 一度、一覧ステータス値を全部取得
+  return await firebase2.read(company);
+}
+
+/**
+ * status.code のみを取得して配列にして返す
+ */
+function convertPostStatusList(portData) {
+    // ループでstatus codeだけを取得して statuses に格納
+    const statuses = [];
+    for (const key in portData) {
+      if (portData.hasOwnProperty(key)) {
+        const data = portData[key];
+        if (data.portCode != undefined) { // このifでcommentとupdateTimeを外している
+          statuses.push(data.status.code); // status codeを配列に保存
+        }
+      }
+    }
+    return statuses;
 }
 
 /**
@@ -42,7 +52,6 @@ async function readFirebase(company) {
  * @param {aneiの運行結果配列} statuses
  */
 function createStatus(statuses, company) {
-  console.log(`createStatus: ${company} start`);
   const data = {
     nomal: statuses.filter(function(value) {
       return value == consts.NORMAL;
@@ -58,7 +67,6 @@ function createStatus(statuses, company) {
     }).length
   };
   sendData[company] = data;
-  console.log(`createStatus: ${company} end`);
 }
 
 /**
