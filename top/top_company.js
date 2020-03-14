@@ -1,7 +1,8 @@
-const firebase = require("firebase");
+// 会社別の運行ステータスの値をまとめて、firebaseに送信している
+
 const consts = require("../consts.js");
 const sendError = require("../slack");
-const firebase2 = require("../lib/firebase_repository");
+const firebase = require("../lib/firebase_repository");
 
 const TABLE = "top_company/";
 const sendData = {};
@@ -13,7 +14,6 @@ firebaseから一覧を読み込む
 変数をDBに登録
 */
 async function createTopCompanyStatus(company) {
-  console.log(`createTopCompanyStatus: ${company}`);
   // まずfirebaseから一覧データを取得
   const readData = await readFirebase(company);
   // status codeだけを取得
@@ -27,7 +27,7 @@ async function createTopCompanyStatus(company) {
  */
 async function readFirebase(company) {
   // 一度、一覧ステータス値を全部取得
-  return await firebase2.read(company);
+  return await firebase.read(company);
 }
 
 /**
@@ -73,12 +73,9 @@ function createStatus(statuses, company) {
  * firebaseへ送信
  */
 async function sendFirebase() {
-  console.log("DB登録開始");
-  console.log(sendData);
-  return firebase
-    .database()
-    .ref(TABLE)
-    .update(sendData);
+  // console.log("DB登録開始");
+  // console.log(sendData);
+  return await firebase.update(TABLE,sendData)
 }
 
 /**
