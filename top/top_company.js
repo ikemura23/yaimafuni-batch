@@ -79,7 +79,6 @@ module.exports = () => {
     .then(() => console.log('開始 トップ 会社別'))
     .then(() => createTopCompanyStatus(consts.ANEI))
     .then(() => createTopCompanyStatus(consts.YKF))
-    .then(() => createTopCompanyStatus(consts.DREAM))
     .then(() => sendFirebase())
     .catch((error) => sendError(error.stack))
     // .catch((error) => console.log(error))
