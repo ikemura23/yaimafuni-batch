@@ -70,7 +70,7 @@ async function getAnnounce(page) {
  * 竹富航路
  */
 async function getKohamaStatus(page) {
-  return await getRawData(page, "#operationstatus > div > div:nth-child(7) > table > tbody > tr");
+  return await getStatusData(page, "#operationstatus > div > div:nth-child(7) > table > tbody > tr");
 } 
 
 /**
@@ -82,30 +82,9 @@ async function getTextContent(page, itemSelector) {
 }
 
 /**
- * リスト取得
- */
-async function getDataList(page,itemSelector) {
-  // Selectorを作成、4〜12までが各港の時間別ステータスになる
-  // const selectors = [];
-  // for (let i = 4; i < 13; i++) {
-  //   selectors.push(
-  //     `#operationstatus > div > div:nth-child(${i}) > table > tbody > tr`
-  //   );
-  // }
-
-  // 港ごとに処理
-  const dataList = {};
-  for (const selector of selectors) {
-    const convertData = await getRawData(page, selector);
-    dataList[convertData.portCode] = convertData.data;
-  }
-  return dataList;
-}
-
-/**
  * 港単体のデータ取得
  */
-async function getRawData(page, itemSelector) {
+async function getStatusData(page, itemSelector) {
   const trNodes = await page.$$(itemSelector);
 
   // 港名
