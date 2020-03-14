@@ -12,7 +12,7 @@ const YkfList = require('./list/ykf_list.js');
 const ykfTime = require('./list/ykf_time_and_announce.js');
 
 // const AneiDetail = require('./detail/detail_anei.js');
-const ykfDetail = require('./detail_new/detail_ykf.js');
+const ykfDetail = require('./detail/detail_ykf.js');
 
 const topCompany = require('./top/top_company.js');
 const topPort = require('./top/top_port.js');
