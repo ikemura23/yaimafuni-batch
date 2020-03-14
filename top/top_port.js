@@ -15,7 +15,7 @@ let hateruma= {};
 /**
  * メイン処理
  */
-module.exports = () => {
+module.exports = (async () => {
   return Promise.resolve()
     .then(() => console.log('開始 港別の作成 '))
     .then(() => readDatabase(consts.ANEI))
@@ -25,7 +25,7 @@ module.exports = () => {
     .then(() => createSendData())
     .then(data => sendToFirebase(data))
     .then(() => console.log('完了 港別の作成'))
-}
+})
 
 /**
  * firebaeから取得した値を返す
