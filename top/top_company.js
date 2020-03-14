@@ -34,17 +34,18 @@ async function readFirebase(company) {
  * status.code のみを取得して配列にして返す
  */
 function convertPostStatusList(portData) {
-    // ループでstatus codeだけを取得して statuses に格納
-    const statuses = [];
-    for (const key in portData) {
-      if (portData.hasOwnProperty(key)) {
-        const data = portData[key];
-        if (data.portCode != undefined) { // このifでcommentとupdateTimeを外している
-          statuses.push(data.status.code); // status codeを配列に保存
-        }
+  // ループでstatus codeだけを取得して statuses に格納
+  const statuses = [];
+  for (const key in portData) {
+    if (portData.hasOwnProperty(key)) {
+      const data = portData[key];
+      if (data.portCode != undefined) {
+        // このifでcommentとupdateTimeを外している
+        statuses.push(data.status.code); // status codeを配列に保存
       }
     }
-    return statuses;
+  }
+  return statuses;
 }
 
 /**
@@ -75,7 +76,7 @@ function createStatus(statuses, company) {
 async function sendFirebase() {
   // console.log("DB登録開始");
   // console.log(sendData);
-  return await firebase.update(TABLE,sendData)
+  return await firebase.update(TABLE, sendData);
 }
 
 /**

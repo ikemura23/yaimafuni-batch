@@ -21,7 +21,7 @@ module.exports = async () => {
     // スクレイピングした生の値
     const listRaw = await getList(page);
     // 送信用に変換
-    const sendData = makeSendData(listRaw);
+    const sendData = await makeSendData(listRaw);
 
     // 送信開始
     await firebase.update(consts.YKF, sendData);
@@ -57,16 +57,21 @@ async function getDataList(page, itemSelector) {
  * 生データから送信用の値を作成する
  */
 async function makeSendData(list) {
-  const sendData = list.map(text => {
+
+  const returnData = {};
+  for (const text of list) {
     const portName = text.slice(0, -1);
-    const statusRaw = text.slice(-1);
-    return {
-      portCode: getPortCode(portName),
+    const portCode = getPortCode(portName);
+    const statusText = text.slice(-1); // 記号文字、◯や△や☓など
+    const portData = {
+      comment: "",
+      portCode: portCode,
       portName: portName,
-      status: getStatusCode(statusRaw)
+      status: getStatusCode(statusText)
     };
-  });
-  return sendData;
+    returnData[portCode] = portData;
+  }
+  return returnData;
 }
 
 // 港名から港コードを返す
