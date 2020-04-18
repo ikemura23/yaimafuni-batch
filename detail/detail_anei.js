@@ -16,6 +16,9 @@ module.exports = async () => {
   const browser = await puppeteer.launch(LAUNCH_OPTION);
   try {
     // todo: メイン処理
+    const data = await makeData(page);
+
+    // await sendToFirebase(data);
 
     browser.close();
   } catch (error) {
@@ -26,3 +29,12 @@ module.exports = async () => {
     console.log(`終了: ${COMPANY} 詳細`);
   }
 };
+
+/**
+ * DBへ登録
+ */
+async function sendToFirebase(data) {
+    const tableName = `${COMPANY}_timeTable/`;
+    console.log("送信開始" + tableName);
+    return await firebase.update(tableName, data);
+  }
