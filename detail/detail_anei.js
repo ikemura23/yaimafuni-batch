@@ -30,11 +30,107 @@ module.exports = async () => {
   }
 };
 
+async function makeData(page) {
+  // 送信用データ生成
+  const data = {
+    // 竹富
+    taketomi: await getTaketomiStatus(page),
+    // // 黒島
+    // kuroshima: await getKuroshimaStatus(page),
+    // // 小浜
+    // kohama: await getKohamaStatus(page),
+    // // 上原
+    // uehara: await getUeharaStatus(page),
+    // // 鳩間
+    // hatoma: await getHatomaStatus(page),
+    // // 大原
+    // oohara: await getOoharaStatus(page),
+    // // 波照間
+    // oohara: await getHaterumaStatus(page),
+  };
+  return data;
+}
+
+/**
+ * 竹富航路
+ */
+async function getTaketomiStatus(page) {
+  return await getStatusData(
+    page,
+    "#route-list > div:nth-child(1) > table > tbody > tr"
+  );
+}
+
+/**
+ * 黒島航路
+ */
+async function getKuroshimaStatus(page) {
+  return await getStatusData(
+    page,
+    "#route-list > div:nth-child(2) > table:nth-child(2) > tbody > tr"
+  );
+}
+
+/**
+ * 小浜航路
+ */
+async function getKohamaStatus(page) {
+  return await getStatusData(
+    page,
+    "#route-list > div:nth-child(2) > table:nth-child(4) > tbody > tr"
+  );
+}
+
+/**
+ * 西表上原航路
+ */
+async function getUeharaStatus(page) {
+  return await getStatusData(
+    page,
+    "#route-list > div:nth-child(4) > table:nth-child(2) > tbody > tr"
+  );
+}
+
+/**
+ * 鳩間航路
+ */
+async function getHatomaStatus(page) {
+  return await getStatusData(
+    page,
+    "#route-list > div:nth-child(4) > table:nth-child(4) > tbody > tr"
+  );
+}
+
+/**
+ * 西表大原航路
+ */
+async function getOoharaStatus(page) {
+  return await getStatusData(
+    page,
+    "#route-list > div:nth-child(4) > table:nth-child(2) > tbody > tr"
+  );
+}
+
+/**
+ * 波照間 航路
+ */
+async function getHaterumaStatus(page) {
+  return await getStatusData(
+    page,
+    "#route-list > div:nth-child(4) > table:nth-child(4) > tbody > tr"
+  );
+}
+
+/**
+ * 港単体のデータ取得
+ */
+async function getStatusData(page, itemSelector) {}
+
 /**
  * DBへ登録
  */
 async function sendToFirebase(data) {
-    const tableName = `${COMPANY}_timeTable/`;
-    console.log("送信開始" + tableName);
-    return await firebase.update(tableName, data);
-  }
+  const tableName = `${COMPANY}_timeTable/`;
+  console.log("送信開始" + tableName);
+  return await firebase.update(tableName, data);
+}
