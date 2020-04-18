@@ -8,13 +8,13 @@ const URL = "https://www.yaeyama.co.jp/operation.html";
 const consts = require("../consts.js");
 const config = require("../config/config");
 const firebase = require("../lib/firebase_repository");
-
+const sendError = require("../slack");
 const COMPANY = consts.YKF;
 
 module.exports = async () => {
   console.log(`開始: ${COMPANY} 詳細`);
+  const browser = await puppeteer.launch(LAUNCH_OPTION);
   try {
-    const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
