@@ -117,7 +117,7 @@ async function getAnnounce(page) {
 async function getTaketomiStatus(page) {
   return await getStatusData(
     page,
-    '#operationstatus > div > div:nth-child(4) > table > tbody > tr'
+    "#operationstatus > div > div:nth-child(7) > table > tbody > tr"
   );
 }
 
@@ -127,7 +127,7 @@ async function getTaketomiStatus(page) {
 async function getKohamaStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(5) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(8) > table > tbody > tr"
   );
 }
 
@@ -137,7 +137,7 @@ async function getKohamaStatus(page) {
 async function getKuroshimaStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(6) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(9) > table > tbody > tr"
   );
 }
 
@@ -147,7 +147,7 @@ async function getKuroshimaStatus(page) {
 async function getOoharaStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(7) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(10) > table > tbody > tr"
   );
 }
 
@@ -157,7 +157,7 @@ async function getOoharaStatus(page) {
 async function getUeharaStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(8) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(11) > table > tbody > tr"
   );
 }
 /**
@@ -166,7 +166,7 @@ async function getUeharaStatus(page) {
 async function getHatomaStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(9) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(12) > table > tbody > tr"
   );
 }
 
@@ -176,7 +176,7 @@ async function getHatomaStatus(page) {
 async function getKohamaTaketomiStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(10) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(13) > table > tbody > tr"
   );
 }
 
@@ -186,7 +186,7 @@ async function getKohamaTaketomiStatus(page) {
 async function getKohamaOoharaStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(11) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(14) > table > tbody > tr"
   );
 }
 
@@ -196,7 +196,7 @@ async function getKohamaOoharaStatus(page) {
 async function getUeharaHatomaStatus(page) {
   return await getStatusData(
     page,
-    "#operationstatus > div > div:nth-child(12) > table > tbody > tr"
+    "#operationstatus > div > div:nth-child(15) > table > tbody > tr"
   );
 }
 
@@ -215,7 +215,7 @@ async function getStatusData(page, itemSelector) {
   const trNodes = await page.$$(itemSelector);
 
   // 港名
-  // const portName = await trNodes[0].$eval("h3", nd => nd.innerText);
+  const portName = await trNodes[0].$eval("h3", nd => nd.innerText);
   // ヘッダー左
   const leftPortName = await trNodes[1].$eval(
     "td:nth-child(1)",
