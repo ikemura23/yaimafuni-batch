@@ -15,15 +15,16 @@ module.exports = async () => {
   console.log(`開始: ${COMPANY} 詳細`);
   const browser = await puppeteer.launch(LAUNCH_OPTION);
   try {
-    // todo: メイン処理
+    const page = await browser.newPage();
+    // page.setUserAgent(config.puppeteer.userAgent);
+    await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
     const data = await makeData(page);
-
     // await sendToFirebase(data);
 
     browser.close();
   } catch (error) {
     console.error(error.stack, `${COMPANY}一覧でエラー`);
-    sendError(error.stack, `${COMPANY}一覧のスクレイピングでエラー発生!`);
+    // sendError(error.stack, `${COMPANY}一覧のスクレイピングでエラー発生!`);
     browser.close();
   } finally {
     console.log(`終了: ${COMPANY} 詳細`);
@@ -57,7 +58,7 @@ async function makeData(page) {
 async function getTaketomiStatus(page) {
   return await getStatusData(
     page,
-    "#route-list > div:nth-child(1) > table > tbody > tr"
+    "#route-list > div:nth-child(1) > table > tbody > tr:nth-child(1)"
   );
 }
 
@@ -124,7 +125,26 @@ async function getHaterumaStatus(page) {
 /**
  * 港単体のデータ取得
  */
-async function getStatusData(page, itemSelector) {}
+async function getStatusData(page, itemSelector) {
+  const trNodes = await page.$$(itemSelector);
+  console.log(trNodes);
+  if (trNodes.length == 0) {
+      console.log("node is empty")
+      return
+  }
+  // ヘッダー左
+  const leftPortName = await trNodes[0].$eval(
+    "th:nth-child(1)",
+    (nd) => nd.innerText
+  );
+  // ヘッダー右
+  const rightPortName = await trNodes[0].$eval(
+    "th:nth-child(2)",
+    (nd) => nd.innerText
+  );
+  console.log(leftPortName);
+  console.log(rightPortName);
+}
 
 /**
  * DBへ登録
