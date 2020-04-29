@@ -11,7 +11,7 @@ const aneiList = require('./list/anei_list.js');
 const YkfList = require('./list/ykf_list.js');
 const ykfTime = require('./list/ykf_time_and_announce.js');
 
-// const AneiDetail = require('./detail/detail_anei.js');
+const aneiDetail = require('./detail/detail_anei.js');
 const ykfDetail = require('./detail/detail_ykf.js');
 
 const topCompany = require('./top/top_company.js');
@@ -32,7 +32,7 @@ Promise.resolve()
   .then(() => aneiList())
   .then(() => ykfTime())
   .then(() => YkfList())
-  // .then(() => AneiDetail())
+  .then(() => aneiDetail())
   .then(() => ykfDetail())
   .then(() => tyhoon())
   .then(() => yahoo())
