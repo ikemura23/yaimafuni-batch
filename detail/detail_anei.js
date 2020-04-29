@@ -58,7 +58,7 @@ async function makeData(page) {
 async function getTaketomiStatus(page) {
   return await getStatusData(
     page,
-    "#route-list > div:nth-child(1) > table > tbody > tr:nth-child(1)"
+    "#route-list > div:nth-child(1) > table > tbody > tr"
   );
 }
 
@@ -127,10 +127,10 @@ async function getHaterumaStatus(page) {
  */
 async function getStatusData(page, itemSelector) {
   const trNodes = await page.$$(itemSelector);
-  console.log(trNodes);
+  console.log(trNodes.length);
   if (trNodes.length == 0) {
-      console.log("node is empty")
-      return
+    console.log("status node is empty");
+    return;
   }
   // ヘッダー左
   const leftPortName = await trNodes[0].$eval(
@@ -144,6 +144,46 @@ async function getStatusData(page, itemSelector) {
   );
   console.log(leftPortName);
   console.log(rightPortName);
+
+  // １行目の港名を省いて時刻表をループ
+  const timeTable = trNodes.filter((_, i) => i > 0);
+  if (trNodes.length == 0) {
+    console.log("timeTable is empty");
+    return;
+  }
+  console.log(timeTable.length);
+  console.log("for開始");
+  for (const time of timeTable) {
+    // 左の行
+    const leftStatus = await time.$eval(
+      "td:nth-child(2)",
+      (nd) => ({innerText:nd.innerText, className: nd.className})
+    );
+    const left = {
+      memo: "",
+      time: await time.$eval("td:nth-child(1)", (nd) => nd.innerText),
+      status: {
+        code: getStatusCode(leftStatus.className.trim()),
+        text: leftStatus.innerText,
+      },
+    };
+    console.log(left);
+    // 左の行
+    const rightStatus = await time.$eval(
+      "td:nth-child(4)",
+      (nd) => ({innerText:nd.innerText, className: nd.className})
+    );
+
+    const right = {
+      memo: "",
+      time: await time.$eval("td:nth-child(3)", (nd) => nd.innerText),
+      status: {
+        code: getStatusCode(rightStatus.className),
+        text: rightStatus.innerText,
+      },
+    };
+    console.log(right);
+  }
 }
 
 /**
@@ -153,4 +193,24 @@ async function sendToFirebase(data) {
   const tableName = `${COMPANY}_timeTable/`;
   console.log("送信開始" + tableName);
   return await firebase.update(tableName, data);
+}
+
+/**
+ * タグのcssクラス名からステータスコードを取得
+ * @param {港単体タグ} arreaTag
+ */
+function getStatusCode(className) {
+  console.log(`className: ${className}`)
+  if (className == "check triangle") {
+    return consts.CATION;
+  } else if (className == "check out") {
+    return consts.CANCEL;
+  } else if (className == "check circle") {
+    return consts.NORMAL;
+  } else if (className == "check") {
+    return consts.NONE;
+  } else {
+    console.log(`ret: ${consts.CATION}`)
+    return consts.CATION;
+  }
 }
