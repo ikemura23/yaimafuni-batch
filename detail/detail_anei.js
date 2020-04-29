@@ -35,19 +35,19 @@ async function makeData(page) {
   // 送信用データ生成
   const data = {
     // 竹富
-    // taketomi: await getTaketomiStatus(page),
+    taketomi: await getTaketomiStatus(page),
     // 黒島
     kuroshima: await getKuroshimaStatus(page),
     // // 小浜
-    // kohama: await getKohamaStatus(page),
+    kohama: await getKohamaStatus(page),
     // // 上原
-    // uehara: await getUeharaStatus(page),
+    uehara: await getUeharaStatus(page),
     // // 鳩間
-    // hatoma: await getHatomaStatus(page),
+    hatoma: await getHatomaStatus(page),
     // // 大原
-    // oohara: await getOoharaStatus(page),
+    oohara: await getOoharaStatus(page),
     // // 波照間
-    // oohara: await getHaterumaStatus(page),
+    oohara: await getHaterumaStatus(page),
   };
   console.log(data)
   return data;
@@ -89,7 +89,7 @@ async function getKohamaStatus(page) {
 async function getUeharaStatus(page) {
   return await getStatusData(
     page,
-    "#route-list > div:nth-child(4) > table:nth-child(2) > tbody > tr"
+    "#route-list > div:nth-child(3) > table:nth-child(2) > tbody > tr"
   );
 }
 
@@ -99,7 +99,7 @@ async function getUeharaStatus(page) {
 async function getHatomaStatus(page) {
   return await getStatusData(
     page,
-    "#route-list > div:nth-child(4) > table:nth-child(4) > tbody > tr"
+    "#route-list > div:nth-child(3) > table:nth-child(4) > tbody > tr"
   );
 }
 
