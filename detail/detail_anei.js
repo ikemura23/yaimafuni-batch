@@ -49,6 +49,7 @@ async function makeData(page) {
     // // 波照間
     // oohara: await getHaterumaStatus(page),
   };
+  console.log(data)
   return data;
 }
 
@@ -151,14 +152,18 @@ async function getStatusData(page, itemSelector) {
     console.log("timeTable is empty");
     return;
   }
+
+  // 保存用変数
+  const rows = [];
+  // 時刻毎にforでループ開始
   console.log(timeTable.length);
   console.log("for開始");
   for (const time of timeTable) {
     // 左の行
-    const leftStatus = await time.$eval(
-      "td:nth-child(2)",
-      (nd) => ({innerText:nd.innerText, className: nd.className})
-    );
+    const leftStatus = await time.$eval("td:nth-child(2)", (nd) => ({
+      innerText: nd.innerText,
+      className: nd.className,
+    }));
     const left = {
       memo: "",
       time: await time.$eval("td:nth-child(1)", (nd) => nd.innerText),
@@ -167,12 +172,12 @@ async function getStatusData(page, itemSelector) {
         text: leftStatus.innerText,
       },
     };
-    console.log(left);
+    // console.log(left);
     // 右の行
-    const rightStatus = await time.$eval(
-      "td:nth-child(4)",
-      (nd) => ({innerText:nd.innerText, className: nd.className})
-    );
+    const rightStatus = await time.$eval("td:nth-child(4)", (nd) => ({
+      innerText: nd.innerText,
+      className: nd.className,
+    }));
 
     const right = {
       memo: "",
@@ -182,8 +187,26 @@ async function getStatusData(page, itemSelector) {
         text: rightStatus.innerText,
       },
     };
-    console.log(right);
+    // console.log(right);
+
+    const row = {
+      left: left,
+      right: right,
+    };
+    // console.log(row);
+    rows.push(row);
   }
+
+  // 返却データ作成
+  const data = {
+    header: {
+      left: leftPortName,
+      right: rightPortName,
+    },
+    row: rows,
+  };
+  // console.log(data);
+  return data;
 }
 
 /**
