@@ -168,7 +168,7 @@ async function getStatusData(page, itemSelector) {
       },
     };
     console.log(left);
-    // 左の行
+    // 右の行
     const rightStatus = await time.$eval(
       "td:nth-child(4)",
       (nd) => ({innerText:nd.innerText, className: nd.className})
@@ -178,7 +178,7 @@ async function getStatusData(page, itemSelector) {
       memo: "",
       time: await time.$eval("td:nth-child(3)", (nd) => nd.innerText),
       status: {
-        code: getStatusCode(rightStatus.className),
+        code: getStatusCode(rightStatus.className.trim()),
         text: rightStatus.innerText,
       },
     };
@@ -200,7 +200,7 @@ async function sendToFirebase(data) {
  * @param {港単体タグ} arreaTag
  */
 function getStatusCode(className) {
-  console.log(`className: ${className}`)
+  // console.log(`className:[${className}]`)
   if (className == "check triangle") {
     return consts.CATION;
   } else if (className == "check out") {
@@ -210,7 +210,6 @@ function getStatusCode(className) {
   } else if (className == "check") {
     return consts.NONE;
   } else {
-    console.log(`ret: ${consts.CATION}`)
     return consts.CATION;
   }
 }
