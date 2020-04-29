@@ -35,9 +35,9 @@ async function makeData(page) {
   // 送信用データ生成
   const data = {
     // 竹富
-    taketomi: await getTaketomiStatus(page),
-    // // 黒島
-    // kuroshima: await getKuroshimaStatus(page),
+    // taketomi: await getTaketomiStatus(page),
+    // 黒島
+    kuroshima: await getKuroshimaStatus(page),
     // // 小浜
     // kohama: await getKohamaStatus(page),
     // // 上原
