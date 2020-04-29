@@ -21,3 +21,4 @@ exports.CANCEL = "cancel"; // 欠航
 exports.CATION = "cation"; // 注意
 exports.NORMAL = "normal"; // 運行
 exports.SUSPEND = "suspend"; // 運休
+exports.NONE = "none"; // 無効(ハイフンのみ)
