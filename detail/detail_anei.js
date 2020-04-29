@@ -19,7 +19,7 @@ module.exports = async () => {
     // page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
     const data = await makeData(page);
-    // await sendToFirebase(data);
+    await sendToFirebase(data);
 
     browser.close();
   } catch (error) {
@@ -128,7 +128,6 @@ async function getHaterumaStatus(page) {
  */
 async function getStatusData(page, itemSelector) {
   const trNodes = await page.$$(itemSelector);
-  console.log(trNodes.length);
   if (trNodes.length == 0) {
     console.log("status node is empty");
     return;
@@ -143,8 +142,6 @@ async function getStatusData(page, itemSelector) {
     "th:nth-child(2)",
     (nd) => nd.innerText
   );
-  console.log(leftPortName);
-  console.log(rightPortName);
 
   // １行目の港名を省いて時刻表をループ
   const timeTable = trNodes.filter((_, i) => i > 0);
@@ -156,8 +153,6 @@ async function getStatusData(page, itemSelector) {
   // 保存用変数
   const rows = [];
   // 時刻毎にforでループ開始
-  console.log(timeTable.length);
-  console.log("for開始");
   for (const time of timeTable) {
     // 左の行
     const leftStatus = await time.$eval("td:nth-child(2)", (nd) => ({
@@ -223,7 +218,6 @@ async function sendToFirebase(data) {
  * @param {港単体タグ} arreaTag
  */
 function getStatusCode(className) {
-  // console.log(`className:[${className}]`)
   if (className == "check triangle") {
     return consts.CATION;
   } else if (className == "check out") {
