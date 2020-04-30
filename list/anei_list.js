@@ -10,8 +10,8 @@ const firebase = require("firebase");
 
 module.exports = async () => {
   console.log("開始:" + consts.ANEI + " 一覧");
+  const browser = await puppeteer.launch(LAUNCH_OPTION);
   try {
-    const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
@@ -86,12 +86,11 @@ module.exports = async () => {
       });
     // console.log(sendData);
 
-    browser.close();
   } catch (error) {
     console.error(error.stack, "安栄一覧でエラー");
     sendError(error.stack, "安栄一覧のスクレイピングでエラー発生!");
-    browser.close();
   } finally {
+    browser.close();
     console.log("終了:" + consts.ANEI + " 一覧");
   }
 };

@@ -12,8 +12,8 @@ const COMPANY = consts.YKF;
 
 module.exports = async () => {
   console.log(`開始: ${COMPANY} 一覧`);
+  const browser = await puppeteer.launch(LAUNCH_OPTION);
   try {
-    const browser = await puppeteer.launch(LAUNCH_OPTION);
     const page = await browser.newPage();
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
@@ -26,12 +26,11 @@ module.exports = async () => {
     // 送信開始
     await firebase.update(consts.YKF, sendData);
 
-    browser.close();
   } catch (error) {
     console.error(error.stack, `${COMPANY}一覧でエラー`);
     sendError(error.stack, `${COMPANY}一覧のスクレイピングでエラー発生!`);
-    browser.close();
   } finally {
+    browser.close();
     console.log(`終了: ${COMPANY} 一覧`);
   }
 };

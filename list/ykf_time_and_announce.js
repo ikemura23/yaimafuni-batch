@@ -51,7 +51,7 @@ module.exports = async () => {
  */
 async function getUpdateTime(page) {
   const data = await getData(page, "#operationstatus > div > div.statusdate");
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
@@ -60,7 +60,7 @@ async function getUpdateTime(page) {
  */
 async function getAnnounce(page) {
   const data = await getData(page, "#operationstatus > div > div.statusdate2");
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
@@ -72,7 +72,7 @@ async function getAnnounce2(page) {
     page,
     "#operationstatus > div > div.statusdate2.bgylw"
   );
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
