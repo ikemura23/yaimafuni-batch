@@ -36,14 +36,6 @@ module.exports = async () => {
 };
 
 async function getData(page) {
-  // 更新日時
-  // const updateTime = await getUpdateTime(page);
-  // console.log(updateTime);
-
-  // アナウンス ※ここは表示されない日があるので要注意
-  // const announce = await getAnnounce(page);
-  // console.log(announce);
-
   // 最初に div.local をまとめて取得
   const devLocalNodes = await page.$$("#operationstatus > div > div.local");
   console.log(`devLocalNodes.length:${devLocalNodes.length}`);
@@ -65,112 +57,6 @@ async function getData(page) {
     // uehara_hatoma: await getUeharaHatomaStatus(page) // 上原-鳩間
   };
   return sendData;
-}
-/**
- * 更新時刻 （2020年02月14日の運航状況）
- */
-async function getUpdateTime(page) {
-  return await getTextContent(page, "#operationstatus > div > div.statusdate");
-}
-
-/**
- * 今日のアナウンスを取得
- */
-async function getAnnounce(page) {
-  return await getTextContent(
-    page,
-    "#operationstatus > div > div:nth-child(5)"
-  );
-}
-
-/**
- * 竹富航路
- */
-async function getTaketomiStatus(devLocalNodes) {
-  return await getStatusData(await devLocalNodes[0].$$("table > tbody > tr"));
-}
-
-/**
- * 小浜航路
- */
-async function getKohamaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(7) > table > tbody > tr"
-  );
-}
-
-/**
- * 黒島航路
- */
-async function getKuroshimaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(8) > table > tbody > tr"
-  );
-}
-
-/**
- * 西表大原航路
- */
-async function getOoharaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(9) > table > tbody > tr"
-  );
-}
-
-/**
- * 西表上原航路
- */
-async function getUeharaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(10) > table > tbody > tr"
-  );
-}
-/**
- * 鳩間航路
- */
-async function getHatomaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(11) > table > tbody > tr",
-    0
-  );
-}
-
-/**
- * 小浜-竹富航路
- */
-async function getKohamaTaketomiStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(12) > table > tbody > tr",
-    1
-  );
-}
-
-/**
- * 小浜-大原航路
- */
-async function getKohamaOoharaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(13) > table > tbody > tr",
-    2
-  );
-}
-
-/**
- * 上原-鳩間航路
- */
-async function getUeharaHatomaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(14) > table > tbody > tr",
-    3
-  );
 }
 
 /**
