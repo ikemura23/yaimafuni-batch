@@ -19,11 +19,16 @@ module.exports = async () => {
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
+    // データ取得
     const data = await getData(page);
     // console.log(info);
 
     // 送信開始
-    await sendToFirebase(data);
+    if (data != null) {
+      await sendToFirebase(data);
+    } else {
+      console.log("dataが null のため送信しない " + tableName);
+    }
 
     browser.close();
   } catch (error) {
@@ -38,7 +43,7 @@ module.exports = async () => {
 async function getData(page) {
   // 最初に div.local をまとめて取得
   const devLocalNodes = await page.$$("#operationstatus > div > div.local");
-  console.log(`devLocalNodes.length:${devLocalNodes.length}`);
+  // console.log(`devLocalNodes.length:${devLocalNodes.length}`);
   if (devLocalNodes.length == 0) {
     console.log("devLocalNodes is empty");
     return null;
@@ -46,12 +51,24 @@ async function getData(page) {
 
   // 送信用データ生成
   const sendData = {
-    taketomi: await getStatusData(await devLocalNodes[0].$$("table > tbody > tr")), // 竹富
-    kohama: await getStatusData(await devLocalNodes[1].$$("table > tbody > tr")), // 小浜
-    kuroshima: await getStatusData(await devLocalNodes[2].$$("table > tbody > tr")), // 黒島
-    oohara: await getStatusData(await devLocalNodes[3].$$("table > tbody > tr")), // 大原
-    uehara: await getStatusData(await devLocalNodes[4].$$("table > tbody > tr")), // 上原
-    hatoma: await getStatusData(await devLocalNodes[5].$$("table > tbody > tr")), // 鳩間
+    taketomi: await getStatusData(
+      await devLocalNodes[0].$$("table > tbody > tr")
+    ), // 竹富
+    kohama: await getStatusData(
+      await devLocalNodes[1].$$("table > tbody > tr")
+    ), // 小浜
+    kuroshima: await getStatusData(
+      await devLocalNodes[2].$$("table > tbody > tr")
+    ), // 黒島
+    oohara: await getStatusData(
+      await devLocalNodes[3].$$("table > tbody > tr")
+    ), // 大原
+    uehara: await getStatusData(
+      await devLocalNodes[4].$$("table > tbody > tr")
+    ), // 上原
+    hatoma: await getStatusData(
+      await devLocalNodes[5].$$("table > tbody > tr")
+    ), // 鳩間
     // kohama_oohara: await getKohamaOoharaStatus(page), // 小浜-大原
     // kohama_taketomi: await getKohamaTaketomiStatus(page), // 小浜-竹富
     // uehara_hatoma: await getUeharaHatomaStatus(page) // 上原-鳩間
