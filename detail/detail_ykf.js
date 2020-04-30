@@ -19,11 +19,16 @@ module.exports = async () => {
     page.setUserAgent(config.puppeteer.userAgent);
     await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
+    // データ取得
     const data = await getData(page);
     // console.log(info);
 
     // 送信開始
-    await sendToFirebase(data);
+    if (data != null) {
+      await sendToFirebase(data);
+    } else {
+      console.log("dataが null のため送信しない " + tableName);
+    }
 
     browser.close();
   } catch (error) {
@@ -36,168 +41,39 @@ module.exports = async () => {
 };
 
 async function getData(page) {
-  // 更新日時
-  // const updateTime = await getUpdateTime(page);
-  // console.log(updateTime);
-
-  // アナウンス ※ここは表示されない日があるので要注意
-  // const announce = await getAnnounce(page);
-  // console.log(announce);
-
-  // 竹富
-  const taketomi = await getTaketomiStatus(page);
-  // console.log(taketomi);
-
-  // 小浜
-  const kohama = await getKohamaStatus(page);
-  // console.log(kohama);
-
-  // 黒島
-  const kuroshima = await getKuroshimaStatus(page);
-  // console.log(kuroshima);
-
-  // 大原
-  const oohara = await getOoharaStatus(page);
-  // console.log(oohara);
-
-  // 上原
-  const uehara = await getUeharaStatus(page);
-  // console.log(uehara);
-
-  // 鳩間
-  const hatoma = await getHatomaStatus(page);
-  // console.log(hatoma);
-
-  // 小浜-竹富
-  const kohamaTaketomi = await getKohamaTaketomiStatus(page);
-  // console.log(kohamaTaketomi);
-
-  // 小浜-大原
-  const kohamaOohara = await getKohamaOoharaStatus(page);
-  // console.log(kohamaOohara);
-
-  // 上原-鳩間
-  const ueharaHatoma = await getUeharaHatomaStatus(page);
-  // console.log(ueharaHatoma);
+  // 最初に div.local をまとめて取得
+  const devLocalNodes = await page.$$("#operationstatus > div > div.local");
+  // console.log(`devLocalNodes.length:${devLocalNodes.length}`);
+  if (devLocalNodes.length == 0) {
+    console.log("devLocalNodes is empty");
+    return null;
+  }
 
   // 送信用データ生成
   const sendData = {
-    taketomi: taketomi,
-    kohama: kohama,
-    kuroshima: kuroshima,
-    oohara: oohara,
-    uehara: uehara,
-    hatoma: hatoma,
-    kohama_oohara: kohamaOohara,
-    kohama_taketomi: kohamaTaketomi,
-    uehara_hatoma: ueharaHatoma
+    taketomi: await getStatusData(
+      await devLocalNodes[0].$$("table > tbody > tr")
+    ), // 竹富
+    kohama: await getStatusData(
+      await devLocalNodes[1].$$("table > tbody > tr")
+    ), // 小浜
+    kuroshima: await getStatusData(
+      await devLocalNodes[2].$$("table > tbody > tr")
+    ), // 黒島
+    oohara: await getStatusData(
+      await devLocalNodes[3].$$("table > tbody > tr")
+    ), // 大原
+    uehara: await getStatusData(
+      await devLocalNodes[4].$$("table > tbody > tr")
+    ), // 上原
+    hatoma: await getStatusData(
+      await devLocalNodes[5].$$("table > tbody > tr")
+    ), // 鳩間
+    // kohama_oohara: await getKohamaOoharaStatus(page), // 小浜-大原
+    // kohama_taketomi: await getKohamaTaketomiStatus(page), // 小浜-竹富
+    // uehara_hatoma: await getUeharaHatomaStatus(page) // 上原-鳩間
   };
   return sendData;
-}
-/**
- * 更新時刻 （2020年02月14日の運航状況）
- */
-async function getUpdateTime(page) {
-  return await getTextContent(page, "#operationstatus > div > div.statusdate");
-}
-
-/**
- * 今日のアナウンスを取得
- */
-async function getAnnounce(page) {
-  return await getTextContent(
-    page,
-    "#operationstatus > div > div:nth-child(5)"
-  );
-}
-
-/**
- * 竹富航路
- */
-async function getTaketomiStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(7) > table > tbody > tr"
-  );
-}
-
-/**
- * 小浜航路
- */
-async function getKohamaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(8) > table > tbody > tr"
-  );
-}
-
-/**
- * 黒島航路
- */
-async function getKuroshimaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(9) > table > tbody > tr"
-  );
-}
-
-/**
- * 西表大原航路
- */
-async function getOoharaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(10) > table > tbody > tr"
-  );
-}
-
-/**
- * 西表上原航路
- */
-async function getUeharaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(11) > table > tbody > tr"
-  );
-}
-/**
- * 鳩間航路
- */
-async function getHatomaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(12) > table > tbody > tr"
-  );
-}
-
-/**
- * 小浜-竹富航路
- */
-async function getKohamaTaketomiStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(13) > table > tbody > tr"
-  );
-}
-
-/**
- * 小浜-大原航路
- */
-async function getKohamaOoharaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(14) > table > tbody > tr"
-  );
-}
-
-/**
- * 上原-鳩間航路
- */
-async function getUeharaHatomaStatus(page) {
-  return await getStatusData(
-    page,
-    "#operationstatus > div > div:nth-child(15) > table > tbody > tr"
-  );
 }
 
 /**
@@ -211,21 +87,23 @@ async function getTextContent(page, itemSelector) {
 /**
  * 港単体のデータ取得
  */
-async function getStatusData(page, itemSelector) {
-  const trNodes = await page.$$(itemSelector);
-
-  // 港名
-  const portName = await trNodes[0].$eval("h3", nd => nd.innerText);
+async function getStatusData(trNodes) {
+  // console.log(`trNodes.length:${trNodes.length}`);
+  if (trNodes.length == 0) {
+    console.log("trNodes is empty");
+    return;
+  }
   // ヘッダー左
   const leftPortName = await trNodes[1].$eval(
     "td:nth-child(1)",
-    nd => nd.innerText
+    (nd) => nd.innerText
   );
   // ヘッダー右
   const rightPortName = await trNodes[1].$eval(
     "td:nth-child(2)",
-    nd => nd.innerText
+    (nd) => nd.innerText
   );
+  // console.log(`leftPortName:${leftPortName} rightPortName:${rightPortName}`);
 
   // 時刻ごとのステータス
   // trタグの0〜1行目は港名なので除外する
@@ -234,11 +112,11 @@ async function getStatusData(page, itemSelector) {
   // 時刻ステータスのループ
   for (const time of timeTable) {
     // 左の行
-    const trLeft = await time.$eval("td:nth-child(1)", nd => nd.innerText);
+    const trLeft = await time.$eval("td:nth-child(1)", (nd) => nd.innerText);
     const leftWords = trLeft.split(" ");
 
     // 右の行
-    const trRight = await time.$eval("td:nth-child(2)", nd => nd.innerText);
+    const trRight = await time.$eval("td:nth-child(2)", (nd) => nd.innerText);
     const rightWords = trRight.split(" ");
 
     // 行データ生成
@@ -248,18 +126,19 @@ async function getStatusData(page, itemSelector) {
         time: leftWords[1],
         status: {
           code: getRowStatusCode(leftWords[0]),
-          text: getRowStatusText(leftWords[0])
-        }
+          text: getRowStatusText(leftWords[0]),
+        },
       },
       right: {
         memo: "",
         time: rightWords[1],
         status: {
           code: getRowStatusCode(rightWords[0]),
-          text: getRowStatusText(rightWords[0])
-        }
-      }
+          text: getRowStatusText(rightWords[0]),
+        },
+      },
     };
+    // console.log(row);
     // 配列に追加
     rows.push(row);
   }
@@ -267,9 +146,9 @@ async function getStatusData(page, itemSelector) {
   const data = {
     header: {
       left: leftPortName,
-      right: rightPortName
+      right: rightPortName,
     },
-    row: rows
+    row: rows,
   };
   // console.log(data);
   return data;
