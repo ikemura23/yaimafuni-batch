@@ -185,20 +185,11 @@ async function getTextContent(page, itemSelector) {
  * 港単体のデータ取得
  */
 async function getStatusData(trNodes) {
-  // const devLocalNodes = await page.$$(itemSelector);
-  // console.log(`devLocalNodes.length:${devLocalNodes.length}`);
-  // if (devLocalNodes.length == 0) {
-  //   console.log("devLocalNodes is empty");
-  //   return;
-  // }
-  // const trNodes = await devLocalNodes[0].$$("table > tbody > tr");
-  console.log(`trNodes.length:${trNodes.length}`);
+  // console.log(`trNodes.length:${trNodes.length}`);
   if (trNodes.length == 0) {
     console.log("trNodes is empty");
     return;
   }
-  // 港名
-  // const portName = await trNodes[0].$eval("h3", nd => nd.innerText);
   // ヘッダー左
   const leftPortName = await trNodes[1].$eval(
     "td:nth-child(1)",
@@ -209,7 +200,7 @@ async function getStatusData(trNodes) {
     "td:nth-child(2)",
     (nd) => nd.innerText
   );
-  console.log(`leftPortName:${leftPortName} rightPortName:${rightPortName}`);
+  // console.log(`leftPortName:${leftPortName} rightPortName:${rightPortName}`);
 
   // 時刻ごとのステータス
   // trタグの0〜1行目は港名なので除外する
@@ -244,7 +235,7 @@ async function getStatusData(trNodes) {
         },
       },
     };
-    console.log(row);
+    // console.log(row);
     // 配列に追加
     rows.push(row);
   }
@@ -256,7 +247,7 @@ async function getStatusData(trNodes) {
     },
     row: rows,
   };
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
