@@ -6,8 +6,8 @@ const sendError = require('../slack');
 const LAUNCH_OPTION = process.env.DYNO ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : { headless: true };
 
 module.exports = (async () => {
+  const browser = await puppeteer.launch(LAUNCH_OPTION)
   try {
-    const browser = await puppeteer.launch(LAUNCH_OPTION)
     const page = await browser.newPage()
     await page.goto(url, { waitUntil: 'domcontentloaded' }) // ページへ移動＋表示されるまで待機
 
@@ -16,12 +16,12 @@ module.exports = (async () => {
 
     const sendData = { today: today, tomorrow: tomorrow };
     await send(sendData)
-
-    browser.close()
+    
   } catch (err) {
     console.error(err)
     sendError(err.stack, "tenkijpのスクレイピングでエラー発生!")
-    browser.close()
+  } finally {
+    browser.close();
   }
 })
 
