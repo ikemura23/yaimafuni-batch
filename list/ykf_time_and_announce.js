@@ -34,14 +34,12 @@ module.exports = async () => {
     // 送信開始
     await firebase.update(consts.YKF, data);
 
-    // browser.close();
   } catch (error) {
     console.error(error.stack, "異常: YKF 時間+アナウンスでエラー");
     sendError(
       error.stack,
       "異常: YKF 時間+アナウンスのスクレイピングでエラー発生!"
     );
-    // browser.close();
   } finally {
     browser.close();
     console.log("終了:" + COMPANY + " 時間+アナウンス");
