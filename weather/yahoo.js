@@ -18,14 +18,13 @@ module.exports = (async () => {
 
     const sendData = { today: today, tomorrow: tomorrow };
     await send(sendData)
-
-    browser.close()
+    
   } catch (err) {
     console.error(err)
     sendError(err.stack, "yahooのスクレイピングでエラー発生!")
     console.log(err)
-    browser.close()
   } finally {
+    browser.close()
     console.log("yahoo end")
   }
 })
