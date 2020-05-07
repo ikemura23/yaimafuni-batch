@@ -6,6 +6,7 @@ const sendError = require('../slack');
 const LAUNCH_OPTION = process.env.DYNO ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : { headless: true };
 
 module.exports = (async () => {
+  console.log(`開始: tenkijp`);
   const browser = await puppeteer.launch(LAUNCH_OPTION)
   try {
     const page = await browser.newPage()
@@ -22,6 +23,7 @@ module.exports = (async () => {
     sendError(err.stack, "tenkijpのスクレイピングでエラー発生!")
   } finally {
     browser.close();
+    console.log(`完了: tenkijp`);
   }
 })
 
@@ -55,7 +57,7 @@ async function getToday(page) {
       windSpeed: windSpeed[i]
     })
   }
-  console.log(datas)
+  // console.log(datas)
   return datas
 }
 
