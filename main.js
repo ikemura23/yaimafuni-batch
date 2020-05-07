@@ -20,18 +20,13 @@ const yahoo = require('./weather/yahoo.js');
 const tenkijp = require('./weather/tenkijp.js');
 const tyhoon = require('./typhoon/tenkijp.js');
 
-// const aneiListAndroid = require('./list/list_anei_android.js');
-// const ykfListAndroid = require('./list/list_ykf_android.js');
-// const weatherAndroid = require('./weather/weahter_android.js');
-// const topAndroid = require('./top/top_android.js');
-
 // const slack = require('./slack');
 
 Promise.resolve()
   .then(() => console.log('main start'))
   .then(() => aneiList())
-  .then(() => ykfTime())
   .then(() => YkfList())
+  .then(() => ykfTime())
   .then(() => aneiDetail())
   .then(() => ykfDetail())
   .then(() => tyhoon())
@@ -39,9 +34,5 @@ Promise.resolve()
   .then(() => topPort())
   .then(() => topCompany())
   .then(() => tenkijp())
-  // .then(() => aneiListAndroid())
-  // .then(() => ykfListAndroid())
-  // .then(() => weatherAndroid())
-  // .then(() => topAndroid())
   .then(() => firebase.database().goOffline())
   .then(() => console.log('main finish'))

@@ -77,7 +77,7 @@ module.exports = async () => {
     await firebase
       .database()
       .ref(consts.ANEI)
-      .update(sendData, e => {
+      .set(sendData, e => {
         if (e) {
           console.error("update error");
         } else {
