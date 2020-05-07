@@ -49,7 +49,7 @@ async function makeData(page) {
     // // 波照間
     oohara: await getHaterumaStatus(page),
   };
-  console.log(data)
+  // console.log(data)
   return data;
 }
 
@@ -209,7 +209,7 @@ async function getStatusData(page, itemSelector) {
  */
 async function sendToFirebase(data) {
   const tableName = `${COMPANY}_timeTable/`;
-  console.log("送信開始" + tableName);
+  // console.log("送信開始" + tableName);
   return await firebase.update(tableName, data);
 }
 
