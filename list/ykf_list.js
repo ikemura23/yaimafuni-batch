@@ -24,7 +24,7 @@ module.exports = async () => {
     const sendData = await makeSendData(listRaw);
 
     // 送信開始
-    await firebase.update(consts.YKF, sendData);
+    await firebase.set(consts.YKF, sendData);
 
   } catch (error) {
     console.error(error.stack, `${COMPANY}一覧でエラー`);
@@ -70,6 +70,7 @@ async function makeSendData(list) {
     };
     returnData[portCode] = portData;
   }
+  // console.log(returnData)
   return returnData;
 }
 
