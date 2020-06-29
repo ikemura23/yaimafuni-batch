@@ -47,7 +47,7 @@ async function makeData(page) {
     // // 大原
     oohara: await getOoharaStatus(page),
     // // 波照間
-    oohara: await getHaterumaStatus(page),
+    hateruma: await getHaterumaStatus(page),
   };
   // console.log(data)
   return data;
