@@ -1,5 +1,5 @@
 const getAnneiList = async () => {
-    console.log("annei list sample")
+    console.log("getAnneiList start")
     return "annei list sample"
 };
 
