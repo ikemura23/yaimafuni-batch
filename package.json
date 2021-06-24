@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "firebase": "^5.11.1",
-    "puppeteer": "^2.1.1",
+    "puppeteer": "^10.0.0",
     "slack-node": "^0.1.8"
   }
 }
