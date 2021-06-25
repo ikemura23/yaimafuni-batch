@@ -31,7 +31,6 @@ const getAnneiList = async () => {
         }
       ),
     };
-    console.dir(haterumaStatus);
 
     // 上原
     const ueharaStatus = {
@@ -50,7 +49,7 @@ const getAnneiList = async () => {
         }
       ),
     };
-    console.dir(ueharaStatus);
+
     // 鳩間
     const hatomaStatus = {
       portName: "鳩間航路",
@@ -68,7 +67,7 @@ const getAnneiList = async () => {
         }
       ),
     };
-    console.dir(hatomaStatus);
+
     // 大原
     const ooharaStatus = {
       portName: "大原航路",
@@ -80,13 +79,12 @@ const getAnneiList = async () => {
         }
       ),
       comment: await page.$eval(
-        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div.conditon_item_caption",
+        "#condition > div > div:nth-child(3) > div > div:nth-child(4) > a",
         (item) => {
           return item.textContent.trim();
         }
       ),
     };
-    console.dir(ooharaStatus);
 
     // 竹富
     const taketomiStatus = {
@@ -105,7 +103,6 @@ const getAnneiList = async () => {
         }
       ),
     };
-    console.dir(taketomiStatus);
 
     // 小浜
     const kohamaStatus = {
@@ -124,7 +121,6 @@ const getAnneiList = async () => {
         }
       ),
     };
-    console.dir(kohamaStatus);
 
     // 黒島
     const kuroshimaStatus = {
@@ -143,7 +139,6 @@ const getAnneiList = async () => {
         }
       ),
     };
-    console.dir(kuroshimaStatus);
 
     const value = {
       hateruma: haterumaStatus,
@@ -155,7 +150,6 @@ const getAnneiList = async () => {
       kuroshima: kuroshimaStatus,
     };
 
-    console.log("取得値");
     console.dir(value);
     return value;
   } catch (error) {
