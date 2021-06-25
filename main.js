@@ -7,7 +7,8 @@ firebase.initializeApp(firebaseConfig);
 
 console.log("main init");
 
-const aneiList = require("./list/anei_list.js");
+const updateAnneiList = require("./src/list/updateAnneiList");
+
 const YkfList = require("./list/ykf_list.js");
 const ykfTime = require("./list/ykf_time_and_announce.js");
 
@@ -23,8 +24,8 @@ const tyhoon = require("./typhoon/tenkijp.js");
 // const slack = require('./slack');
 
 (async () => {
-  console.log("main start");
-  await aneiList();
+  console.group("main start");
+  await updateAnneiList();
   await YkfList();
   await ykfTime();
   await aneiDetail();
@@ -35,5 +36,6 @@ const tyhoon = require("./typhoon/tenkijp.js");
   await topCompany();
   await tenkijp();
   await firebase.database().goOffline();
+  console.groupEnd()
   console.log("main finish");
 })();
