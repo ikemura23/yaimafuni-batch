@@ -1,6 +1,7 @@
 const saveAnneiList = async (value) => {
-    console.log("saveAnneiList start")
-    console.log(`save ${value}`)
+  console.group("saveAnneiList start");
+  console.dir(value);
+  console.groupEnd();
 };
 
 module.exports = saveAnneiList;
