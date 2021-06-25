@@ -8,7 +8,7 @@ const config = require("../../config/config");
 const consts = require("../../consts.js");
 
 const getAnneiList = async () => {
-  console.group("getAnneiList");
+  console.group("getAnneiList start");
   const browser = await puppeteer.launch(LAUNCH_OPTION);
   try {
     const page = await browser.newPage();
@@ -123,7 +123,7 @@ const getAnneiList = async () => {
       kuroshima: kuroshimaStatus,
     };
 
-    console.dir(value);
+    // console.dir(value);
     return value;
   } catch (error) {
     // TODO

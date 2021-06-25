@@ -3,6 +3,7 @@ const getAnneiList = require("./getAnneiList");
 const saveAnneiList = require("./saveAnneiList");
 
 const updateAnneiList = async () => {
+  console.group("updateAnneiList start");
   const updateTimeAndComment = await getAnneiUpdateTimeAndComment();
   const value = await getAnneiList();
   const saveData = {
@@ -17,6 +18,8 @@ const updateAnneiList = async () => {
     uehara: value.uehara,
   };
   await saveAnneiList(saveData);
+  console.log("updateAnneiList end");
+  console.groupEnd();
 };
 
 module.exports = updateAnneiList;
