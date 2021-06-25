@@ -8,13 +8,13 @@ const updateAnneiList = async () => {
   const saveData = {
     updateTime: updateTimeAndComment.updateTime,
     comment: updateTimeAndComment.comment,
-    hateruma: null,
-    hatoma: null,
-    kohama: null,
-    kuroshima: null,
-    oohara: null,
-    taketomi: null,
-    uehara: null,
+    hateruma: value.hateruma,
+    hatoma: value.hatoma,
+    kohama: value.kohama,
+    kuroshima: value.kuroshima,
+    oohara: value.oohara,
+    taketomi: value.taketomi,
+    uehara: value.uehara,
   };
   await saveAnneiList(saveData);
 };
