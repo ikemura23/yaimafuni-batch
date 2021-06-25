@@ -141,13 +141,13 @@ module.exports = getAnneiList;
  */
 async function getStatusCode(className) {
   if (className == "operation_triangle") {
-    return consts.CATION;
+    return { code: consts.CATION, text: "一部運休" };
   } else if (className == "operation_times") {
-    return consts.CANCEL;
+    return { code: consts.CANCEL, text: "全便欠航" };
   } else if (className == "operation_normal") {
-    return consts.NORMAL;
+    return { code: consts.NORMAL, text: "通常運航" };
   } else {
-    return consts.CATION;
+    return { code: consts.CATION, text: "一部運休" };
   }
 }
 
@@ -170,11 +170,7 @@ const readStatusData = async (page, statusSelector) => {
   const raw = await page.$eval(statusSelector, (item) => {
     return { className: item.className, text: item.textContent };
   });
-  const statusCode = await getStatusCode(raw.className);
-  return {
-    code: statusCode,
-    text: raw.text,
-  };
+  return await getStatusCode(raw.className);
 };
 
 const readCommentData = async (page, commentSelector) => {
