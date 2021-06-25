@@ -15,60 +15,135 @@ const getAnneiList = async () => {
     await page.goto(TARGET_URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
     // 波照間
-    const haterumaStatus = await page.$eval(
-      "#condition > div > div:nth-child(3) > div > div:nth-child(1) > a",
-      (item) => {
-        return { className: item.className, text: item.textContent };
-      }
-    );
+    const haterumaStatus = {
+      portName: "波照間島航路",
+      portCode: "hateruma",
+      status: await page.$eval(
+        "#condition > div > div:nth-child(3) > div > div:nth-child(1) > a",
+        (item) => {
+          return { className: item.className, text: item.textContent };
+        }
+      ),
+      comment: await page.$eval(
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div.conditon_item_caption",
+        (item) => {
+          return item.textContent.trim();
+        }
+      ),
+    };
+    console.dir(haterumaStatus);
 
     // 上原
-    const ueharaStatus = await page.$eval(
-      "#condition > div > div:nth-child(3) > div > div:nth-child(2) > a",
-      (item) => {
-        return { className: item.className, text: item.textContent };
-      }
-    );
-
+    const ueharaStatus = {
+      portName: "上原航路",
+      portCode: "uehara",
+      status: await page.$eval(
+        "#condition > div > div:nth-child(3) > div > div:nth-child(2) > a",
+        (item) => {
+          return { className: item.className, text: item.textContent };
+        }
+      ),
+      comment: await page.$eval(
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div.conditon_item_caption",
+        (item) => {
+          return item.textContent.trim();
+        }
+      ),
+    };
+    console.dir(ueharaStatus);
     // 鳩間
-    const hatomaStatus = await page.$eval(
-      "#condition > div > div:nth-child(3) > div > div:nth-child(3) > a",
-      (item) => {
-        return { className: item.className, text: item.textContent };
-      }
-    );
-
+    const hatomaStatus = {
+      portName: "鳩間航路",
+      portCode: "hatoma",
+      status: await page.$eval(
+        "#condition > div > div:nth-child(3) > div > div:nth-child(3) > a",
+        (item) => {
+          return { className: item.className, text: item.textContent };
+        }
+      ),
+      comment: await page.$eval(
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption",
+        (item) => {
+          return item.textContent.trim();
+        }
+      ),
+    };
+    console.dir(hatomaStatus);
     // 大原
-    const ooharaStatus = await page.$eval(
-      "#condition > div > div:nth-child(3) > div > div:nth-child(4) > a",
-      (item) => {
-        return { className: item.className, text: item.textContent };
-      }
-    );
+    const ooharaStatus = {
+      portName: "大原航路",
+      portCode: "oohara",
+      status: await page.$eval(
+        "#condition > div > div:nth-child(3) > div > div:nth-child(4) > a",
+        (item) => {
+          return { className: item.className, text: item.textContent };
+        }
+      ),
+      comment: await page.$eval(
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div.conditon_item_caption",
+        (item) => {
+          return item.textContent.trim();
+        }
+      ),
+    };
+    console.dir(ooharaStatus);
 
     // 竹富
-    const taketomiStatus = await page.$eval(
-      "#condition > div > div:nth-child(3) > div > div:nth-child(5) > a",
-      (item) => {
-        return { className: item.className, text: item.textContent };
-      }
-    );
+    const taketomiStatus = {
+      portName: "竹富航路",
+      portCode: "taketomi",
+      status: await page.$eval(
+        "#condition > div > div:nth-child(3) > div > div:nth-child(5) > a",
+        (item) => {
+          return { className: item.className, text: item.textContent };
+        }
+      ),
+      comment: await page.$eval(
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption",
+        (item) => {
+          return item.textContent.trim();
+        }
+      ),
+    };
+    console.dir(taketomiStatus);
 
     // 小浜
-    const kohamaStatus = await page.$eval(
-      "#condition > div > div:nth-child(3) > div > div:nth-child(6) > a",
-      (item) => {
-        return { className: item.className, text: item.textContent };
-      }
-    );
+    const kohamaStatus = {
+      portName: "小浜航路",
+      portCode: "kohama",
+      status: await page.$eval(
+        "#condition > div > div:nth-child(3) > div > div:nth-child(6) > a",
+        (item) => {
+          return { className: item.className, text: item.textContent };
+        }
+      ),
+      comment: await page.$eval(
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div.conditon_item_caption",
+        (item) => {
+          return item.textContent.trim();
+        }
+      ),
+    };
+    console.dir(kohamaStatus);
 
-    // 小浜
-    const kuroshimaStatus = await page.$eval(
-      "#condition > div > div:nth-child(3) > div > div:nth-child(7) > a",
-      (item) => {
-        return { className: item.className, text: item.textContent };
-      }
-    );
+    // 黒島
+    const kuroshimaStatus = {
+      portName: "黒島航路",
+      portCode: "kuroshima",
+      status: await page.$eval(
+        "#condition > div > div:nth-child(3) > div > div:nth-child(7) > a",
+        (item) => {
+          return { className: item.className, text: item.textContent };
+        }
+      ),
+      comment: await page.$eval(
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div.conditon_item_caption",
+        (item) => {
+          return item.textContent.trim();
+        }
+      ),
+    };
+    console.dir(kuroshimaStatus);
 
     const value = {
       hateruma: haterumaStatus,
@@ -80,6 +155,7 @@ const getAnneiList = async () => {
       kuroshima: kuroshimaStatus,
     };
 
+    console.log("取得値");
     console.dir(value);
     return value;
   } catch (error) {
