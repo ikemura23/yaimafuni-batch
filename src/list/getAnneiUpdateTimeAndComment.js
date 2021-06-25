@@ -15,7 +15,6 @@ const getAnneiUpdateTimeAndComment = async () => {
     await page.goto(TARGET_URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
     // 更新時刻の取得
-    console.log("更新時刻の取得");
     const updateTimeText = await page.$eval(
       "div.condition_subtitle > div",
       (item) => {
@@ -27,7 +26,6 @@ const getAnneiUpdateTimeAndComment = async () => {
     );
 
     // お知らせコメントの取得
-    console.log("お知らせコメントの取得");
     const commentText = await page.$eval("div.condition_list > div", (item) => {
       return item.textContent.trim();
     });
@@ -38,14 +36,13 @@ const getAnneiUpdateTimeAndComment = async () => {
       comment: commentText,
     };
 
-    console.log("取得値");
-    console.dir(value);
+    // console.dir(value);
     return value;
   } catch (error) {
     // TODO
   } finally {
     browser.close();
-    console.groupEnd("getAnneiUpdateTimeAndComment end");
+    console.groupEnd();
   }
 };
 
