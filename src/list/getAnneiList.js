@@ -5,6 +5,7 @@ const LAUNCH_OPTION = process.env.DYNO
   : { headless: true };
 const TARGET_URL = "https://aneikankou.co.jp/condition";
 const config = require("../../config/config");
+const consts = require("../../consts.js");
 
 const getAnneiList = async () => {
   console.group("getAnneiList");
@@ -18,17 +19,13 @@ const getAnneiList = async () => {
     const haterumaStatus = {
       portName: "波照間島航路",
       portCode: "hateruma",
-      status: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(1) > a",
-        (item) => {
-          return { className: item.className, text: item.textContent };
-        }
-      ),
-      comment: await page.$eval(
-        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div.conditon_item_caption",
-        (item) => {
-          return item.textContent.trim();
-        }
+      status: ({ code, text } = await readStatusData(
+        page,
+        "#condition > div > div:nth-child(3) > div > div:nth-child(1) > a"
+      )),
+      comment: await readCommentData(
+        page,
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div.conditon_item_caption"
       ),
     };
 
@@ -36,17 +33,13 @@ const getAnneiList = async () => {
     const ueharaStatus = {
       portName: "上原航路",
       portCode: "uehara",
-      status: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(2) > a",
-        (item) => {
-          return { className: item.className, text: item.textContent };
-        }
-      ),
-      comment: await page.$eval(
-        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div.conditon_item_caption",
-        (item) => {
-          return item.textContent.trim();
-        }
+      status: ({ code, text } = await readStatusData(
+        page,
+        "#condition > div > div:nth-child(3) > div > div:nth-child(2) > a"
+      )),
+      comment: await readCommentData(
+        page,
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div.conditon_item_caption"
       ),
     };
 
@@ -54,17 +47,13 @@ const getAnneiList = async () => {
     const hatomaStatus = {
       portName: "鳩間航路",
       portCode: "hatoma",
-      status: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(3) > a",
-        (item) => {
-          return { className: item.className, text: item.textContent };
-        }
-      ),
-      comment: await page.$eval(
-        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption",
-        (item) => {
-          return item.textContent.trim();
-        }
+      status: ({ code, text } = await readStatusData(
+        page,
+        "#condition > div > div:nth-child(3) > div > div:nth-child(3) > a"
+      )),
+      comment: await readCommentData(
+        page,
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption"
       ),
     };
 
@@ -72,17 +61,13 @@ const getAnneiList = async () => {
     const ooharaStatus = {
       portName: "大原航路",
       portCode: "oohara",
-      status: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(4) > a",
-        (item) => {
-          return { className: item.className, text: item.textContent };
-        }
-      ),
-      comment: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(4) > a",
-        (item) => {
-          return item.textContent.trim();
-        }
+      status: ({ code, text } = await readStatusData(
+        page,
+        "#condition > div > div:nth-child(3) > div > div:nth-child(4) > a"
+      )),
+      comment: await readCommentData(
+        page,
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div.conditon_item_caption"
       ),
     };
 
@@ -90,17 +75,13 @@ const getAnneiList = async () => {
     const taketomiStatus = {
       portName: "竹富航路",
       portCode: "taketomi",
-      status: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(5) > a",
-        (item) => {
-          return { className: item.className, text: item.textContent };
-        }
-      ),
-      comment: await page.$eval(
-        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption",
-        (item) => {
-          return item.textContent.trim();
-        }
+      status: ({ code, text } = await readStatusData(
+        page,
+        "#condition > div > div:nth-child(3) > div > div:nth-child(5) > a"
+      )),
+      comment: await readCommentData(
+        page,
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption"
       ),
     };
 
@@ -108,17 +89,13 @@ const getAnneiList = async () => {
     const kohamaStatus = {
       portName: "小浜航路",
       portCode: "kohama",
-      status: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(6) > a",
-        (item) => {
-          return { className: item.className, text: item.textContent };
-        }
-      ),
-      comment: await page.$eval(
-        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div.conditon_item_caption",
-        (item) => {
-          return item.textContent.trim();
-        }
+      status: ({ code, text } = await readStatusData(
+        page,
+        "#condition > div > div:nth-child(3) > div > div:nth-child(6) > a"
+      )),
+      comment: await readCommentData(
+        page,
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div.conditon_item_caption"
       ),
     };
 
@@ -126,17 +103,13 @@ const getAnneiList = async () => {
     const kuroshimaStatus = {
       portName: "黒島航路",
       portCode: "kuroshima",
-      status: await page.$eval(
-        "#condition > div > div:nth-child(3) > div > div:nth-child(7) > a",
-        (item) => {
-          return { className: item.className, text: item.textContent };
-        }
-      ),
-      comment: await page.$eval(
-        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div.conditon_item_caption",
-        (item) => {
-          return item.textContent.trim();
-        }
+      status: ({ code, text } = await readStatusData(
+        page,
+        "#condition > div > div:nth-child(3) > div > div:nth-child(7) > a"
+      )),
+      comment: await readCommentData(
+        page,
+        "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div.conditon_item_caption"
       ),
     };
 
@@ -161,6 +134,54 @@ const getAnneiList = async () => {
 };
 
 module.exports = getAnneiList;
+
+/**
+ * タグのcssクラス名からステータスコードを取得
+ * @param {港単体タグ} arreaTag
+ */
+async function getStatusCode(className) {
+  if (className == "operation_triangle") {
+    return consts.CATION;
+  } else if (className == "operation_times") {
+    return consts.CANCEL;
+  } else if (className == "operation_normal") {
+    return consts.NORMAL;
+  } else {
+    return consts.CATION;
+  }
+}
+
+// const statusMaster = [
+//   { className: "operation_normall", code: consts.NORMAL },
+//   { className: "operation_triangle", code: consts.CATION },
+//   { className: "operation_times", code: consts.CANCEL },
+// ];
+
+// const statusFinder = async (className) => {
+//   const status = statusMaster.find((s) => className == s.className)
+//   console.log(`status: ${status}`);
+//   if (status) {
+//       return consts.CATION
+//   }
+//   return status.code;
+// };
+
+const readStatusData = async (page, statusSelector) => {
+  const raw = await page.$eval(statusSelector, (item) => {
+    return { className: item.className, text: item.textContent };
+  });
+  const statusCode = await getStatusCode(raw.className);
+  return {
+    code: statusCode,
+    text: raw.text,
+  };
+};
+
+const readCommentData = async (page, commentSelector) => {
+  return await page.$eval(commentSelector, (item) => {
+    return item.textContent.trim();
+  });
+};
 
 /**
  * 運行ステータスは、XX航路のクラス名で判定する
