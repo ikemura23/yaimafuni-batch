@@ -1,4 +1,4 @@
-const repository = require("../../lib/firebase_repository");
+const repository = require("../repository/firebase_repository");
 const consts = require("../../consts.js");
 
 /**
