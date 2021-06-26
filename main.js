@@ -1,5 +1,5 @@
 const firebase = require("firebase");
-const config = require("./config/config.js");
+const config = require("./src/config/config.js");
 const firebaseConfig = {
   databaseURL: config.firebase.databaseURL,
 };
