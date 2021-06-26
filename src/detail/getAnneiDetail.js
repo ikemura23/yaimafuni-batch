@@ -14,14 +14,7 @@ const getAnneiDetail = async () => {
 
     await page.goto(TARGET_URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
 
-    // 波照間
-    // 上原
-    // 鳩間
-    // 大原
-    // 竹富
-    // 小浜
-    // 黒島
-    const value = {};
+    const value = await readTimetableData(page);
     console.dir(value);
   } catch (error) {
     // TODO
@@ -32,3 +25,19 @@ const getAnneiDetail = async () => {
 };
 getAnneiDetail();
 module.exports = getAnneiDetail;
+
+/**
+ * スクレイピング処理
+ * @param page pupperteer.page
+ * @returns 取得値
+ */
+const readTimetableData = async (page) => {
+  // 波照間
+  // 上原
+  // 鳩間
+  // 大原
+  // 竹富
+  // 小浜
+  // 黒島
+  return {};
+};
