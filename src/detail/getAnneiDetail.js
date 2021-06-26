@@ -14,9 +14,10 @@ const getAnneiDetail = async () => {
     const page = await browser.newPage();
 
     await page.goto(TARGET_URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
-
+    // メイン処理
     const value = await readTimetableData(page);
     console.dir(value);
+    // TODO: 保存処理
   } catch (error) {
     // TODO
   } finally {
@@ -35,28 +36,28 @@ module.exports = getAnneiDetail;
 const readTimetableData = async (page) => {
   // 送信用データ生成
   const data = {
+    // 波照間
+    hateruma: await getHaterumaStatus(page),
+    // 上原
+    uehara: await getUeharaStatus(page),
+    // 鳩間
+    hatoma: await getHatomaStatus(page),
+    // 大原
+    oohara: await getOoharaStatus(page),
     // 竹富
     taketomi: await getTaketomiStatus(page),
+    // 小浜
+    kohama: await getKohamaStatus(page),
     // 黒島
-    // kuroshima: await getKuroshimaStatus(page),
-    // // // 小浜
-    // kohama: await getKohamaStatus(page),
-    // // // 上原
-    // uehara: await getUeharaStatus(page),
-    // // // 鳩間
-    // hatoma: await getHatomaStatus(page),
-    // // // 大原
-    // oohara: await getOoharaStatus(page),
-    // // // 波照間
-    // hateruma: await getHaterumaStatus(page),
+    kuroshima: await getKuroshimaStatus(page),
   };
   return data;
 };
 
 /**
- * 竹富航路
+ * 波照間
  */
-async function getTaketomiStatus(page) {
+async function getHaterumaStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
@@ -65,10 +66,75 @@ async function getTaketomiStatus(page) {
 }
 
 /**
+ * 上原
+ */
+async function getUeharaStatus(page) {
+  return await getStatusData(
+    page,
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div"
+  );
+}
+
+/**
+ * 鳩間
+ */
+async function getHatomaStatus(page) {
+  return await getStatusData(
+    page,
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div"
+  );
+}
+
+/**
+ * 大原
+ */
+async function getOoharaStatus(page) {
+  return await getStatusData(
+    page,
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div"
+  );
+}
+
+/**
+ * 竹富
+ */
+async function getTaketomiStatus(page) {
+  return await getStatusData(
+    page,
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div"
+  );
+}
+
+/**
+ * 小浜
+ */
+async function getKohamaStatus(page) {
+  return await getStatusData(
+    page,
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div"
+  );
+}
+
+/**
+ * 黒島
+ */
+async function getKuroshimaStatus(page) {
+  return await getStatusData(
+    page,
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(1) > div",
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(2) > div"
+  );
+}
+
+/**
  * 港単体のデータ取得
  */
 async function getStatusData(page, leftSelector, rightSelector) {
-  console.log("getStatusData");
 
   const leftNodes = await page.$$(leftSelector);
   const leftRow = await convertRowData(leftNodes);
@@ -76,13 +142,16 @@ async function getStatusData(page, leftSelector, rightSelector) {
   const rightNodes = await page.$$(rightSelector);
   const rightRow = await convertRowData(rightNodes);
 
-  const row = {
-    left: leftRow,
-    right: rightRow,
-  };
-  // console.log(row);
-  row.push(row);
-  //   console.table(rows);
+  const row = [];
+
+  for (var i = 0; i < leftRow.length; i++) {
+    row.push({
+      left: leftRow[i],
+      right: rightRow[i],
+    });
+  }
+//   console.dir(row);
+  return row;
 }
 
 /**
@@ -129,6 +198,9 @@ async function convertRowData(parentNodes) {
   return row;
 }
 
+/**
+ * ステータスコードを取得
+ */
 async function getStatusCode(statusText) {
   if (statusText == "◯") {
     return consts.NORMAL;
@@ -143,6 +215,9 @@ async function getStatusCode(statusText) {
   }
 }
 
+/**
+ * ステータス文字
+ */
 async function getStatusText(statusText) {
   if (statusText == "◯") {
     return "通常運航";
