@@ -4,7 +4,7 @@ const LAUNCH_OPTION = process.env.DYNO
   ? { args: ["--no-sandbox", "--disable-setuid-sandbox"] }
   : { headless: true };
 const TARGET_URL = "https://aneikankou.co.jp/condition";
-const config = require("../../config/config");
+const config = require("../config/config");
 
 const getAnneiUpdateTimeAndComment = async () => {
   console.group("getAnneiUpdateTimeAndComment start");
