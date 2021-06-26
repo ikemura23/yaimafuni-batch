@@ -5,6 +5,7 @@ const LAUNCH_OPTION = process.env.DYNO
   : { headless: true };
 const TARGET_URL = "https://aneikankou.co.jp/condition";
 const config = require("../../config/config");
+const consts = require("../../consts.js");
 
 const getAnneiDetail = async () => {
   console.group("getAnneiDetail start");
@@ -58,23 +59,46 @@ const readTimetableData = async (page) => {
 async function getTaketomiStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div"
   );
 }
 
 /**
  * 港単体のデータ取得
  */
-async function getStatusData(page, itemSelector) {
+async function getStatusData(page, leftSelector, rightSelector) {
   console.log("getStatusData");
 
-  const parentNodes = await page.$$(itemSelector);
+  const leftNodes = await page.$$(leftSelector);
+  const leftRow = await convertRowData(leftNodes);
+
+  const rightNodes = await page.$$(rightSelector);
+  const rightRow = await convertRowData(rightNodes);
+
+  const row = {
+    left: leftRow,
+    right: rightRow,
+  };
+  // console.log(row);
+  row.push(row);
+  //   console.table(rows);
+}
+
+/**
+ * divタグのnode配列を整形して配列にする
+ * @param  parentNodes divタグのnode配列
+ * @returns 縦1列の配列
+ */
+async function convertRowData(parentNodes) {
   if (parentNodes.length == 0) {
-    console.log("status node is empty");
+    console.log("parentNodes is empty");
     return;
   }
-  console.log(parentNodes.length);
+  // console.log(parentNodes.length);
 
+  // returnで返す変数
+  const row = [];
 
   // divをループして値を取り出す
   for (const node of parentNodes) {
@@ -89,14 +113,44 @@ async function getStatusData(page, itemSelector) {
       "div.condition_item_port_detail_status",
       (nd) => nd.innerText
     );
+
+    // console.log(`time: ${time} , status: ${status}`);
+
+    row.push({
+      memo: "",
+      time: time,
+      status: {
+        code: await getStatusCode(status),
+        text: await getStatusText(status),
+      },
+    });
   }
+  // console.log(row);
+  return row;
+}
 
-  // 左
-  const time = await parentNodes[0].$eval(
-    "div.condition_item_port_detail_time",
-    (nd) => nd.innerText
-  );
-  console.log(time);
+async function getStatusCode(statusText) {
+  if (statusText == "◯") {
+    return consts.NORMAL;
+  } else if (statusText == "△") {
+    return consts.CATION;
+  } else if (statusText == "✕") {
+    return consts.CANCEL;
+  } else if (statusText == "未定") {
+    return consts.CATION;
+  } else {
+    return consts.CATION;
+  }
+}
 
-  console.log(status);
+async function getStatusText(statusText) {
+  if (statusText == "◯") {
+    return "通常運航";
+  } else if (statusText == "△") {
+    return "一部運休";
+  } else if (statusText == "✕") {
+    return "欠航";
+  } else {
+    return statusText;
+  }
 }
