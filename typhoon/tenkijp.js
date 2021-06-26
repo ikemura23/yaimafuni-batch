@@ -6,23 +6,25 @@ const sendError = require('../slack');
 const LAUNCH_OPTION = process.env.DYNO ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : { headless: true };
 
 module.exports = (async () => {
-  console.log('開始 : 台風 tenkijp');
+  console.group('開始 : 台風 tenkijp');
+  const browser = await puppeteer.launch(LAUNCH_OPTION)
   try {
-    const browser = await puppeteer.launch(LAUNCH_OPTION)
     const page = await browser.newPage()
     await page.goto(url, { waitUntil: 'domcontentloaded' }) // ページへ移動＋表示されるまで待機
 
     const sendData = await getSection(page)
 
     await send(sendData)
-
-    browser.close()
-    console.log('完了 : 台風 tenkijp');
   } catch (err) {
     console.log('異常 : 台風 tenkijp');
     console.error(err)
     sendError(err.stack, "台風:tenkijpのスクレイピングでエラー発生!")
+    
+  }
+  finally {
     browser.close()
+    console.groupEnd()
+    console.log('完了 : 台風 tenkijp');
   }
 })
 
