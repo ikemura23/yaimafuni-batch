@@ -1,7 +1,7 @@
 // 港別の運行ステータスの値をまとめているだけ
 
 const firebase = require("firebase");
-const consts = require("../../consts.js");
+const consts = require("../consts.js");
 
 /**
  * メイン処理
