@@ -4,9 +4,9 @@ const LAUNCH_OPTION = process.env.DYNO
   ? { args: ["--no-sandbox", "--disable-setuid-sandbox"] }
   : { headless: true };
 const URL = "https://www.yaeyama.co.jp/operation.html";
-const consts = require("../consts.js");
-const config = require("../config/config");
-const firebase = require("../lib/firebase_repository");
+const consts = require("../../consts.js");
+const config = require("../../config/config");
+const firebase = require("../../repository/firebase_repository");
 
 const COMPANY = consts.YKF;
 

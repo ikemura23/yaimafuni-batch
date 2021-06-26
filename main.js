@@ -1,5 +1,5 @@
 const firebase = require("firebase");
-const config = require("./config/config.js");
+const config = require("./src/config/config.js");
 const firebaseConfig = {
   databaseURL: config.firebase.databaseURL,
 };
@@ -10,16 +10,16 @@ console.log("main init");
 const updateAnneiList = require("./src/list/updateAnneiList");
 const updateAnneiDetail = require("./src/detail/updateAnneiDetail");
 
-const YkfList = require("./list/ykf_list.js");
-const ykfTime = require("./list/ykf_time_and_announce.js");
+const YkfList = require("./src/list/ykf/ykf_list.js");
+const ykfTime = require("./src/list/ykf/ykf_time_and_announce.js");
 
-const ykfDetail = require("./detail/detail_ykf.js");
+const ykfDetail = require("./src/detail/ykf/detail_ykf.js");
 
-const topCompany = require("./top/top_company.js");
-const topPort = require("./top/top_port.js");
-const yahoo = require("./weather/yahoo.js");
-const tenkijp = require("./weather/tenkijp.js");
-const tyhoon = require("./typhoon/tenkijp.js");
+const topCompany = require("./src/top/top_company.js");
+const topPort = require("./src/top/top_port.js");
+const yahoo = require("./src/weather/yahoo.js");
+const tenkijp = require("./src/weather/tenkijp.js");
+const tyhoon = require("./src/typhoon/tenkijp.js");
 
 // const slack = require('./slack');
 
