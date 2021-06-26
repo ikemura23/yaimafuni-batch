@@ -10,8 +10,8 @@ console.log("main init");
 const updateAnneiList = require("./src/list/updateAnneiList");
 const updateAnneiDetail = require("./src/detail/updateAnneiDetail");
 
-const YkfList = require("./list/ykf_list.js");
-const ykfTime = require("./list/ykf_time_and_announce.js");
+const YkfList = require("./src/list/ykf/ykf_list.js");
+const ykfTime = require("./src/list/ykf/ykf_time_and_announce.js");
 
 const ykfDetail = require("./detail/detail_ykf.js");
 
