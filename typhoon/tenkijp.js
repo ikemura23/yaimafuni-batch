@@ -42,8 +42,12 @@ async function getSection(page) {
  */
 async function getData(page, itemSelector) {
   const beforeNodes = await page.$$(itemSelector)
-  // 最初と最後は不要データなので除外する [ '気象予報士の見解（日直予報士：台風関連記事）', '台風13号(レンレン)', '台風14号(カジキ)', '台風を知る' ]
-  const nodes = beforeNodes.filter((_, i) => i != 0 && i != beforeNodes.length-1)
+  // 最初と最後は台風データではないので除外する
+  const nodes = await asyncFilter(beforeNodes, async (node) => {
+    const title = await node.$eval('h3', nd => nd.innerText)
+    return title.startsWith("台風"); // h3タグが 台風 から始まってるnodeのみに絞る
+  });
+
   const datas = []
   for (const node of nodes) {
     const data = {
@@ -56,7 +60,7 @@ async function getData(page, itemSelector) {
       area : await node.$eval('tr:nth-child(4) > td', nd => nd.innerText),
       maxWindSpeedNearCenter : await node.$eval('tr:nth-child(5) > td', nd => nd.innerText),
     }
-    // console.log(data)
+    console.log(data)
     datas.push(data)
   }
   return datas
@@ -68,4 +72,18 @@ async function getData(page, itemSelector) {
 async function send(data) {
   // console.log(data)
   return firebase.database().ref('typhoon/tenkijp').set(data)
+}
+
+/**
+ * filterでawaitを使える関数
+ * 参考： https://advancedweb.hu/how-to-use-async-functions-with-array-filter-in-javascript/
+ * 
+ * @param arr filter対象配列
+ * @param predicate 判定関数
+ * @returns フィルターされた配列
+ */
+const asyncFilter = async (arr, predicate) => {
+	const results = await Promise.all(arr.map(predicate));
+
+	return arr.filter((_v, index) => results[index]);
 }
