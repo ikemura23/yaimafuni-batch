@@ -1,5 +1,5 @@
 const Slack = require('slack-node');
-const config = require('./config/config.js');
+const config = require('./src/config/config.js');
 
 /**
  * 引数をSlack#notificasionに投稿

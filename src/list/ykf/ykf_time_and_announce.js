@@ -5,7 +5,7 @@ const LAUNCH_OPTION = process.env.DYNO
   : { headless: true };
 const URL = "https://www.yaeyama.co.jp/operation.html";
 const consts = require("../../../consts.js");
-const config = require("../../../config/config");
+const config = require("../../config/config");
 const firebase = require("../../../lib/firebase_repository");
 
 const COMPANY = consts.YKF;
