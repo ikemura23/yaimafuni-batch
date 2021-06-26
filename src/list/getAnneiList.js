@@ -140,7 +140,7 @@ module.exports = getAnneiList;
  * @param {港単体タグ} arreaTag
  */
 async function getStatusCode(className) {
-  if (className == "operation_triangle") {
+  if (className == "operation_partial") {
     return { code: consts.CATION, text: "一部運休" };
   } else if (className == "operation_times") {
     return { code: consts.CANCEL, text: "全便欠航" };
