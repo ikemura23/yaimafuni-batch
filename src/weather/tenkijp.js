@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
 const url = 'https://tenki.jp/forecast/10/50/9410/47207/3hours.html'
 const firebase = require("firebase");
-const sendError = require('../slack');
+const sendError = require('../../slack');
 // Heroku環境かどうかの判断
 const LAUNCH_OPTION = process.env.DYNO ? { args: ['--no-sandbox', '--disable-setuid-sandbox'] } : { headless: true };
 
