@@ -61,7 +61,8 @@ async function getHaterumaStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div",
+    "波照間発"
   );
 }
 
@@ -72,7 +73,8 @@ async function getUeharaStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div",
+    "上原発"
   );
 }
 
@@ -83,7 +85,8 @@ async function getHatomaStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div",
+    "鳩間発"
   );
 }
 
@@ -94,7 +97,8 @@ async function getOoharaStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div",
+    "大原発"
   );
 }
 
@@ -105,7 +109,8 @@ async function getTaketomiStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div",
+    "竹富発"
   );
 }
 
@@ -116,7 +121,8 @@ async function getKohamaStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div",
+    "小浜発"
   );
 }
 
@@ -127,15 +133,20 @@ async function getKuroshimaStatus(page) {
   return await getStatusData(
     page,
     "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(2) > div"
+    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(2) > div",
+    "黒島発"
   );
 }
 
 /**
  * 港単体のデータ取得
  */
-async function getStatusData(page, leftSelector, rightSelector) {
-
+async function getStatusData(
+  page,
+  leftSelector,
+  rightSelector,
+  rightHeaderText
+) {
   const leftNodes = await page.$$(leftSelector);
   const leftRow = await convertRowData(leftNodes);
 
@@ -150,8 +161,14 @@ async function getStatusData(page, leftSelector, rightSelector) {
       right: rightRow[i],
     });
   }
-//   console.dir(row);
-  return row;
+  //   console.dir(row);
+  return {
+    header: {
+      left: "石垣発",
+      right: rightHeaderText,
+    },
+    row: row,
+  };
 }
 
 /**
