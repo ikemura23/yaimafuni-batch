@@ -1,7 +1,7 @@
 // 会社別の運行ステータスの値をまとめて、firebaseに送信している
 
 const consts = require("../../consts.js");
-const sendError = require("../../slack");
+const sendError = require("../slack");
 const firebase = require("../repository/firebase_repository");
 
 const TABLE = "top_company/";
