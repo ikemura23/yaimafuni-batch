@@ -5,7 +5,7 @@ const LAUNCH_OPTION = process.env.DYNO
   : { headless: true };
 const TARGET_URL = "https://aneikankou.co.jp/condition";
 const config = require("../config/config");
-const consts = require("../../consts.js");
+const consts = require("../consts.js");
 
 const getAnneiList = async () => {
   console.group("getAnneiList start");

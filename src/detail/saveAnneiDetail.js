@@ -1,5 +1,5 @@
 const repository = require("../repository/firebase_repository");
-const consts = require("../../consts.js");
+const consts = require("../consts.js");
 
 /**
  * 安栄詳細のデータを保存する
