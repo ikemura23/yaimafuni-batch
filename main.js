@@ -13,7 +13,6 @@ const updateAnneiDetail = require("./src/detail/updateAnneiDetail");
 const YkfList = require("./list/ykf_list.js");
 const ykfTime = require("./list/ykf_time_and_announce.js");
 
-const aneiDetail = require("./detail/detail_anei.js");
 const ykfDetail = require("./detail/detail_ykf.js");
 
 const topCompany = require("./top/top_company.js");
@@ -30,7 +29,6 @@ const tyhoon = require("./typhoon/tenkijp.js");
   await updateAnneiDetail();
   await YkfList();
   await ykfTime();
-  await aneiDetail();
   await ykfDetail();
   await tyhoon();
   await yahoo();
