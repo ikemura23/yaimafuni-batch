@@ -17,8 +17,8 @@ const ykfDetail = require("./detail/detail_ykf.js");
 
 const topCompany = require("./top/top_company.js");
 const topPort = require("./top/top_port.js");
-const yahoo = require("./weather/yahoo.js");
-const tenkijp = require("./weather/tenkijp.js");
+const yahoo = require("./src/weather/yahoo.js");
+const tenkijp = require("./src/weather/tenkijp.js");
 const tyhoon = require("./typhoon/tenkijp.js");
 
 // const slack = require('./slack');
