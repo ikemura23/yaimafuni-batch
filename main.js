@@ -19,7 +19,7 @@ const topCompany = require("./src/top/top_company.js");
 const topPort = require("./src/top/top_port.js");
 const yahoo = require("./src/weather/yahoo.js");
 const tenkijp = require("./src/weather/tenkijp.js");
-const tyhoon = require("./typhoon/tenkijp.js");
+const tyhoon = require("./src/typhoon/tenkijp.js");
 
 // const slack = require('./slack');
 
