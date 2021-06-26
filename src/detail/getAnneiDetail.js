@@ -16,16 +16,16 @@ const getAnneiDetail = async () => {
     await page.goto(TARGET_URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
     // メイン処理
     const value = await readTimetableData(page);
-    console.dir(value);
-    // TODO: 保存処理
+    // console.dir(value);
+    return value;
   } catch (error) {
     // TODO
   } finally {
     browser.close();
+    console.log("getAnneiDetail end");
     console.groupEnd();
   }
 };
-getAnneiDetail();
 module.exports = getAnneiDetail;
 
 /**
