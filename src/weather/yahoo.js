@@ -60,14 +60,14 @@ async function getToday(page) {
 
   //返却データ作成
   const data = {
-    date: date,
-    weather: weather,
+    date: date.replace(/\r?\n/g, '').trim(),
+    weather: weather.replace(/\r?\n/g, '').trim(),
     temperature: {
-      hight: temperatureHight,
-      low: temperatureLow
+      hight: temperatureHight.replace(/\r?\n/g, '').trim(),
+      low: temperatureLow.replace(/\r?\n/g, '').trim(),
     },
-    wave: wave,
-    wind: wind
+    wave: wave.replace(/\r?\n/g, '').trim(),
+    wind: wind.replace(/\r?\n/g, '').trim(),
   }
   // console.log(data)
   return data
@@ -93,16 +93,16 @@ async function getTomorrow(page) {
 
   //返却データ作成
   const data = {
-    date: date,
-    weather: weather,
+    date: date.replace(/\r?\n/g, '').trim(),
+    weather: weather.replace(/\r?\n/g, '').trim(),
     temperature: {
-      hight: temperatureHight,
-      low: temperatureLow
+      hight: temperatureHight.replace(/\r?\n/g, '').trim(),
+      low: temperatureLow.replace(/\r?\n/g, '').trim(),
     },
-    wave: wave,
-    wind: wind
+    wave: wave.replace(/\r?\n/g, '').trim(),
+    wind: wind.replace(/\r?\n/g, '').trim(),
   }
-  // console.log(data)
+  console.dir(data)
   return data
 }
 /**
