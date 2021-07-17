@@ -47,7 +47,7 @@ async function getData(page, itemSelector) {
   // 最初と最後は台風データではないので除外する
   const nodes = await asyncFilter(beforeNodes, async (node) => {
     const title = await node.$eval('h3', nd => nd.innerText)
-    return title.startsWith("台風"); // h3タグが 台風 から始まってるnodeのみに絞る
+    return title.startsWith("台風") || title.startsWith("熱帯"); // h3タグが 台風 から始まってるnodeのみに絞る
   });
 
   const datas = []
@@ -55,7 +55,7 @@ async function getData(page, itemSelector) {
     const data = {
       name : await node.$eval('h3', nd => nd.innerText),
       dateTime : await node.$eval('.date-time', nd => nd.innerText),
-      img : await node.$eval('img', nd => nd.src),
+      img : await asyncGetImg(page, node),
       scale : await node.$eval('tr:nth-child(1) > td', nd => nd.innerText),
       intensity : await node.$eval('tr:nth-child(2) > td', nd => nd.innerText),
       pressure : await node.$eval('tr:nth-child(3) > td', nd => nd.innerText),
@@ -88,4 +88,32 @@ const asyncFilter = async (arr, predicate) => {
 	const results = await Promise.all(arr.map(predicate));
 
 	return arr.filter((_v, index) => results[index]);
+}
+
+/**
+ * 台風の画像urlを取得する
+ * @param {*} page 
+ * @param {*} node 
+ * @returns url
+ */
+const asyncGetImg = async(page, node) => {
+  let returnUrl = null
+  try {
+    returnUrl =  await node.$eval('img', nd => nd.src)
+    console.log(`returnUrl 1: ${returnUrl}`)
+  } catch(error) {
+    console.log("台風のimgタグが見つからない")
+  }
+  console.log(`returnUrl 1: ${returnUrl}`)
+  if (returnUrl == null) {
+    try {
+      returnUrl =  await page.$eval('#typhoon-image-src', img => {
+        return img.getAttribute('src');
+      })
+      console.log(`returnUrl 2: ${returnUrl}`)
+      return returnUrl
+    } catch(error) {
+      console.error(error)
+    }
+  }
 }

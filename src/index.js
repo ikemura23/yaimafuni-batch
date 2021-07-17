@@ -25,16 +25,16 @@ const tyhoon = require("./typhoon/tenkijp.js");
 
 (async () => {
   console.group("main start");
-  await updateAnneiList();
-  await updateAnneiDetail();
-  await YkfList();
-  await ykfTime();
-  await ykfDetail();
+  // await updateAnneiList();
+  // await updateAnneiDetail();
+  // await YkfList();
+  // await ykfTime();
+  // await ykfDetail();
   await tyhoon();
-  await yahoo();
-  await topPort();
-  await topCompany();
-  await tenkijp();
+  // await yahoo();
+  // await topPort();
+  // await topCompany();
+  // await tenkijp();
   await firebase.database().goOffline();
   console.groupEnd()
   console.log("main finish");
