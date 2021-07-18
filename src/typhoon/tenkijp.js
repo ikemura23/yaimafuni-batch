@@ -107,13 +107,13 @@ const asyncGetImg = async(page, node) => {
   console.log(`returnUrl 1: ${returnUrl}`)
   if (returnUrl == null) {
     try {
-      returnUrl =  await page.$eval('#typhoon-image-src', img => {
+      returnUrl = await page.$eval('#typhoon-image-src', img => {
         return img.getAttribute('src');
       })
       console.log(`returnUrl 2: ${returnUrl}`)
-      return returnUrl
     } catch(error) {
       console.error(error)
     }
   }
+  return returnUrl;
 }
