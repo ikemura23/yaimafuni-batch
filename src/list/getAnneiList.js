@@ -142,7 +142,7 @@ module.exports = getAnneiList;
 async function getStatusCode(className) {
   if (className == "operation_partial") {
     return { code: consts.CATION, text: "一部運休" };
-  } else if (className == "operation_times") {
+  } else if (className == "operation_suspension") {
     return { code: consts.CANCEL, text: "全便欠航" };
   } else if (className == "operation_normal") {
     return { code: consts.NORMAL, text: "通常運航" };
