@@ -7,7 +7,7 @@ const URL = "https://www.yaeyama.co.jp/operation.html";
 const consts = require("../../consts.js");
 const config = require("../../config/config");
 const firebase = require("../../repository/firebase_repository");
-
+const sendError = require('../../slack');
 const COMPANY = consts.YKF;
 
 module.exports = async () => {
