@@ -34,8 +34,7 @@ module.exports = (async () => {
  * @param {Page} page
  */
 async function getSection(page) {
-    const datas = await getData(page, "body > section > section.section-wrap")
-    return datas
+    return await getData(page, "body > section > section.section-wrap")
 }
 
 /**

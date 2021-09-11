@@ -4,7 +4,6 @@ const LAUNCH_OPTION = process.env.DYNO
     ? {args: ["--no-sandbox", "--disable-setuid-sandbox"]}
     : {headless: true};
 const TARGET_URL = "https://aneikankou.co.jp/condition";
-const config = require("../config/config");
 const sendError = require('../slack');
 
 const getAnneiUpdateTimeAndComment = async () => {
