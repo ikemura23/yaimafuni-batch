@@ -42,7 +42,7 @@ const getAnneiUpdateTimeAndComment = async () => {
     } catch (error) {
         sendError(error)
     } finally {
-        browser.close();
+        await browser.close();
         console.groupEnd();
     }
 };

@@ -21,7 +21,7 @@ module.exports = (async () => {
         sendError(err.stack, "台風:tenkijpのスクレイピングでエラー発生!")
 
     } finally {
-        browser.close()
+        await browser.close()
         console.groupEnd()
         console.log('完了 : 台風 tenkijp');
     }

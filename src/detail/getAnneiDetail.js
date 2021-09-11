@@ -21,7 +21,7 @@ const getAnneiDetail = async () => {
     } catch (error) {
         // TODO
     } finally {
-        browser.close();
+        await browser.close();
         console.log("getAnneiDetail end");
         console.groupEnd();
     }
