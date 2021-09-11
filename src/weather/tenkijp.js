@@ -66,7 +66,7 @@ async function getToday(page) {
 
 /**
  * 明日
- * @param {page}} page
+ * @param page
  */
 async function getTomorrow(page) {
 

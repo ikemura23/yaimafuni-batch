@@ -31,8 +31,8 @@ module.exports = (async () => {
 
 /**
  * pageからセレククターの値を返す
- * @param {ページ} page
- * @param {セレクター} itemSelector
+ * @param {"ページ"} page
+ * @param {"セレクター"} itemSelector
  */
 async function getData(page, itemSelector) {
     return await page.$eval(itemSelector, item => {
@@ -75,7 +75,7 @@ async function getToday(page) {
 
 /**
  * 明日
- * @param {page}} page
+ * @param page
  */
 async function getTomorrow(page) {
     const date = await getData(page, "#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.date")
@@ -114,4 +114,4 @@ async function send(data) {
         firebase.database().ref('weather/today').set(data.today),
         firebase.database().ref('weather/tomorrow').set(data.tomorrow)
     ])
-};
+}

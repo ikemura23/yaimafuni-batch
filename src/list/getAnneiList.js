@@ -138,14 +138,14 @@ module.exports = getAnneiList;
 
 /**
  * タグのcssクラス名からステータスコードを取得
- * @param {港単体タグ} arreaTag
+ * @param {"cssクラス名"} className
  */
 async function getStatusCode(className) {
-    if (className == "operation_partial") {
+    if (className === "operation_partial") {
         return {code: consts.CATION, text: "一部運休"};
-    } else if (className == "operation_suspension") {
+    } else if (className === "operation_suspension") {
         return {code: consts.CANCEL, text: "全便欠航"};
-    } else if (className == "operation_normal") {
+    } else if (className === "operation_normal") {
         return {code: consts.NORMAL, text: "通常運航"};
     } else {
         return {code: consts.CATION, text: "一部運休"};

@@ -4,7 +4,6 @@ const LAUNCH_OPTION = process.env.DYNO
     ? {args: ["--no-sandbox", "--disable-setuid-sandbox"]}
     : {headless: true};
 const TARGET_URL = "https://aneikankou.co.jp/condition";
-const config = require("../config/config");
 const consts = require("../consts.js");
 const sendError = require("../slack");
 
@@ -16,9 +15,8 @@ const getAnneiDetail = async () => {
 
         await page.goto(TARGET_URL, {waitUntil: "networkidle2"}); // ページへ移動＋表示されるまで待機
         // メイン処理
-        const value = await readTimetableData(page);
         // console.dir(value);
-        return value;
+        return await readTimetableData(page);
     } catch (error) {
         sendError(error);
     } finally {
@@ -36,7 +34,7 @@ module.exports = getAnneiDetail;
  */
 const readTimetableData = async (page) => {
     // 送信用データ生成
-    const data = {
+    return {
         // 波照間
         hateruma: await getHaterumaStatus(page),
         // 上原
@@ -52,7 +50,6 @@ const readTimetableData = async (page) => {
         // 黒島
         kuroshima: await getKuroshimaStatus(page),
     };
-    return data;
 };
 
 /**
@@ -178,7 +175,7 @@ async function getStatusData(
  * @returns 縦1列の配列
  */
 async function convertRowData(parentNodes) {
-    if (parentNodes.length == 0) {
+    if (parentNodes.length === 0) {
         console.log("parentNodes is empty");
         return;
     }
@@ -220,13 +217,13 @@ async function convertRowData(parentNodes) {
  * ステータスコードを取得
  */
 async function getStatusCode(statusText) {
-    if (statusText == "◯") {
+    if (statusText === "◯") {
         return consts.NORMAL;
-    } else if (statusText == "△") {
+    } else if (statusText === "△") {
         return consts.CATION;
-    } else if (statusText == "✕") {
+    } else if (statusText === "✕") {
         return consts.CANCEL;
-    } else if (statusText == "未定") {
+    } else if (statusText === "未定") {
         return consts.CATION;
     } else {
         return consts.CATION;
@@ -237,11 +234,11 @@ async function getStatusCode(statusText) {
  * ステータス文字
  */
 async function getStatusText(statusText) {
-    if (statusText == "◯") {
+    if (statusText === "◯") {
         return "通常運航";
-    } else if (statusText == "△") {
+    } else if (statusText === "△") {
         return "一部運休";
-    } else if (statusText == "✕") {
+    } else if (statusText === "✕") {
         return "欠航";
     } else {
         return statusText;
