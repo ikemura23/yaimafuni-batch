@@ -6,6 +6,7 @@ const LAUNCH_OPTION = process.env.DYNO
 const TARGET_URL = "https://aneikankou.co.jp/condition";
 const config = require("../config/config");
 const consts = require("../consts.js");
+const sendError = require("../slack");
 
 const getAnneiDetail = async () => {
     console.group("getAnneiDetail start");
@@ -19,7 +20,7 @@ const getAnneiDetail = async () => {
         // console.dir(value);
         return value;
     } catch (error) {
-        // TODO
+        sendError(error);
     } finally {
         await browser.close();
         console.log("getAnneiDetail end");

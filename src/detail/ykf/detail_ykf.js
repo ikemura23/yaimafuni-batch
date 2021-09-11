@@ -89,7 +89,7 @@ async function getTextContent(page, itemSelector) {
  */
 async function getStatusData(trNodes) {
     // console.log(`trNodes.length:${trNodes.length}`);
-    if (trNodes.length == 0) {
+    if (trNodes.length === 0) {
         console.log("trNodes is empty");
         return;
     }
@@ -143,15 +143,14 @@ async function getStatusData(trNodes) {
         rows.push(row);
     }
     // 返却データ作成
-    const data = {
+    // console.log(data);
+    return {
         header: {
             left: leftPortName,
             right: rightPortName,
         },
         row: rows,
     };
-    // console.log(data);
-    return data;
 }
 
 /**
