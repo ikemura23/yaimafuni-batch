@@ -59,7 +59,7 @@ async function getDataList(page, itemSelector) {
  * 生データから送信用の値を作成する
  */
 async function makeSendData(listRaw) {
-    const splitData = listRaw.map(raw => raw.split('<br>',2)); //  [竹富,一部欠航],[小浜,一部欠航],[黒島,一部欠航]... に変換する
+    const splitData = listRaw.map(raw => raw.split('<br>', 2)); //  [竹富,一部欠航],[小浜,一部欠航],[黒島,一部欠航]... に変換する
     // console.log(`splitData: ${splitData}, length:${splitData.length}`);
 
     const returnData = {};
