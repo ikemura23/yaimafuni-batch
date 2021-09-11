@@ -25,7 +25,7 @@ module.exports = (async () => {
         console.error(err)
         sendError(err.stack, "tenkijpのスクレイピングでエラー発生!")
     } finally {
-        browser.close();
+        await browser.close();
         console.log(`完了: tenkijp`);
     }
 })

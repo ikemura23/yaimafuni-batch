@@ -24,7 +24,7 @@ module.exports = (async () => {
         sendError(err.stack, "yahooのスクレイピングでエラー発生!")
         console.log(err)
     } finally {
-        browser.close()
+        await browser.close()
         console.log("yahoo end")
     }
 })
