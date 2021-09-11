@@ -1,7 +1,7 @@
 const firebase = require("firebase");
 const config = require("./config/config.js");
 const firebaseConfig = {
-  databaseURL: config.firebase.databaseURL,
+    databaseURL: config.firebase.databaseURL,
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -24,18 +24,18 @@ const tyhoon = require("./typhoon/tenkijp.js");
 // const slack = require('./slack');
 
 (async () => {
-  console.group("main start");
-  await updateAnneiList();
-  await updateAnneiDetail();
-  await YkfList();
-  await ykfTime();
-  await ykfDetail();
-  await tyhoon();
-  await yahoo();
-  await topPort();
-  await topCompany();
-  await tenkijp();
-  await firebase.database().goOffline();
-  console.groupEnd()
-  console.log("main finish");
+    console.group("main start");
+    await updateAnneiList();
+    await updateAnneiDetail();
+    await YkfList();
+    await ykfTime();
+    await ykfDetail();
+    await tyhoon();
+    await yahoo();
+    await topPort();
+    await topCompany();
+    await tenkijp();
+    await firebase.database().goOffline();
+    console.groupEnd()
+    console.log("main finish");
 })();
