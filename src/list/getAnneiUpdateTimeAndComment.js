@@ -5,6 +5,7 @@ const LAUNCH_OPTION = process.env.DYNO
     : {headless: true};
 const TARGET_URL = "https://aneikankou.co.jp/condition";
 const config = require("../config/config");
+const sendError = require('../slack');
 
 const getAnneiUpdateTimeAndComment = async () => {
     console.group("getAnneiUpdateTimeAndComment start");
@@ -39,7 +40,7 @@ const getAnneiUpdateTimeAndComment = async () => {
         // console.dir(value);
         return value;
     } catch (error) {
-        // TODO
+        sendError(error)
     } finally {
         browser.close();
         console.groupEnd();
