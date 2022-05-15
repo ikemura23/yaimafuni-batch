@@ -51,3 +51,5 @@ jspm_packages
 json/
 
 config.json
+
+.DS_Store
