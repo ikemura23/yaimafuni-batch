@@ -7,8 +7,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "liner": "node mobile/send_liner_info.js",
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
