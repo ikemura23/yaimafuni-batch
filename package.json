@@ -13,8 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "firebase": "^8.6.8",
-    "puppeteer": "^10.0.0",
+    "firebase": "^8.10.1",
+    "puppeteer": "^16.2.0",
     "slack-node": "^0.1.8"
   }
 }
