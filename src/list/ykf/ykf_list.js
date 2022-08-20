@@ -20,14 +20,15 @@ module.exports = async () => {
         await page.goto(URL, {waitUntil: "networkidle2"}); // ページへ移動＋表示されるまで待機
 
         // スクレイピングした生の値
-        const listRaw = await getList(page) // 竹富<br>一部欠航,小浜<br>一部欠航,黒島<br>一部欠航
-        // console.log(`listRaw: ${listRaw}`);
+        const htmlDataList= await getInnerHtmlList(page) // 竹富<br>一部欠航,小浜<br>一部欠航,黒島<br>一部欠航
+        console.log("YKF 一覧 inner htmlデータ")
+        console.table(htmlDataList);
 
         // 送信用に変換
-        const sendData = await makeSendData(listRaw);
-        console.dir(sendData);
-        // 送信開始
-        await firebase.set(consts.YKF, sendData);
+        // const sendData = await makeSendData(listRaw);
+        // console.dir(sendData);
+        // // 送信開始
+        // await firebase.set(consts.YKF, sendData);
 
     } catch (error) {
         console.error(error.stack, `${COMPANY}一覧でエラー`);
@@ -41,14 +42,27 @@ module.exports = async () => {
 /**
  * リスト取得
  */
-async function getList(page) {
+async function getInnerHtmlList(page) {
     return await getDataList(
         page,
-        "#operation_status > div:nth-child(2) > div > div > div > div"
+        "#status > div > div.status > div.list"
     );
 }
-
+    /* こんなデータが取得できる
+  ┌─────────┬─────────────────────────────────────────────┐
+  │ (index) │                   Values                    │
+  ├─────────┼─────────────────────────────────────────────┤
+  │    0    │   '<span>竹富</span><strong>〇</strong>'    │
+  │    1    │   '<span>小浜</span><strong>〇</strong>'    │
+  │    2    │   '<span>黒島</span><strong>〇</strong>'    │
+  │    3    │ '<span>西表大原</span><strong>〇</strong>'  │
+  │    4    │ '<span>西表上原</span><strong>〇</strong>'  │
+  │    5    │   '<span>鳩間</span><strong>〇</strong>'    │
+  │    6    │ '<span>上原-鳩間</span><strong>〇</strong>' │
+  └─────────┴─────────────────────────────────────────────┘
+    */
 async function getDataList(page, itemSelector) {
+
     return (datas = await page.evaluate(selector => {
         const list = Array.from(document.querySelectorAll(selector));
         return list.map(data => data.innerHTML);
