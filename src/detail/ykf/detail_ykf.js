@@ -21,7 +21,7 @@ module.exports = async () => {
 
         // データ取得
         const data = await getData(page);
-        // console.log(info);
+        console.table(data);
 
         // 送信開始
         if (data != null) {
@@ -42,7 +42,7 @@ module.exports = async () => {
 
 async function getData(page) {
     // 最初に div.local をまとめて取得
-    const devLocalNodes = await page.$$("#operationstatus > div > div.local");
+    const devLocalNodes = await page.$$("#status > div > div.local");
     // console.log(`devLocalNodes.length:${devLocalNodes.length}`);
     if (devLocalNodes.length == 0) {
         console.log("devLocalNodes is empty");
@@ -52,23 +52,24 @@ async function getData(page) {
     // 送信用データ生成
     const sendData = {
         taketomi: await getStatusData(
-            await devLocalNodes[0].$$("table > tbody > tr")
+            await devLocalNodes[0].$$("div.local.local0 > table > tbody > tr")
         ), // 竹富
         kohama: await getStatusData(
-            await devLocalNodes[1].$$("table > tbody > tr")
+            await devLocalNodes[1].$$("div.local.local1 > table > tbody > tr")
         ), // 小浜
         kuroshima: await getStatusData(
-            await devLocalNodes[2].$$("table > tbody > tr")
+            await devLocalNodes[2].$$("div.local.local2 > table > tbody > tr")
         ), // 黒島
         oohara: await getStatusData(
-            await devLocalNodes[3].$$("table > tbody > tr")
+            await devLocalNodes[3].$$("div.local.local3 > table > tbody > tr")
         ), // 大原
         uehara: await getStatusData(
-            await devLocalNodes[4].$$("table > tbody > tr")
+            await devLocalNodes[4].$$("div.local.local4 > table > tbody > tr")
         ), // 上原
         hatoma: await getStatusData(
-            await devLocalNodes[5].$$("table > tbody > tr")
+            await devLocalNodes[5].$$("div.local.local5 > table > tbody > tr")
         ), // 鳩間
+        // TODO: 上原ー鳩間も送って大丈夫か試す
         // kohama_oohara: await getKohamaOoharaStatus(page), // 小浜-大原
         // kohama_taketomi: await getKohamaTaketomiStatus(page), // 小浜-竹富
         // uehara_hatoma: await getUeharaHatomaStatus(page) // 上原-鳩間

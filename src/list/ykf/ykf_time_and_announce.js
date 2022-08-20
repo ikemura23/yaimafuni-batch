@@ -30,7 +30,7 @@ module.exports = async () => {
             comment: announce2 ? `${announce}\n${announce2}` : announce,
             updateTime: updateTime,
         };
-
+        console.dir(data)
         // 送信開始
         await firebase.update(consts.YKF, data);
 
@@ -50,7 +50,7 @@ module.exports = async () => {
  * 更新日時
  */
 async function getUpdateTime(page) {
-    const data = await getData(page, "#operationstatus > div > div.statusdate");
+    const data = await getData(page, "#status > div > div.statusdate");
     // console.log(data);
     return data;
 }
@@ -59,7 +59,7 @@ async function getUpdateTime(page) {
  * アナウンス
  */
 async function getAnnounce(page) {
-    const data = await getData(page, "#operationstatus > div > div.statusdate2");
+    const data = await getData(page, "#status > div > div:nth-child(3)");
     // console.log(data);
     return data;
 }
@@ -70,7 +70,7 @@ async function getAnnounce(page) {
 async function getAnnounce2(page) {
     const data = await getInnerTextForSelector(
         page,
-        "#operationstatus > div > div.statusdate2.bgylw"
+        "#status > div > div.statusdate2.bgylw"
     );
     // console.log(data);
     return data;
