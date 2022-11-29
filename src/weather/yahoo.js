@@ -1,13 +1,11 @@
-const puppeteer = require('puppeteer')
+const browserFactory = require('../browser-factory')
 const url = 'https://weather.yahoo.co.jp/weather/jp/47/9410.html'
 const firebase = require("firebase");
 const sendError = require('../slack');
-// Heroku環境かどうかの判断
-const LAUNCH_OPTION = process.env.DYNO ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {headless: true};
 
 module.exports = (async () => {
     console.log("yahoo start")
-    const browser = await puppeteer.launch(LAUNCH_OPTION)
+    const browser = await browserFactory.create();
     try {
         const page = await browser.newPage()
         await page.goto(url, {waitUntil: 'networkidle2'}) // ページへ移動＋表示されるまで待機

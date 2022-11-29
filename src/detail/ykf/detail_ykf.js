@@ -1,9 +1,5 @@
 // YKF 詳細
-const puppeteer = require("puppeteer");
-// Heroku環境かどうかの判断
-const LAUNCH_OPTION = process.env.DYNO
-    ? {args: ["--no-sandbox", "--disable-setuid-sandbox"]}
-    : {headless: true};
+const browserFactory = require('../../browser-factory')
 const URL = "https://www.yaeyama.co.jp/operation.html";
 const consts = require("../../consts.js");
 const config = require("../../config/config");
@@ -13,7 +9,7 @@ const COMPANY = consts.YKF;
 
 module.exports = async () => {
     console.log(`開始: ${COMPANY} 詳細`);
-    const browser = await puppeteer.launch(LAUNCH_OPTION);
+    const browser = await browserFactory.create();
     try {
         const page = await browser.newPage();
         await page.setUserAgent(config.puppeteer.userAgent);
