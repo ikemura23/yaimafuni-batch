@@ -1,19 +1,13 @@
-const puppeteer = require("puppeteer");
-// Heroku環境かどうかの判断
-const LAUNCH_OPTION = process.env.DYNO
-    ? {args: ["--no-sandbox", "--disable-setuid-sandbox"]}
-    : {headless: true};
+const browserFactory = require('../browser-factory');
 const TARGET_URL = "https://aneikankou.co.jp/condition";
-const config = require("../config/config");
 const consts = require("../consts.js");
 const sendError = require('../slack');
 
 const getAnneiList = async () => {
     console.group("getAnneiList start");
-    const browser = await puppeteer.launch(LAUNCH_OPTION);
+    const browser = await browserFactory.create();
     try {
         const page = await browser.newPage();
-        // page.setUserAgent(config.puppeteer.userAgent);
         await page.goto(TARGET_URL, {waitUntil: "networkidle2"}); // ページへ移動＋表示されるまで待機
 
         // 波照間
