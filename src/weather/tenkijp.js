@@ -10,7 +10,7 @@ module.exports = (async () => {
     try {
         const page = await browser.newPage()
         await page.goto(url, {
-            timeout: 5000,
+            timeout: 10000,
             waitUntil: 'domcontentloaded'
         }) // ページへ移動＋表示されるまで待機
 
