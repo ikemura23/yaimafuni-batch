@@ -1,17 +1,16 @@
-const puppeteer = require('puppeteer')
+
 const url = 'https://tenki.jp/forecast/10/50/9410/47207/3hours.html'
 const firebase = require("firebase");
 const sendError = require('../slack');
-// Heroku環境かどうかの判断
-const LAUNCH_OPTION = process.env.DYNO ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {headless: true};
+const browserFactory = require('../browser-factory')
 
 module.exports = (async () => {
     console.log(`開始: tenkijp`);
-    const browser = await puppeteer.launch(LAUNCH_OPTION)
+    const browser = await browserFactory.create()
     try {
         const page = await browser.newPage()
         await page.goto(url, {
-            timeout: 5000,
+            timeout: 10000,
             waitUntil: 'domcontentloaded'
         }) // ページへ移動＋表示されるまで待機
 

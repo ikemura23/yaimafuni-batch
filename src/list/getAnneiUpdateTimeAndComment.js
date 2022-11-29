@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const browserFactory = require('../browser-factory');
 // Heroku環境かどうかの判断
 const LAUNCH_OPTION = process.env.DYNO
     ? {args: ["--no-sandbox", "--disable-setuid-sandbox"]}
@@ -8,7 +8,7 @@ const sendError = require('../slack');
 
 const getAnneiUpdateTimeAndComment = async () => {
     console.group("getAnneiUpdateTimeAndComment start");
-    const browser = await puppeteer.launch(LAUNCH_OPTION);
+    const browser = await browserFactory.create();
     try {
         const page = await browser.newPage();
 
