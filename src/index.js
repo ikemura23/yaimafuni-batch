@@ -21,6 +21,9 @@ const yahoo = require("./weather/yahoo.js");
 const tenkijp = require("./weather/tenkijp.js");
 const tyhoon = require("./typhoon/tenkijp.js");
 
+// １時間おきの天気
+const updateHourlyWeather = require("./weather/hourly/updateHourlyWeather");
+
 // const slack = require('./slack');
 
 (async () => {
@@ -35,6 +38,7 @@ const tyhoon = require("./typhoon/tenkijp.js");
     await topPort();
     await topCompany();
     await tenkijp();
+    await updateHourlyWeather();
     await firebase.database().goOffline();
     console.groupEnd()
     console.log("main finish");
