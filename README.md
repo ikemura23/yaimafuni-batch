@@ -20,8 +20,3 @@ node src/index.js
 
 ## node.jsのバージョン固定
 `.node-version`ファイルにnode.jsのバージョン指定をしている。
-
-## herokuのnodeバージョンを指定
-
-`package.json`の`enginesにnode.jsのバージョンを指定できる。
-https://devcenter.heroku.com/ja/articles/nodejs-support#specifying-a-node-js-version
