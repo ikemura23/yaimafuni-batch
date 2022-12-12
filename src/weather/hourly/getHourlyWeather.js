@@ -1,11 +1,15 @@
-const url =
-  "https://api.open-meteo.com/v1/jma?latitude=24.34&longitude=124.16&hourly=weathercode,windspeed_10m,winddirection_10m&current_weather=true&windspeed_unit=ms&timezone=Asia%2FTokyo";
-
+/**
+ * Weather Forecast API https://open-meteo.com/en/docs
+ * から天気情報を取得して、オブジェクト型に整形して返す
+ * 
+ * @returns {Object} 日時、天気コード、風速、風向き
+ * 
+ */
 const getHourlyWeather = async () => {
   console.group("getHourlyWeather start");
   try {
-    const json = await (await fetch(url)).json();
-    const parsedObj = JSON.parse(JSON.stringify(json)); // JSON.stringifyがないとパースエラーになる
+    const responseJson = await getWeatherForecastApi();
+    const parsedObj = JSON.parse(JSON.stringify(responseJson)); // JSON.stringifyがないとパースエラーになる
 
     const data = mapToData(
       parsedObj.hourly.time,
@@ -22,6 +26,17 @@ const getHourlyWeather = async () => {
     console.groupEnd();
   }
 };
+
+/**
+ * Weather Forecast API から天気情報を取得する
+ * @returns jsonをシリアライズしたオブジェクト
+ */
+const getWeatherForecastApi = async () => {
+  const API_URL =
+  "https://api.open-meteo.com/v1/jma?latitude=24.34&longitude=124.16&hourly=weathercode,windspeed_10m,winddirection_10m&current_weather=true&windspeed_unit=ms&timezone=Asia%2FTokyo";
+
+  return await (await fetch(API_URL)).json();
+}
 
 /**
  * APIレスポンス Jsonからオブジェクト型に変換する
