@@ -1,10 +1,7 @@
 const browserFactory = require('../browser-factory');
-// Heroku環境かどうかの判断
-const LAUNCH_OPTION = process.env.DYNO
-    ? {args: ["--no-sandbox", "--disable-setuid-sandbox"]}
-    : {headless: true};
-const TARGET_URL = "https://aneikankou.co.jp/condition";
 const sendError = require('../slack');
+
+const TARGET_URL = "https://aneikankou.co.jp/condition";
 
 const getAnneiUpdateTimeAndComment = async () => {
     console.group("getAnneiUpdateTimeAndComment start");
