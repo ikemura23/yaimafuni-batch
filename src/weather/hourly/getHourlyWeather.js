@@ -2,18 +2,25 @@ const url =
   "https://api.open-meteo.com/v1/jma?latitude=24.34&longitude=124.16&hourly=weathercode,windspeed_10m,winddirection_10m&current_weather=true&windspeed_unit=ms&timezone=Asia%2FTokyo";
 
 const getHourlyWeather = async () => {
-  const json = await (await fetch(url)).json();
-  const parsedObj = JSON.parse(JSON.stringify(json)); // JSON.stringifyがないとパースエラーになる
+  console.group("getHourlyWeather start");
+  try {
+    const json = await (await fetch(url)).json();
+    const parsedObj = JSON.parse(JSON.stringify(json)); // JSON.stringifyがないとパースエラーになる
 
-  const data = mapToData(
-    parsedObj.hourly.time,
-    parsedObj.hourly.weathercode,
-    parsedObj.hourly.windspeed_10m,
-    parsedObj.hourly.winddirection_10m
-  );
-  const dateGroupList = groupBy(data, "date");
-  // console.log(dateGroupList);
-  return dateGroupList;
+    const data = mapToData(
+      parsedObj.hourly.time,
+      parsedObj.hourly.weathercode,
+      parsedObj.hourly.windspeed_10m,
+      parsedObj.hourly.winddirection_10m
+    );
+    const dateGroupList = groupBy(data, "date");
+    return dateGroupList;
+  } catch(e) {
+    console.error(e)
+  } finally {
+    console.log("getHourlyWeather end");
+    console.groupEnd();
+  }
 };
 
 /**
