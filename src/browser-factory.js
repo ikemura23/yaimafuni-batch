@@ -1,9 +1,9 @@
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 
 async function create() {
   const LAUNCH_OPTION = {
     headless: true,
-    channel: "chrome", // Mac
+    // channel: "chrome", // Mac
     // executablePath: "chromium-browser", // Raspberry Pi
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   };
