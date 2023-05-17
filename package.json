@@ -13,8 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sparticuz/chromium": "^109.0.5",
     "firebase": "^8.10.1",
-    "puppeteer": "^10.4.0",
+    "puppeteer-core": "19.4",
     "slack-node": "^0.1.8"
   }
 }
