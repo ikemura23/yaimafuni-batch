@@ -1,16 +1,26 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
+const chromium = require("@sparticuz/chromium");
 
 async function create() {
   const LAUNCH_OPTION = {
-    headless: true,
-    // channel: "chrome", // Mac
-    // executablePath: "chromium-browser", // Raspberry Pi
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    executablePath: process.env.IS_LOCAL
+      ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      : await chromium.executablePath(),
+    headless: process.env.IS_LOCAL ? true : chromium.headless,
+    ignoreHTTPSErrors: true,
+    defaultViewport: chromium.defaultViewport,
+    args: process.env.IS_LOCAL
+      ? [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--hide-scrollbars",
+          "--disable-web-security",
+        ]
+      : [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
   };
-//   const browser = await puppeteer.launch(LAUNCH_OPTION);
   return await puppeteer.launch(LAUNCH_OPTION);
-};
+}
 
 module.exports = {
-    create
+  create,
 };
