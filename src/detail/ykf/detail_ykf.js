@@ -1,5 +1,5 @@
 // YKF 詳細
-const browserFactory = require('../../browser-factory')
+const createBrowser = require('../../browser-factory')
 const URL = "https://www.yaeyama.co.jp/operation.html";
 const consts = require("../../consts.js");
 const config = require("../../config/config");
@@ -9,7 +9,7 @@ const COMPANY = consts.YKF;
 
 module.exports = async () => {
     console.log(`開始: ${COMPANY} 詳細`);
-    const browser = await browserFactory.create();
+    const browser = await createBrowser();
     try {
         const page = await browser.newPage();
         await page.setUserAgent(config.puppeteer.userAgent);

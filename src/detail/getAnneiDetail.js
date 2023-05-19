@@ -1,11 +1,11 @@
-const browserFactory = require('../browser-factory')
+const createBrowser = require('../browser-factory')
 const TARGET_URL = "https://aneikankou.co.jp/condition";
 const consts = require("../consts.js");
 const sendError = require("../slack");
 
 const getAnneiDetail = async () => {
     console.group("getAnneiDetail start");
-    const browser = await browserFactory.create();
+    const browser = await createBrowser();
     try {
         const page = await browser.newPage();
 
