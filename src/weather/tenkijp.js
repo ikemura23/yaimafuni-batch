@@ -2,11 +2,11 @@
 const url = 'https://tenki.jp/forecast/10/50/9410/47207/3hours.html'
 const firebase = require("firebase");
 const sendError = require('../slack');
-const browserFactory = require('../browser-factory')
+const createBrowser = require('../browser-factory')
 
 module.exports = (async () => {
     console.log(`開始: tenkijp`);
-    const browser = await browserFactory.create()
+    const browser = await createBrowser()
     try {
         const page = await browser.newPage()
         await page.goto(url, {

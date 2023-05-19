@@ -1,16 +1,22 @@
-const browserFactory = require('../browser-factory');
-const sendError = require('../slack');
+const createBrowser = require('../browser-factory');
+// const sendError = require('../slack');
 
 const TARGET_URL = "https://aneikankou.co.jp/condition";
 
 const getAnneiUpdateTimeAndComment = async () => {
     console.group("getAnneiUpdateTimeAndComment start");
-    const browser = await browserFactory.create();
+
+    console.log("await createBrowser()")
+    const browser = await createBrowser();
+    console.log("await browserFactory.create() end")
     try {
+        console.log("try start")
         const page = await browser.newPage();
+        console.log("browser.newPage() ok")
 
         await page.goto(TARGET_URL, {waitUntil: "networkidle2"}); // ページへ移動＋表示されるまで待機
-
+        console.log("page.goto ok: ", TARGET_URL)
+        console.log("更新時刻の取得")
         // 更新時刻の取得
         const updateTimeText = await page.$eval(
             "div.condition_subtitle > div",
@@ -21,7 +27,7 @@ const getAnneiUpdateTimeAndComment = async () => {
                     .trim();
             }
         );
-
+        console.log("お知らせコメントの取得")
         // お知らせコメントの取得
         const commentText = await page.$eval("div.condition_list > div", (item) => {
             return item.textContent.trim();
@@ -33,10 +39,11 @@ const getAnneiUpdateTimeAndComment = async () => {
             comment: commentText,
         };
 
-        // console.dir(value);
+        console.dir(value);
         return value;
     } catch (error) {
-        sendError(error)
+        console.error("Error getAnneiUpdateTimeAndComment: ", error);
+        // sendError(error)
     } finally {
         await browser.close();
         console.groupEnd();
