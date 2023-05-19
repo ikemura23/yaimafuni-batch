@@ -5,7 +5,10 @@ exports.handler = async function (event, context) {
     const firebaseConfig = {
       databaseURL: config.firebase.databaseURL,
     };
-    firebase.initializeApp(firebaseConfig);
+    // Initialize Firebase
+    if (firebase.apps.length === 0) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
     console.log("main init");
 
