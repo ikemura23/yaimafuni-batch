@@ -53,3 +53,5 @@ json/
 config.json
 
 .DS_Store
+
+*.zip
