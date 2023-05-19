@@ -1,11 +1,11 @@
-const browserFactory = require('../browser-factory')
+const createBrowser = require('../browser-factory')
 const url = 'https://tenki.jp/lite/bousai/typhoon/'
 const firebase = require("firebase");
 const sendError = require('../slack');
 
 module.exports = (async () => {
     console.group('開始 : 台風 tenkijp');
-    const browser = await browserFactory.create();
+    const browser = await createBrowser();
     try {
         const page = await browser.newPage()
         await page.goto(url, {waitUntil: 'domcontentloaded'}) // ページへ移動＋表示されるまで待機
