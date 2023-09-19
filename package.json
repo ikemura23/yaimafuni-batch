@@ -15,6 +15,7 @@
   "dependencies": {
     "@sparticuz/chromium": "^109.0.5",
     "firebase": "^8.10.1",
+    "firebase-admin": "^11.10.1",
     "puppeteer-core": "19.4",
     "slack-node": "^0.1.8"
   }
