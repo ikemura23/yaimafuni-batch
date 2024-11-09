@@ -1,4 +1,4 @@
-exports.handler = async function (event, context) {
+exports.handler = async function () {
   try {
     const firebase = require("firebase");
     const config = require("./src/config/config.js");
@@ -46,7 +46,6 @@ exports.handler = async function (event, context) {
     await firebase.database().goOffline();
     console.groupEnd();
     console.log("main finish");
-
   } catch (err) {
     console.log("Error happended: ", err);
   }
