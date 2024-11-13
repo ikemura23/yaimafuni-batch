@@ -13,9 +13,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sparticuz/chromium": "^130.0.0",
     "firebase": "^8.10.1",
     "puppeteer-core": "23.7.1",
     "slack-node": "^0.1.8"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "^130.0.0"
   }
 }
