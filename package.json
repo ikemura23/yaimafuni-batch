@@ -7,7 +7,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node localRun.js"
+    "start": "node localRun.js",
+    "deploy": "./deploy.sh"
   },
   "keywords": [],
   "author": "",
