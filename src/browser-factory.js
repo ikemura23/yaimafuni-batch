@@ -2,11 +2,11 @@ const puppeteer = require("puppeteer-core");
 const chromium = require("@sparticuz/chromium");
 
 module.exports = async () => {
+  const executablePath =
+    process.env.CHROMIUM_EXECUTABLE_PATH ?? (await chromium.executablePath());
 
   const LAUNCH_OPTION = {
-    executablePath: process.env.IS_LOCAL
-      ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-      : await chromium.executablePath(),
+    executablePath: executablePath,
     headless: process.env.IS_LOCAL ? true : chromium.headless,
     ignoreHTTPSErrors: true,
     defaultViewport: chromium.defaultViewport,
