@@ -9,7 +9,7 @@ module.exports = async () => {
   try {
     const page = await browser.newPage();
     await page.goto(url, {
-      timeout: 10000,
+      timeout: 30000,
       waitUntil: "domcontentloaded",
     }); // ページへ移動＋表示されるまで待機
 
