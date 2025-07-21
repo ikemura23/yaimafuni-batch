@@ -1,6 +1,7 @@
 exports.handler = async function () {
+  let admin;
   try {
-    const admin = require("firebase-admin");
+    admin = require("firebase-admin");
     const config = require("./src/config/config.js");
 
     // Initialize Firebase Admin if not already initialized
@@ -48,5 +49,10 @@ exports.handler = async function () {
     console.log("main finish");
   } catch (err) {
     console.log("Error happended: ", err);
+  } finally {
+    // Firebase接続を適切に終了
+    if (admin && admin.apps.length > 0) {
+      await admin.app().delete();
+    }
   }
 };
