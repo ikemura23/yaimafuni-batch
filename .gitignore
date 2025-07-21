@@ -55,3 +55,4 @@ config.json
 .DS_Store
 
 *.zip
+serviceAccountKey.json
