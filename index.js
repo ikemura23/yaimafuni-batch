@@ -1,13 +1,14 @@
 exports.handler = async function () {
   try {
-    const firebase = require("firebase");
+    const admin = require("firebase-admin");
     const config = require("./src/config/config.js");
-    const firebaseConfig = {
-      databaseURL: config.firebase.databaseURL,
-    };
-    // Initialize Firebase
-    if (firebase.apps.length === 0) {
-      firebase.initializeApp(firebaseConfig);
+
+    // Initialize Firebase Admin if not already initialized
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert(require("./serviceAccountKey.json")),
+        databaseURL: config.firebase.databaseURL,
+      });
     }
 
     console.log("main init");
@@ -43,7 +44,6 @@ exports.handler = async function () {
     await topCompany();
     await tenkijp();
     await updateHourlyWeather();
-    await firebase.database().goOffline();
     console.groupEnd();
     console.log("main finish");
   } catch (err) {

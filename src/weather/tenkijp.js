@@ -1,5 +1,16 @@
 const url = "https://tenki.jp/forecast/10/50/9410/47207/3hours.html";
-const firebase = require("firebase");
+const admin = require("firebase-admin");
+const config = require("../config/config");
+
+// Initialize Firebase Admin if not already initialized
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(require("../../serviceAccountKey.json")),
+    databaseURL: config.firebase.databaseURL,
+  });
+}
+
+const database = admin.database();
 const sendError = require("../slack");
 const createBrowser = require("../browser-factory");
 
@@ -116,7 +127,7 @@ async function getTomorrow(page) {
  */
 async function send(data) {
   return Promise.all([
-    firebase.database().ref("weather/today/table").set(data.today),
-    firebase.database().ref("weather/tomorrow/table").set(data.tomorrow),
+    database.ref("weather/today/table").set(data.today),
+    database.ref("weather/tomorrow/table").set(data.tomorrow),
   ]);
 }
