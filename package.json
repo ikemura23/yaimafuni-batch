@@ -2,21 +2,24 @@
   "name": "scraping-yaimafuni",
   "version": "1.0.0",
   "engines": {
-    "node": "18.1.0"
+    "node": "20.18.0"
   },
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node localRun.js"
+    "start": "node localRun.js",
+    "deploy": "./deploy.sh"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sparticuz/chromium": "^109.0.5",
     "firebase": "^8.10.1",
     "firebase-admin": "^11.10.1",
-    "puppeteer-core": "19.4",
+    "puppeteer-core": "23.7.1",
     "slack-node": "^0.1.8"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "^130.0.0"
   }
 }
