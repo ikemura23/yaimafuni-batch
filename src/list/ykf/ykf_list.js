@@ -13,7 +13,7 @@ module.exports = async () => {
   try {
     const page = await browser.newPage();
     await page.setUserAgent(config.puppeteer.userAgent);
-    await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
+    await page.goto(URL, { waitUntil: "networkidle2", timeout: 60000 }); // ページへ移動＋表示されるまで待機
 
     // スクレイピングした生の値
     const sendData = await generateSendData(page); // 竹富<br>一部欠航,小浜<br>一部欠航,黒島<br>一部欠航
