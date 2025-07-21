@@ -1,7 +1,18 @@
 // 港別の運行ステータスの値をまとめているだけ
 
-const firebase = require("firebase");
+const admin = require("firebase-admin");
+const config = require("../config/config");
 const consts = require("../consts.js");
+
+// Initialize Firebase Admin if not already initialized
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(require("../../serviceAccountKey.json")),
+    databaseURL: config.firebase.databaseURL,
+  });
+}
+
+const database = admin.database();
 
 /**
  * メイン処理
@@ -21,8 +32,7 @@ module.exports = async () => {
  * firebaeから取得した値を返す
  */
 async function readDatabase(path) {
-  return firebase
-    .database()
+  return database
     .ref(path)
     .once("value")
     .then(function (snapshot) {
@@ -34,7 +44,7 @@ async function readDatabase(path) {
  * firebaseへ送信
  */
 async function sendToFirebase(data) {
-  return firebase.database().ref("top_port").set(data);
+  return database.ref("top_port").set(data);
 }
 
 /**

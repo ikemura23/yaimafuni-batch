@@ -1,4 +1,15 @@
-const firebase = require("firebase");
+const admin = require("firebase-admin");
+const config = require("../config/config");
+
+// Initialize Firebase Admin if not already initialized
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(require("../../serviceAccountKey.json")),
+    databaseURL: config.firebase.databaseURL,
+  });
+}
+
+const database = admin.database();
 
 /**
  * Firebaseのリポジトリ
@@ -7,8 +18,7 @@ module.exports = {
   // 読み込み
   read: async (path) => {
     if (!path) return null;
-    return await firebase
-      .database()
+    return await database
       .ref(path)
       .once("value")
       .then((snapshot) => {
@@ -25,16 +35,13 @@ module.exports = {
     if (!data) return;
 
     // try {
-    return await firebase
-      .database()
-      .ref(path)
-      .update(data, (e) => {
-        if (e) {
-          console.error("update error");
-        } else {
-          console.log("update complete!");
-        }
-      });
+    return await database.ref(path).update(data, (e) => {
+      if (e) {
+        console.error("update error");
+      } else {
+        console.log("update complete!");
+      }
+    });
     // } catch (error) {
     //   console.error(error);
     // }
@@ -44,15 +51,12 @@ module.exports = {
     if (!data) return;
 
     // try {
-    return await firebase
-      .database()
-      .ref(path)
-      .set(data, (e) => {
-        if (e) {
-          console.error("update error");
-        } else {
-          console.log("update complete!");
-        }
-      });
+    return await database.ref(path).set(data, (e) => {
+      if (e) {
+        console.error("update error");
+      } else {
+        console.log("update complete!");
+      }
+    });
   },
 };

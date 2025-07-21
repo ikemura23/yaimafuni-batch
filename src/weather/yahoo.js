@@ -1,7 +1,18 @@
 const createBrowser = require("../browser-factory");
 const url = "https://weather.yahoo.co.jp/weather/jp/47/9410.html";
-const firebase = require("firebase");
+const admin = require("firebase-admin");
+const config = require("../config/config");
 const sendError = require("../slack");
+
+// Initialize Firebase Admin if not already initialized
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(require("../../serviceAccountKey.json")),
+    databaseURL: config.firebase.databaseURL,
+  });
+}
+
+const database = admin.database();
 
 module.exports = async () => {
   console.log("yahoo start");
@@ -144,7 +155,7 @@ async function getTomorrow(page) {
  */
 async function send(data) {
   return Promise.all([
-    firebase.database().ref("weather/today").set(data.today),
-    firebase.database().ref("weather/tomorrow").set(data.tomorrow),
+    database.ref("weather/today").set(data.today),
+    database.ref("weather/tomorrow").set(data.tomorrow),
   ]);
 }
