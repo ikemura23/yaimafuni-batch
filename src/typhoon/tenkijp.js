@@ -1,7 +1,18 @@
 const createBrowser = require("../browser-factory");
 const url = "https://tenki.jp/lite/bousai/typhoon/";
-const firebase = require("firebase");
+const admin = require("firebase-admin");
+const config = require("../config/config");
 const sendError = require("../slack");
+
+// Initialize Firebase Admin if not already initialized
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(require("../../serviceAccountKey.json")),
+    databaseURL: config.firebase.databaseURL,
+  });
+}
+
+const database = admin.database();
 
 module.exports = async () => {
   console.group("開始 : 台風 tenkijp");
@@ -71,7 +82,7 @@ async function getData(page, itemSelector) {
  */
 async function send(data) {
   // console.log(data)
-  return firebase.database().ref("typhoon/tenkijp").set(data);
+  return database.ref("typhoon/tenkijp").set(data);
 }
 
 /**

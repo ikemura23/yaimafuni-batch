@@ -8,8 +8,8 @@ npm install --production
 # Remove existing ZIP if any
 rm -f source.zip
 
-# Create ZIP file excluding unnecessary files
-zip -r source.zip . -x "*.git*" "node_modules/.bin/*"
+# Create ZIP file including only necessary files and dependencies
+zip -r source.zip . -x "*.git*" "*.DS_Store" ".cursor/*" "*.log" "*.tmp" "coverage/*" "test/*" "tests/*" "docs/*" "*.md" "*.txt" "*.sh" "deploy.sh" "upload-chromium.sh" "scripts/*" "node_modules/.bin/*"
 
 echo "ZIP file created: source.zip"
 

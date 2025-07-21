@@ -1,13 +1,15 @@
 exports.handler = async function () {
+  let admin;
   try {
-    const firebase = require("firebase");
+    admin = require("firebase-admin");
     const config = require("./src/config/config.js");
-    const firebaseConfig = {
-      databaseURL: config.firebase.databaseURL,
-    };
-    // Initialize Firebase
-    if (firebase.apps.length === 0) {
-      firebase.initializeApp(firebaseConfig);
+
+    // Initialize Firebase Admin if not already initialized
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert(require("./serviceAccountKey.json")),
+        databaseURL: config.firebase.databaseURL,
+      });
     }
 
     console.log("main init");
@@ -43,10 +45,14 @@ exports.handler = async function () {
     await topCompany();
     await tenkijp();
     await updateHourlyWeather();
-    await firebase.database().goOffline();
     console.groupEnd();
     console.log("main finish");
   } catch (err) {
     console.log("Error happended: ", err);
+  } finally {
+    // Firebase接続を適切に終了
+    if (admin && admin.apps.length > 0) {
+      await admin.app().delete();
+    }
   }
 };
