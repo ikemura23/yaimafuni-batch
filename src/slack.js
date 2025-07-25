@@ -1,10 +1,10 @@
-const Slack = require("slack-node");
-const config = require("./config/config.js");
+const Slack = require('slack-node');
+const config = require('./config/config.js');
 
 /**
  * 引数をSlack#notificasionに投稿
  */
-module.exports = function post(msg, comment = "") {
+module.exports = function post(msg, comment = '') {
   console.log(`Post to Slack: ${comment} ${msg}`);
 
   const webhookUri = config.slack.webHookUrl;
@@ -12,15 +12,15 @@ module.exports = function post(msg, comment = "") {
   slack.setWebhook(webhookUri);
   slack.webhook(
     {
-      channel: "#notification",
-      username: "yaimafuni-backend",
-      icon_emoji: ":ghost:",
-      text: getNowFormatDateTime() + "\n" + comment + "\n" + msg,
+      channel: '#notification',
+      username: 'yaimafuni-backend',
+      icon_emoji: ':ghost:',
+      text: getNowFormatDateTime() + '\n' + comment + '\n' + msg,
     },
     function (err, response) {
       if (err) console.log(err);
       // console.log(response);
-    }
+    },
   );
 };
 
@@ -29,19 +29,19 @@ module.exports = function post(msg, comment = "") {
  */
 function getNowFormatDateTime() {
   const date = new Date();
-  let res = "";
+  let res = '';
   try {
     res =
       date.getFullYear() +
-      "/" +
+      '/' +
       padZero(date.getMonth() + 1) +
-      "/" +
+      '/' +
       padZero(date.getDate()) +
-      " " +
+      ' ' +
       padZero(date.getHours()) +
-      ":" +
+      ':' +
       padZero(date.getMinutes()) +
-      ":" +
+      ':' +
       padZero(date.getSeconds());
   } catch (error) {}
   return res;
@@ -54,9 +54,9 @@ function getNowFormatDateTime() {
 function padZero(num) {
   let result = null;
   if (num < 10) {
-    result = "0" + num;
+    result = '0' + num;
   } else {
-    result = "" + num;
+    result = '' + num;
   }
   return result;
 }

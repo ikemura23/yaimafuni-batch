@@ -1,10 +1,10 @@
-const admin = require("firebase-admin");
-const config = require("../config/config");
+const admin = require('firebase-admin');
+const config = require('../config/config');
 
 // Initialize Firebase Admin if not already initialized
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(require("../../serviceAccountKey.json")),
+    credential: admin.credential.cert(require('../../serviceAccountKey.json')),
     databaseURL: config.firebase.databaseURL,
   });
 }
@@ -20,7 +20,7 @@ module.exports = {
     if (!path) return null;
     return await database
       .ref(path)
-      .once("value")
+      .once('value')
       .then((snapshot) => {
         return snapshot.val();
       });
@@ -37,9 +37,9 @@ module.exports = {
     // try {
     return await database.ref(path).update(data, (e) => {
       if (e) {
-        console.error("update error");
+        console.error('update error');
       } else {
-        console.log("update complete!");
+        console.log('update complete!');
       }
     });
     // } catch (error) {
@@ -53,9 +53,9 @@ module.exports = {
     // try {
     return await database.ref(path).set(data, (e) => {
       if (e) {
-        console.error("update error");
+        console.error('update error');
       } else {
-        console.log("update complete!");
+        console.log('update complete!');
       }
     });
   },

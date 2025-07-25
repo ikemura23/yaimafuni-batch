@@ -1,15 +1,15 @@
-const createBrowser = require("../browser-factory");
-const TARGET_URL = "https://aneikankou.co.jp/condition";
-const consts = require("../consts.js");
-const sendError = require("../slack");
+const createBrowser = require('../browser-factory');
+const TARGET_URL = 'https://aneikankou.co.jp/condition';
+const consts = require('../consts.js');
+const sendError = require('../slack');
 
 const getAnneiDetail = async () => {
-  console.group("getAnneiDetail start");
+  console.group('getAnneiDetail start');
   const browser = await createBrowser();
   try {
     const page = await browser.newPage();
 
-    await page.goto(TARGET_URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
+    await page.goto(TARGET_URL, { waitUntil: 'networkidle2' }); // ページへ移動＋表示されるまで待機
     // メイン処理
     // console.dir(value);
     return await readTimetableData(page);
@@ -17,7 +17,7 @@ const getAnneiDetail = async () => {
     sendError(error);
   } finally {
     await browser.close();
-    console.log("getAnneiDetail end");
+    console.log('getAnneiDetail end');
     console.groupEnd();
   }
 };
@@ -54,9 +54,9 @@ const readTimetableData = async (page) => {
 async function getHaterumaStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div",
-    "波照間発"
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div',
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div',
+    '波照間発',
   );
 }
 
@@ -66,9 +66,9 @@ async function getHaterumaStatus(page) {
 async function getUeharaStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div",
-    "上原発"
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div',
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div',
+    '上原発',
   );
 }
 
@@ -78,9 +78,9 @@ async function getUeharaStatus(page) {
 async function getHatomaStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div",
-    "鳩間発"
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div',
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div',
+    '鳩間発',
   );
 }
 
@@ -90,9 +90,9 @@ async function getHatomaStatus(page) {
 async function getOoharaStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div",
-    "大原発"
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div',
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div',
+    '大原発',
   );
 }
 
@@ -102,9 +102,9 @@ async function getOoharaStatus(page) {
 async function getTaketomiStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div",
-    "竹富発"
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div',
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div',
+    '竹富発',
   );
 }
 
@@ -114,9 +114,9 @@ async function getTaketomiStatus(page) {
 async function getKohamaStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div",
-    "小浜発"
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div',
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div',
+    '小浜発',
   );
 }
 
@@ -126,9 +126,9 @@ async function getKohamaStatus(page) {
 async function getKuroshimaStatus(page) {
   return await getStatusData(
     page,
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(1) > div",
-    "#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(2) > div",
-    "黒島発"
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(1) > div',
+    '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(2) > div',
+    '黒島発',
   );
 }
 
@@ -139,7 +139,7 @@ async function getStatusData(
   page,
   leftSelector,
   rightSelector,
-  rightHeaderText
+  rightHeaderText,
 ) {
   const leftNodes = await page.$$(leftSelector);
   const leftRow = await convertRowData(leftNodes);
@@ -158,7 +158,7 @@ async function getStatusData(
   //   console.dir(row);
   return {
     header: {
-      left: "石垣発",
+      left: '石垣発',
       right: rightHeaderText,
     },
     row: row,
@@ -172,7 +172,7 @@ async function getStatusData(
  */
 async function convertRowData(parentNodes) {
   if (parentNodes.length === 0) {
-    console.log("parentNodes is empty");
+    console.log('parentNodes is empty');
     return;
   }
   // console.log(parentNodes.length);
@@ -184,20 +184,20 @@ async function convertRowData(parentNodes) {
   for (const node of parentNodes) {
     // 左の時刻（例 08:00）
     const time = await node.$eval(
-      "div.condition_item_port_detail_time",
-      (nd) => nd.innerText
+      'div.condition_item_port_detail_time',
+      (nd) => nd.innerText,
     );
 
     // 右のステータス記号文字（例 ○ △ ✗）
     const status = await node.$eval(
-      "div.condition_item_port_detail_status",
-      (nd) => nd.innerText
+      'div.condition_item_port_detail_status',
+      (nd) => nd.innerText,
     );
 
     // console.log(`time: ${time} , status: ${status}`);
 
     row.push({
-      memo: "",
+      memo: '',
       time: time,
       status: {
         code: await getStatusCode(status),
@@ -213,13 +213,13 @@ async function convertRowData(parentNodes) {
  * ステータスコードを取得
  */
 async function getStatusCode(statusText) {
-  if (statusText === "◯") {
+  if (statusText === '◯') {
     return consts.NORMAL;
-  } else if (statusText === "△") {
+  } else if (statusText === '△') {
     return consts.CATION;
-  } else if (statusText === "✕") {
+  } else if (statusText === '✕') {
     return consts.CANCEL;
-  } else if (statusText === "未定") {
+  } else if (statusText === '未定') {
     return consts.CATION;
   } else {
     return consts.CATION;
@@ -230,12 +230,12 @@ async function getStatusCode(statusText) {
  * ステータス文字
  */
 async function getStatusText(statusText) {
-  if (statusText === "◯") {
-    return "通常運航";
-  } else if (statusText === "△") {
-    return "一部運休";
-  } else if (statusText === "✕") {
-    return "欠航";
+  if (statusText === '◯') {
+    return '通常運航';
+  } else if (statusText === '△') {
+    return '一部運休';
+  } else if (statusText === '✕') {
+    return '欠航';
   } else {
     return statusText;
   }
