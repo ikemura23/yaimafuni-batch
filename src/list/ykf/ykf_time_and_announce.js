@@ -1,18 +1,18 @@
-const createBrowser = require("../../browser-factory");
-const URL = "http://www.yaeyama.co.jp/operation.html";
-const consts = require("../../consts.js");
-const config = require("../../config/config");
-const firebase = require("../../repository/firebase_repository");
-const sendError = require("../../slack");
+const createBrowser = require('../../browser-factory');
+const URL = 'http://www.yaeyama.co.jp/operation.html';
+const consts = require('../../consts.js');
+const config = require('../../config/config');
+const firebase = require('../../repository/firebase_repository');
+const sendError = require('../../slack');
 const COMPANY = consts.YKF;
 
 module.exports = async () => {
-  console.log("開始:" + COMPANY + " 時間+アナウンス");
+  console.log('開始:' + COMPANY + ' 時間+アナウンス');
   const browser = await createBrowser();
   try {
     const page = await browser.newPage();
     await page.setUserAgent(config.puppeteer.userAgent);
-    await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
+    await page.goto(URL, { waitUntil: 'networkidle2' }); // ページへ移動＋表示されるまで待機
 
     // 更新日時
     const updateTime = await getUpdateTime(page);
@@ -30,14 +30,14 @@ module.exports = async () => {
     // 送信開始
     await firebase.update(consts.YKF, data);
   } catch (error) {
-    console.error(error.stack, "異常: YKF 時間+アナウンスでエラー");
+    console.error(error.stack, '異常: YKF 時間+アナウンスでエラー');
     sendError(
       error.stack,
-      "異常: YKF 時間+アナウンスのスクレイピングでエラー発生!"
+      '異常: YKF 時間+アナウンスのスクレイピングでエラー発生!',
     );
   } finally {
     await browser.close();
-    console.log("終了:" + COMPANY + " 時間+アナウンス");
+    console.log('終了:' + COMPANY + ' 時間+アナウンス');
   }
 };
 
@@ -45,7 +45,7 @@ module.exports = async () => {
  * 更新日時
  */
 async function getUpdateTime(page) {
-  const data = await getData(page, "#status > div > div.statusdate");
+  const data = await getData(page, '#status > div > div.statusdate');
   // console.log(data);
   return data;
 }
@@ -54,7 +54,7 @@ async function getUpdateTime(page) {
  * アナウンス
  */
 async function getAnnounce(page) {
-  const data = await getData(page, "#status > div > div:nth-child(3)");
+  const data = await getData(page, '#status > div > div:nth-child(3)');
   // console.log(data);
   return data;
 }
@@ -65,7 +65,7 @@ async function getAnnounce(page) {
 async function getAnnounce2(page) {
   const data = await getInnerTextForSelector(
     page,
-    "#status > div > div.statusdate2.bgylw"
+    '#status > div > div.statusdate2.bgylw',
   );
   // console.log(data);
   return data;
@@ -88,6 +88,6 @@ const getInnerTextForSelector = async (page, selector) => {
   } catch (error) {
     // 存在しない場合もあるのでエラーは握りつぶす
     // console.error(error)
-    return "";
+    return '';
   }
 };
