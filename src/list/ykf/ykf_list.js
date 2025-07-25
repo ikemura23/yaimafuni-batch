@@ -1,9 +1,9 @@
-const createBrowser = require("../../browser-factory");
-const URL = "http://www.yaeyama.co.jp/operation.html";
-const consts = require("../../consts.js");
-const config = require("../../config/config");
-const firebase = require("../../repository/firebase_repository");
-const sendError = require("../../slack");
+const createBrowser = require('../../browser-factory');
+const URL = 'http://www.yaeyama.co.jp/operation.html';
+const consts = require('../../consts.js');
+const config = require('../../config/config');
+const firebase = require('../../repository/firebase_repository');
+const sendError = require('../../slack');
 
 const COMPANY = consts.YKF;
 
@@ -13,11 +13,11 @@ module.exports = async () => {
   try {
     const page = await browser.newPage();
     await page.setUserAgent(config.puppeteer.userAgent);
-    await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
+    await page.goto(URL, { waitUntil: 'networkidle2', timeout: 60000 }); // ページへ移動＋表示されるまで待機
 
     // スクレイピングした生の値
     const sendData = await generateSendData(page); // 竹富<br>一部欠航,小浜<br>一部欠航,黒島<br>一部欠航
-    console.log("送信値");
+    console.log('送信値');
     console.dir(sendData);
     // // 送信開始
     await firebase.set(consts.YKF, sendData);
@@ -36,9 +36,9 @@ module.exports = async () => {
 async function generateSendData(page) {
   const contentList = await getDataList(
     page,
-    "#status > div > div.status > div.list"
+    '#status > div > div.status > div.list',
   );
-  console.log("YKF 一覧 inner htmlデータ");
+  console.log('YKF 一覧 inner htmlデータ');
   console.table(contentList);
   return makeSendData(contentList);
 }
@@ -63,8 +63,8 @@ async function getDataList(page, itemSelector) {
       {
         // 子要素のtextContentを取得して、オブジェクトにセットして返す
         let obj = {};
-        obj["port"] = data.firstChild.textContent; // 港名
-        obj["status"] = data.lastChild.textContent; // 運行ステータス値
+        obj['port'] = data.firstChild.textContent; // 港名
+        obj['status'] = data.lastChild.textContent; // 運行ステータス値
         return obj;
       }
     });
@@ -82,7 +82,7 @@ async function makeSendData(contentList) {
     const portCode = getPortCode(portName);
     const statusText = data.status; // 記号文字、◯や△や☓など
     const portData = {
-      comment: "",
+      comment: '',
       portCode: portCode,
       portName: portName,
       status: getStatusCode(statusText),
@@ -96,23 +96,23 @@ async function makeSendData(contentList) {
 // 港名から港コードを返す
 function getPortCode(portName) {
   // 港id
-  if (portName === "竹富") {
+  if (portName === '竹富') {
     return consts.TAKETOMI;
-  } else if (portName === "小浜") {
+  } else if (portName === '小浜') {
     return consts.KOHAMA;
-  } else if (portName === "小浜-竹富") {
+  } else if (portName === '小浜-竹富') {
     return consts.KOHAMA_TAKETOMI;
-  } else if (portName === "黒島") {
+  } else if (portName === '黒島') {
     return consts.KUROSHIMA;
-  } else if (portName === "小浜-大原") {
+  } else if (portName === '小浜-大原') {
     return consts.KOHAMA_OOHARA;
-  } else if (portName === "西表大原") {
+  } else if (portName === '西表大原') {
     return consts.OOHARA;
-  } else if (portName === "西表上原") {
+  } else if (portName === '西表上原') {
     return consts.UEHARA;
-  } else if (portName === "上原-鳩間") {
+  } else if (portName === '上原-鳩間') {
     return consts.UEHARA_HATOMA;
-  } else if (portName === "鳩間") {
+  } else if (portName === '鳩間') {
     return consts.HATOMA;
   }
 }
@@ -120,24 +120,24 @@ function getPortCode(portName) {
 // 記号から運行ステータスを判別
 function getStatusCode(kigou) {
   const status = {
-    code: "",
-    text: "",
+    code: '',
+    text: '',
   };
-  if (kigou === "△") {
-    status.code = "cation";
-    status.text = "注意";
-  } else if (kigou === "×") {
-    status.code = "cancel";
-    status.text = "欠航";
-  } else if (kigou === "〇") {
-    status.code = "normal";
-    status.text = "通常運行";
-  } else if (kigou === "一部欠航") {
-    status.code = "cation";
-    status.text = "一部欠航";
+  if (kigou === '△') {
+    status.code = 'cation';
+    status.text = '注意';
+  } else if (kigou === '×') {
+    status.code = 'cancel';
+    status.text = '欠航';
+  } else if (kigou === '〇') {
+    status.code = 'normal';
+    status.text = '通常運行';
+  } else if (kigou === '一部欠航') {
+    status.code = 'cation';
+    status.text = '一部欠航';
   } else {
-    status.code = "cation";
-    status.text = "注意";
+    status.code = 'cation';
+    status.text = '注意';
   }
   return status;
 }

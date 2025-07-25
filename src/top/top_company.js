@@ -1,10 +1,10 @@
 // 会社別の運行ステータスの値をまとめて、firebaseに送信している
 
-const consts = require("../consts.js");
-const sendError = require("../slack");
-const firebase = require("../repository/firebase_repository");
+const consts = require('../consts.js');
+const sendError = require('../slack');
+const firebase = require('../repository/firebase_repository');
 
-const TABLE = "top_company/";
+const TABLE = 'top_company/';
 const sendData = {};
 
 /*
@@ -83,7 +83,7 @@ async function sendFirebase() {
  * 外部からの呼び出し用メソッド
  */
 module.exports = async () => {
-  console.log("開始 トップ 会社別");
+  console.log('開始 トップ 会社別');
   try {
     await createTopCompanyStatus(consts.ANEI);
     await createTopCompanyStatus(consts.YKF);
@@ -92,5 +92,5 @@ module.exports = async () => {
     await sendError(error.stack);
   }
 
-  console.log("完了 トップ 会社別");
+  console.log('完了 トップ 会社別');
 };

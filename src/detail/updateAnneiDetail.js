@@ -1,8 +1,8 @@
-const getAnneiDetail = require("./getAnneiDetail");
-const saveAnneiDetail = require("./saveAnneiDetail");
+const getAnneiDetail = require('./getAnneiDetail');
+const saveAnneiDetail = require('./saveAnneiDetail');
 
 const updateAnneiDetail = async () => {
-  console.group("updateAnneiDetail start");
+  console.group('updateAnneiDetail start');
 
   // 取得
   const value = await getAnneiDetail();
@@ -10,7 +10,7 @@ const updateAnneiDetail = async () => {
   // 保存
   await saveAnneiDetail(value);
 
-  console.log("updateAnneiDetail end");
+  console.log('updateAnneiDetail end');
   console.groupEnd();
 };
 

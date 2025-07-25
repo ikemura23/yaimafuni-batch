@@ -1,7 +1,7 @@
-const admin = require("firebase-admin");
-const { getFirestore } = require("firebase-admin/firestore");
+const admin = require('firebase-admin');
+const { getFirestore } = require('firebase-admin/firestore');
 
-const config = require("../config/config");
+const config = require('../config/config');
 
 let db = null;
 
@@ -15,17 +15,17 @@ function getServiceAccount() {
       return JSON.parse(process.env.YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT);
     } catch (error) {
       console.error(
-        "Failed to parse YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT:",
-        error
+        'Failed to parse YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT:',
+        error,
       );
       throw new Error(
-        "Invalid YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable"
+        'Invalid YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable',
       );
     }
   }
 
   throw new Error(
-    "YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable is not set"
+    'YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable is not set',
   );
 }
 
@@ -51,7 +51,7 @@ function initializeFirestore() {
  */
 function getCollection() {
   const firestore = initializeFirestore();
-  const collectionName = config.firebase.firestore?.collection || "dev";
+  const collectionName = config.firebase.firestore?.collection || 'dev';
   return firestore.collection(collectionName);
 }
 
@@ -84,8 +84,8 @@ module.exports = {
    * @returns {Promise<void>}
    */
   update: async function update(path, data) {
-    if (!path) throw new Error("Path is required");
-    if (!data) throw new Error("Data is required");
+    if (!path) throw new Error('Path is required');
+    if (!data) throw new Error('Data is required');
 
     try {
       const collection = getCollection();
@@ -103,8 +103,8 @@ module.exports = {
    * @returns {Promise<void>}
    */
   set: async function set(path, data) {
-    if (!path) throw new Error("Path is required");
-    if (!data) throw new Error("Data is required");
+    if (!path) throw new Error('Path is required');
+    if (!data) throw new Error('Data is required');
 
     try {
       const collection = getCollection();
@@ -128,7 +128,7 @@ module.exports = {
         ...doc.data(),
       }));
     } catch (error) {
-      console.error("Firestore getAll error:", error);
+      console.error('Firestore getAll error:', error);
       throw error;
     }
   },
@@ -139,7 +139,7 @@ module.exports = {
    * @returns {Promise<void>}
    */
   delete: async function deleteDoc(path) {
-    if (!path) throw new Error("Path is required");
+    if (!path) throw new Error('Path is required');
 
     try {
       const collection = getCollection();
