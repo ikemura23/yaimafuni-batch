@@ -1,5 +1,5 @@
-const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium");
+const puppeteer = require('puppeteer-core');
+const chromium = require('@sparticuz/chromium');
 
 module.exports = async () => {
   const executablePath =
@@ -12,12 +12,12 @@ module.exports = async () => {
     defaultViewport: chromium.defaultViewport,
     args: process.env.IS_LOCAL
       ? [
-          "--no-sandbox",
-          "--disable-setuid-sandbox",
-          "--hide-scrollbars",
-          "--disable-web-security",
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--hide-scrollbars',
+          '--disable-web-security',
         ]
-      : [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+      : [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
   };
   return await puppeteer.launch(LAUNCH_OPTION);
 };

@@ -1,10 +1,10 @@
 // YKF 詳細
-const createBrowser = require("../../browser-factory");
-const URL = "http://www.yaeyama.co.jp/operation.html";
-const consts = require("../../consts.js");
-const config = require("../../config/config");
-const firebase = require("../../repository/firebase_repository");
-const sendError = require("../../slack");
+const createBrowser = require('../../browser-factory');
+const URL = 'http://www.yaeyama.co.jp/operation.html';
+const consts = require('../../consts.js');
+const config = require('../../config/config');
+const firebase = require('../../repository/firebase_repository');
+const sendError = require('../../slack');
 const COMPANY = consts.YKF;
 
 module.exports = async () => {
@@ -13,7 +13,7 @@ module.exports = async () => {
   try {
     const page = await browser.newPage();
     await page.setUserAgent(config.puppeteer.userAgent);
-    await page.goto(URL, { waitUntil: "networkidle2" }); // ページへ移動＋表示されるまで待機
+    await page.goto(URL, { waitUntil: 'networkidle2' }); // ページへ移動＋表示されるまで待機
 
     // データ取得
     const data = await getData(page);
@@ -23,7 +23,7 @@ module.exports = async () => {
     if (data != null) {
       await sendToFirebase(data);
     } else {
-      console.log("dataが null のため送信しない " + tableName);
+      console.log('dataが null のため送信しない ' + tableName);
     }
   } catch (error) {
     console.error(error.stack, `${COMPANY}一覧でエラー`);
@@ -36,32 +36,32 @@ module.exports = async () => {
 
 async function getData(page) {
   // 最初に div.local をまとめて取得
-  const devLocalNodes = await page.$$("#status > div > div.local");
+  const devLocalNodes = await page.$$('#status > div > div.local');
   // console.log(`devLocalNodes.length:${devLocalNodes.length}`);
   if (devLocalNodes.length == 0) {
-    console.log("devLocalNodes is empty");
+    console.log('devLocalNodes is empty');
     return null;
   }
 
   // 送信用データ生成
   const sendData = {
     taketomi: await getStatusData(
-      await devLocalNodes[0].$$("div.local.local0 > table > tbody > tr")
+      await devLocalNodes[0].$$('div.local.local0 > table > tbody > tr'),
     ), // 竹富
     kohama: await getStatusData(
-      await devLocalNodes[1].$$("div.local.local1 > table > tbody > tr")
+      await devLocalNodes[1].$$('div.local.local1 > table > tbody > tr'),
     ), // 小浜
     kuroshima: await getStatusData(
-      await devLocalNodes[2].$$("div.local.local2 > table > tbody > tr")
+      await devLocalNodes[2].$$('div.local.local2 > table > tbody > tr'),
     ), // 黒島
     oohara: await getStatusData(
-      await devLocalNodes[3].$$("div.local.local3 > table > tbody > tr")
+      await devLocalNodes[3].$$('div.local.local3 > table > tbody > tr'),
     ), // 大原
     uehara: await getStatusData(
-      await devLocalNodes[4].$$("div.local.local4 > table > tbody > tr")
+      await devLocalNodes[4].$$('div.local.local4 > table > tbody > tr'),
     ), // 上原
     hatoma: await getStatusData(
-      await devLocalNodes[5].$$("div.local.local5 > table > tbody > tr")
+      await devLocalNodes[5].$$('div.local.local5 > table > tbody > tr'),
     ), // 鳩間
     // TODO: 上原ー鳩間も送って大丈夫か試す
     // kohama_oohara: await getKohamaOoharaStatus(page), // 小浜-大原
@@ -76,7 +76,7 @@ async function getData(page) {
  */
 async function getTextContent(page, itemSelector) {
   const element = await page.$(itemSelector);
-  return await (await element.getProperty("textContent")).jsonValue();
+  return await (await element.getProperty('textContent')).jsonValue();
 }
 
 /**
@@ -85,18 +85,18 @@ async function getTextContent(page, itemSelector) {
 async function getStatusData(trNodes) {
   // console.log(`trNodes.length:${trNodes.length}`);
   if (trNodes.length === 0) {
-    console.log("trNodes is empty");
+    console.log('trNodes is empty');
     return;
   }
   // ヘッダー左
   const leftPortName = await trNodes[1].$eval(
-    "td:nth-child(1)",
-    (nd) => nd.innerText
+    'td:nth-child(1)',
+    (nd) => nd.innerText,
   );
   // ヘッダー右
   const rightPortName = await trNodes[1].$eval(
-    "td:nth-child(2)",
-    (nd) => nd.innerText
+    'td:nth-child(2)',
+    (nd) => nd.innerText,
   );
   // console.log(`leftPortName:${leftPortName} rightPortName:${rightPortName}`);
 
@@ -107,17 +107,17 @@ async function getStatusData(trNodes) {
   // 時刻ステータスのループ
   for (const time of timeTable) {
     // 左の行
-    const trLeft = await time.$eval("td:nth-child(1)", (nd) => nd.innerText);
-    const leftWords = trLeft.split(" ");
+    const trLeft = await time.$eval('td:nth-child(1)', (nd) => nd.innerText);
+    const leftWords = trLeft.split(' ');
 
     // 右の行
-    const trRight = await time.$eval("td:nth-child(2)", (nd) => nd.innerText);
-    const rightWords = trRight.split(" ");
+    const trRight = await time.$eval('td:nth-child(2)', (nd) => nd.innerText);
+    const rightWords = trRight.split(' ');
 
     // 行データ生成
     const row = {
       left: {
-        memo: "",
+        memo: '',
         time: leftWords[1],
         status: {
           code: getRowStatusCode(leftWords[0]),
@@ -125,7 +125,7 @@ async function getStatusData(trNodes) {
         },
       },
       right: {
-        memo: "",
+        memo: '',
         time: rightWords[1],
         status: {
           code: getRowStatusCode(rightWords[0]),
@@ -153,30 +153,30 @@ async function getStatusData(trNodes) {
  */
 async function sendToFirebase(data) {
   const tableName = `${COMPANY}_timeTable/`;
-  console.log("送信開始" + tableName);
+  console.log('送信開始' + tableName);
   return await firebase.update(tableName, data);
 }
 
 // 港名から港コードを返す
 function getPortCode(portName) {
   // 港id
-  if (portName === "竹富航路") {
+  if (portName === '竹富航路') {
     return consts.TAKETOMI;
-  } else if (portName === "小浜航路") {
+  } else if (portName === '小浜航路') {
     return consts.KOHAMA;
-  } else if (portName === "小浜-竹富航路") {
+  } else if (portName === '小浜-竹富航路') {
     return consts.KOHAMA_TAKETOMI;
-  } else if (portName === "黒島航路") {
+  } else if (portName === '黒島航路') {
     return consts.KUROSHIMA;
-  } else if (portName === "小浜-大原航路") {
+  } else if (portName === '小浜-大原航路') {
     return consts.KOHAMA_OOHARA;
-  } else if (portName === "西表大原航路") {
+  } else if (portName === '西表大原航路') {
     return consts.OOHARA;
-  } else if (portName === "西表上原航路") {
+  } else if (portName === '西表上原航路') {
     return consts.UEHARA;
-  } else if (portName === "上原-鳩間航路") {
+  } else if (portName === '上原-鳩間航路') {
     return consts.UEHARA_HATOMA;
-  } else if (portName === "鳩間航路") {
+  } else if (portName === '鳩間航路') {
     return consts.HATOMA;
   }
 }
@@ -186,14 +186,14 @@ function getPortCode(portName) {
  */
 function getRowStatusCode(statusRawText) {
   switch (statusRawText) {
-    case "△":
+    case '△':
       return consts.CATION;
-    case "×":
+    case '×':
       return consts.CANCEL;
-    case "〇":
+    case '〇':
       return consts.NORMAL;
-    case "":
-      return "";
+    case '':
+      return '';
     default:
       return consts.CATION;
   }
@@ -204,15 +204,15 @@ function getRowStatusCode(statusRawText) {
  */
 function getRowStatusText(statusRawText) {
   switch (statusRawText) {
-    case "○":
-      return "通常運行";
-    case "〇":
-      return "通常運行";
-    case "×":
-      return "欠航";
-    case "":
-      return "";
+    case '○':
+      return '通常運行';
+    case '〇':
+      return '通常運行';
+    case '×':
+      return '欠航';
+    case '':
+      return '';
     default:
-      return "注意";
+      return '注意';
   }
 }
