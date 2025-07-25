@@ -1,0 +1,38 @@
+---
+alwaysApply: true
+---
+
+# 開発ワークフローガイド
+
+## 基本原則
+
+### ドキュメント管理
+- **各タスクの要件と設計は `.tmp/design-YYYYMMDD-識別子.md` に記述すること**
+  - 例: `.tmp/design-20241220-user-auth.md`, `.tmp/design-20241220-weather-api.md`
+- **各メインタスクに対応する詳細なサブタスクは `.tmp/task-YYYYMMDD-識別子.md` に定義すること**
+  - 例: `.tmp/task-20241220-user-auth.md`, `.tmp/task-20241220-weather-api.md`
+- **作業が進行するたびに `.tmp/task-YYYYMMDD-識別子.md` を更新すること**
+
+#### 識別子の命名規則
+- **識別子はgitのブランチ名を使用すること**
+- **例**: `feature/user-authentication`, `bugfix/login-error`, `refactor/database-optimization`
+- **注意**: ブランチ名に含まれるスラッシュ（/）はファイル名ではハイフン（-）に変換する
+  - ブランチ名: `feature/user-auth` → ファイル名: `design-20241220-feature-user-auth.md`
+
+## 開発手順
+
+### 1. 計画・設計フェーズ
+- 計画を立てて、要件を `.tmp/design-YYYYMMDD-識別子.md` に記述する
+- 要件に基づいてすべてのタスクを洗い出し、`.tmp/task-YYYYMMDD-識別子.md` にMarkdown形式で記述する
+
+### 2. タスク管理
+- タスクは単一コミットで完了できる単位に分割する
+- 各タスクにチェックリストを設けて進捗管理を行う
+
+### 3. コード品質
+- 可読性を保つために、常にコードフォーマッターを適用する
+- **フォーマット実行**: `npm run format`
+- **フォーマットチェック**: `npm run format:check`
+
+### 4. 変更管理
+- 変更はすぐにコミットせず、**確認を求めること**
