@@ -14,11 +14,11 @@ class DetailController {
    */
   static async getAnneiDetail() {
     console.group('DetailController.getAnneiDetail start');
-    
+
     try {
       const rawData = await DetailScraper.scrapeDetailData();
       const transformedData = DetailTransformer.transformDetailData(rawData);
-      
+
       return transformedData;
     } catch (error) {
       console.error('DetailController.getAnneiDetail error:', error);
@@ -36,12 +36,12 @@ class DetailController {
    */
   static async saveAnneiDetail(value) {
     console.group('DetailController.saveAnneiDetail start');
-    
+
     try {
       const tableName = `${consts.ANEI}_timeTable/`;
-      
+
       await repository.set(tableName, value);
-      
+
       console.log('DetailController.saveAnneiDetail end');
     } catch (error) {
       console.error('DetailController.saveAnneiDetail error:', error);
@@ -58,13 +58,13 @@ class DetailController {
    */
   static async updateAnneiDetail() {
     console.group('DetailController.updateAnneiDetail start');
-    
+
     try {
       // 取得
-      const value = await this.getAnneiDetail();
+      const value = await DetailController.getAnneiDetail();
 
       // 保存
-      await this.saveAnneiDetail(value);
+      await DetailController.saveAnneiDetail(value);
 
       console.log('DetailController.updateAnneiDetail end');
     } catch (error) {
@@ -81,4 +81,4 @@ class DetailController {
 module.exports = DetailController.getAnneiDetail;
 module.exports.getAnneiDetail = DetailController.getAnneiDetail;
 module.exports.saveAnneiDetail = DetailController.saveAnneiDetail;
-module.exports.updateAnneiDetail = DetailController.updateAnneiDetail; 
+module.exports.updateAnneiDetail = DetailController.updateAnneiDetail;
