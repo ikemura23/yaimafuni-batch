@@ -17,10 +17,10 @@ exports.handler = async function () {
     const updateAnneiList = require('./src/list/updateAnneiList');
     const updateAnneiDetail = require('./src/detail/updateAnneiDetail');
 
-    const YkfList = require('./src/list/ykf/ykf_list.js');
-    const ykfTime = require('./src/list/ykf/ykf_time_and_announce.js');
+    const YkfList = require('./src/ykf/controllers/list-controller.js');
+    const ykfTime = require('./src/ykf/controllers/time-announce-controller.js');
 
-    const ykfDetail = require('./src/detail/ykf/detail_ykf.js');
+    const ykfDetail = require('./src/ykf/controllers/detail-controller.js');
 
     const topCompany = require('./src/top/top_company.js');
     const topPort = require('./src/top/top_port.js');
