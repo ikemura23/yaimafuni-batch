@@ -15,11 +15,11 @@ class ListController {
    */
   static async getAnneiList() {
     console.group('ListController.getAnneiList start');
-    
+
     try {
       const rawData = await ListScraper.scrapeListData();
       const transformedData = ListTransformer.transformListData(rawData);
-      
+
       return transformedData;
     } catch (error) {
       console.error('ListController.getAnneiList error:', error);
@@ -37,7 +37,7 @@ class ListController {
    */
   static async saveAnneiList(value) {
     console.group('ListController.saveAnneiList start');
-    
+
     try {
       await repository.set(consts.ANEI, value);
       await firestoreRepository.set(consts.ANEI, value);
@@ -57,18 +57,19 @@ class ListController {
    */
   static async updateAnneiList(updateTimeAndComment = null) {
     console.group('ListController.updateAnneiList start');
-    
+
     try {
       // 更新時間とコメントが渡されていない場合は取得
       let timeAndComment = updateTimeAndComment;
       if (!timeAndComment) {
         // 時間・アナウンス関連のコントローラーから取得
         const TimeAnnounceController = require('./time-announce-controller');
-        timeAndComment = await TimeAnnounceController.getAnneiUpdateTimeAndComment();
+        timeAndComment =
+          await TimeAnnounceController.getAnneiUpdateTimeAndComment();
       }
 
-      const value = await this.getAnneiList();
-      
+      const value = await ListController.getAnneiList();
+
       const saveData = {
         updateTime: timeAndComment.updateTime,
         comment: timeAndComment.comment,
@@ -80,9 +81,9 @@ class ListController {
         taketomi: value.taketomi,
         uehara: value.uehara,
       };
-      
-      await this.saveAnneiList(saveData);
-      
+
+      await ListController.saveAnneiList(saveData);
+
       console.log('ListController.updateAnneiList end');
     } catch (error) {
       console.error('ListController.updateAnneiList error:', error);
@@ -98,4 +99,4 @@ class ListController {
 module.exports = ListController.getAnneiList;
 module.exports.getAnneiList = ListController.getAnneiList;
 module.exports.saveAnneiList = ListController.saveAnneiList;
-module.exports.updateAnneiList = ListController.updateAnneiList; 
+module.exports.updateAnneiList = ListController.updateAnneiList;
