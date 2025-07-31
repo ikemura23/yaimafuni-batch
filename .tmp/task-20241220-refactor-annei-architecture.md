@@ -197,18 +197,18 @@ YKFで成功したリファクタリング構造をAnneiにも適用し、プロ
 - [x] 全ての機能が正常に呼び出されることを確認
 
 ### 4.2 既存ファイルの削除
-- [ ] 移行が完了した既存ファイルの削除
-  - [ ] `src/list/getAnneiList.js` 削除
-  - [ ] `src/list/saveAnneiList.js` 削除
-  - [ ] `src/list/updateAnneiList.js` 削除
-  - [ ] `src/list/getAnneiUpdateTimeAndComment.js` 削除
-  - [ ] `src/detail/getAnneiDetail.js` 削除
-  - [ ] `src/detail/saveAnneiDetail.js` 削除
-  - [ ] `src/detail/updateAnneiDetail.js` 削除
+- [x] 移行が完了した既存ファイルの削除
+  - [x] `src/list/getAnneiList.js` 削除
+  - [x] `src/list/saveAnneiList.js` 削除
+  - [x] `src/list/updateAnneiList.js` 削除
+  - [x] `src/list/getAnneiUpdateTimeAndComment.js` 削除
+  - [x] `src/detail/getAnneiDetail.js` 削除
+  - [x] `src/detail/saveAnneiDetail.js` 削除
+  - [x] `src/detail/updateAnneiDetail.js` 削除
 
 **確認事項:**
-- [ ] 削除後もアプリケーションが正常に動作することを確認
-- [ ] 空になったディレクトリの削除（必要に応じて）
+- [x] 削除後もアプリケーションが正常に動作することを確認
+- [x] 空になったディレクトリの削除（必要に応じて）
 
 ### 4.3 全体動作確認
 - [x] 全てのAnnei機能が正常に動作することを確認
@@ -217,8 +217,8 @@ YKFで成功したリファクタリング構造をAnneiにも適用し、プロ
 - [x] エラーハンドリングが正常に動作することを確認
 
 ### 4.4 バックアップファイルの削除
-- [ ] 移行が成功したことを確認後、バックアップファイルを削除
-- [ ] 不要になった `.backup` ファイルの削除
+- [x] 移行が成功したことを確認後、バックアップファイルを削除
+- [x] 不要になった `.backup` ファイルの削除
 
 ## ロールバック計画
 
