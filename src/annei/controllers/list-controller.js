@@ -96,7 +96,8 @@ class ListController {
 }
 
 // 既存のインターフェースを維持するためのエクスポート
-module.exports = ListController.getAnneiList;
-module.exports.getAnneiList = ListController.getAnneiList;
-module.exports.saveAnneiList = ListController.saveAnneiList;
-module.exports.updateAnneiList = ListController.updateAnneiList;
+module.exports = {
+  getAnneiList: ListController.getAnneiList,
+  saveAnneiList: ListController.saveAnneiList,
+  updateAnneiList: ListController.updateAnneiList,
+};

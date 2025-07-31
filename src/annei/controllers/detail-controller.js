@@ -78,7 +78,8 @@ class DetailController {
 }
 
 // 既存のインターフェースを維持するためのエクスポート
-module.exports = DetailController.getAnneiDetail;
-module.exports.getAnneiDetail = DetailController.getAnneiDetail;
-module.exports.saveAnneiDetail = DetailController.saveAnneiDetail;
-module.exports.updateAnneiDetail = DetailController.updateAnneiDetail;
+module.exports = {
+  getAnneiDetail: DetailController.getAnneiDetail,
+  saveAnneiDetail: DetailController.saveAnneiDetail,
+  updateAnneiDetail: DetailController.updateAnneiDetail,
+};
