@@ -14,8 +14,8 @@ exports.handler = async function () {
 
     console.log('main init');
 
-    const updateAnneiList = require('./src/list/updateAnneiList');
-    const updateAnneiDetail = require('./src/detail/updateAnneiDetail');
+    const updateAnneiList = require('./src/annei/controllers/list-controller.js').updateAnneiList;
+    const updateAnneiDetail = require('./src/annei/controllers/detail-controller.js').updateAnneiDetail;
 
     const YkfList = require('./src/ykf/controllers/list-controller.js');
     const ykfTime = require('./src/ykf/controllers/time-announce-controller.js');
