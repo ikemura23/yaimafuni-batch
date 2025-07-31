@@ -50,25 +50,13 @@ async function getData(page, itemSelector) {
  * @param {Page} page
  */
 async function getToday(page) {
-  const hour = await getData(
-    page,
-    '#forecast-point-3h-today > tbody > tr.hour > td',
-  );
+  const hour = await getData(page, '#forecast-point-3h-today > tbody > tr.hour > td');
   // console.log(hour) //=> [ '03', '06', '09', '12', '15', '18', '21', '24' ]
-  const weather = await getData(
-    page,
-    '#forecast-point-3h-today > tbody > tr.weather > td',
-  );
+  const weather = await getData(page, '#forecast-point-3h-today > tbody > tr.weather > td');
   // console.log(weather) //=> [ '雨', '曇り', '晴れ', '晴れ', '晴れ', '曇り', '曇り', '曇り' ]
-  const windDirection = await getData(
-    page,
-    '#forecast-point-3h-today > tbody > tr.wind-direction > td > p',
-  );
+  const windDirection = await getData(page, '#forecast-point-3h-today > tbody > tr.wind-direction > td > p');
   // console.log(windDirection) //=> [ '南西', '南', '南東', '南東', '東南東', '東南東', '東南東', '南東' ]
-  const windSpeed = await getData(
-    page,
-    '#forecast-point-3h-today > tbody > tr.wind-speed > td',
-  );
+  const windSpeed = await getData(page, '#forecast-point-3h-today > tbody > tr.wind-speed > td');
   // console.log(windSpeed) //=> [ '5', '5', '5', '5', '5', '5', '5', '4' ]
   const datas = [];
 
@@ -89,25 +77,13 @@ async function getToday(page) {
  * @param page
  */
 async function getTomorrow(page) {
-  const hour = await getData(
-    page,
-    '#forecast-point-3h-tomorrow > tbody > tr.hour > td',
-  );
+  const hour = await getData(page, '#forecast-point-3h-tomorrow > tbody > tr.hour > td');
   // console.log(hour) //=> [ '03', '06', '09', '12', '15', '18', '21', '24' ]
-  const weather = await getData(
-    page,
-    '#forecast-point-3h-tomorrow > tbody > tr.weather > td',
-  );
+  const weather = await getData(page, '#forecast-point-3h-tomorrow > tbody > tr.weather > td');
   // console.log(weather) //=> [ '雨', '曇り', '晴れ', '晴れ', '晴れ', '曇り', '曇り', '曇り' ]
-  const windDirection = await getData(
-    page,
-    '#forecast-point-3h-tomorrow > tbody > tr.wind-blow > td > p',
-  ); //todayとtrクラス名が違う
+  const windDirection = await getData(page, '#forecast-point-3h-tomorrow > tbody > tr.wind-blow > td > p'); //todayとtrクラス名が違う
   // console.log(windDirection) //=> [ '南西', '南', '南東', '南東', '東南東', '東南東', '東南東', '南東' ]
-  const windSpeed = await getData(
-    page,
-    '#forecast-point-3h-tomorrow > tbody > tr.wind-speed > td',
-  );
+  const windSpeed = await getData(page, '#forecast-point-3h-tomorrow > tbody > tr.wind-speed > td');
   // console.log(windSpeed) //=> [ '5', '5', '5', '5', '5', '5', '5', '4' ]
   const datas = [];
   for (i = 1; i < 6; i++) {

@@ -36,10 +36,7 @@ class TimeAnnounceScraper {
    * @returns {Promise<string>} 更新日時
    */
   static async getUpdateTime(page) {
-    return await BrowserHelper.getTextContent(
-      page,
-      '#status > div > div.statusdate',
-    );
+    return await BrowserHelper.getTextContent(page, '#status > div > div.statusdate');
   }
 
   /**
@@ -48,10 +45,7 @@ class TimeAnnounceScraper {
    * @returns {Promise<string>} アナウンス
    */
   static async getAnnounce(page) {
-    return await BrowserHelper.getTextContent(
-      page,
-      '#status > div > div:nth-child(3)',
-    );
+    return await BrowserHelper.getTextContent(page, '#status > div > div:nth-child(3)');
   }
 
   /**
@@ -60,11 +54,7 @@ class TimeAnnounceScraper {
    * @returns {Promise<string>} アナウンス2
    */
   static async getAnnounce2(page) {
-    return await BrowserHelper.getTextContent(
-      page,
-      '#status > div > div.statusdate2.bgylw',
-      '',
-    );
+    return await BrowserHelper.getTextContent(page, '#status > div > div.statusdate2.bgylw', '');
   }
 }
 

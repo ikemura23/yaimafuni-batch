@@ -20,7 +20,7 @@ module.exports = function post(msg, comment = '') {
     function (err, response) {
       if (err) console.log(err);
       // console.log(response);
-    },
+    }
   );
 };
 

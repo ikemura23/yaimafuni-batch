@@ -15,7 +15,7 @@ const getHourlyWeather = async () => {
       parsedObj.hourly.time,
       parsedObj.hourly.weathercode,
       parsedObj.hourly.windspeed_10m,
-      parsedObj.hourly.winddirection_10m,
+      parsedObj.hourly.winddirection_10m
     );
     const dateGroupList = groupBy(data, 'date');
     return dateGroupList;
@@ -46,12 +46,7 @@ const getWeatherForecastApi = async () => {
  * @param {Array} windDirectionList 風向き
  * @returns {Object} 必要な値(日時、天気コード、風速、風向き)のみの値
  */
-function mapToData(
-  timeList,
-  weatherCodeList,
-  windSpeedList,
-  windDirectionList,
-) {
+function mapToData(timeList, weatherCodeList, windSpeedList, windDirectionList) {
   const result = [];
 
   timeList.forEach((time, i) => {

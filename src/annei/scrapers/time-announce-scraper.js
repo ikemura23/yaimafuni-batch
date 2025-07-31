@@ -12,21 +12,21 @@ class TimeAnnounceScraper {
    */
   static async scrapeTimeAndAnnounceData() {
     console.group('TimeAnnounceScraper.scrapeTimeAndAnnounceData start');
-    
+
     try {
       const { browser, page } = await BrowserHelper.createBrowserAndPage();
-      
+
       try {
         await BrowserHelper.navigateToPage(page, this.TARGET_URL);
-        
+
         const updateTime = await this.getUpdateTime(page);
         const announce = await this.getAnnounce(page);
-        
+
         const value = {
           updateTime,
           comment: announce,
         };
-        
+
         console.dir(value);
         return value;
       } finally {
@@ -46,15 +46,9 @@ class TimeAnnounceScraper {
    * @returns {Promise<string>} 更新時刻
    */
   static async getUpdateTime(page) {
-    return await page.$eval(
-      'div.condition_subtitle > div',
-      (item) => {
-        return item.textContent
-          .replace('【更新時間', '')
-          .replace('】', '')
-          .trim();
-      },
-    );
+    return await page.$eval('div.condition_subtitle > div', (item) => {
+      return item.textContent.replace('【更新時間', '').replace('】', '').trim();
+    });
   }
 
   /**
@@ -78,4 +72,4 @@ class TimeAnnounceScraper {
   }
 }
 
-module.exports = TimeAnnounceScraper; 
+module.exports = TimeAnnounceScraper;

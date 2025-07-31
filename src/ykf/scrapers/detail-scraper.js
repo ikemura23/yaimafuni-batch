@@ -38,24 +38,12 @@ class DetailScraper {
 
     // 送信用データ生成
     const sendData = {
-      taketomi: await this.getStatusData(
-        await devLocalNodes[0].$$('div.local.local0 > table > tbody > tr'),
-      ), // 竹富
-      kohama: await this.getStatusData(
-        await devLocalNodes[1].$$('div.local.local1 > table > tbody > tr'),
-      ), // 小浜
-      kuroshima: await this.getStatusData(
-        await devLocalNodes[2].$$('div.local.local2 > table > tbody > tr'),
-      ), // 黒島
-      oohara: await this.getStatusData(
-        await devLocalNodes[3].$$('div.local.local3 > table > tbody > tr'),
-      ), // 大原
-      uehara: await this.getStatusData(
-        await devLocalNodes[4].$$('div.local.local4 > table > tbody > tr'),
-      ), // 上原
-      hatoma: await this.getStatusData(
-        await devLocalNodes[5].$$('div.local.local5 > table > tbody > tr'),
-      ), // 鳩間
+      taketomi: await this.getStatusData(await devLocalNodes[0].$$('div.local.local0 > table > tbody > tr')), // 竹富
+      kohama: await this.getStatusData(await devLocalNodes[1].$$('div.local.local1 > table > tbody > tr')), // 小浜
+      kuroshima: await this.getStatusData(await devLocalNodes[2].$$('div.local.local2 > table > tbody > tr')), // 黒島
+      oohara: await this.getStatusData(await devLocalNodes[3].$$('div.local.local3 > table > tbody > tr')), // 大原
+      uehara: await this.getStatusData(await devLocalNodes[4].$$('div.local.local4 > table > tbody > tr')), // 上原
+      hatoma: await this.getStatusData(await devLocalNodes[5].$$('div.local.local5 > table > tbody > tr')), // 鳩間
     };
 
     return sendData;
@@ -73,15 +61,9 @@ class DetailScraper {
     }
 
     // ヘッダー左
-    const leftPortName = await trNodes[1].$eval(
-      'td:nth-child(1)',
-      (nd) => nd.innerText,
-    );
+    const leftPortName = await trNodes[1].$eval('td:nth-child(1)', (nd) => nd.innerText);
     // ヘッダー右
-    const rightPortName = await trNodes[1].$eval(
-      'td:nth-child(2)',
-      (nd) => nd.innerText,
-    );
+    const rightPortName = await trNodes[1].$eval('td:nth-child(2)', (nd) => nd.innerText);
 
     // 時刻ごとのステータス
     // trタグの0〜1行目は港名なので除外する

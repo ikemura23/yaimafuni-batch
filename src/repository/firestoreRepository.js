@@ -14,19 +14,12 @@ function getServiceAccount() {
     try {
       return JSON.parse(process.env.YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT);
     } catch (error) {
-      console.error(
-        'Failed to parse YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT:',
-        error,
-      );
-      throw new Error(
-        'Invalid YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable',
-      );
+      console.error('Failed to parse YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT:', error);
+      throw new Error('Invalid YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable');
     }
   }
 
-  throw new Error(
-    'YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable is not set',
-  );
+  throw new Error('YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT environment variable is not set');
 }
 
 /**

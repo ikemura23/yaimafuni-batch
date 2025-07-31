@@ -15,15 +15,11 @@ class TimeAnnounceController {
 
     try {
       const rawData = await TimeAnnounceScraper.scrapeTimeAndAnnounceData();
-      const transformedData =
-        TimeAnnounceTransformer.transformTimeAndAnnounceData(rawData);
+      const transformedData = TimeAnnounceTransformer.transformTimeAndAnnounceData(rawData);
 
       return transformedData;
     } catch (error) {
-      console.error(
-        'TimeAnnounceController.getAnneiUpdateTimeAndComment error:',
-        error,
-      );
+      console.error('TimeAnnounceController.getAnneiUpdateTimeAndComment error:', error);
       sendError(error);
       throw error;
     } finally {
@@ -34,6 +30,5 @@ class TimeAnnounceController {
 
 // 既存のインターフェースを維持するためのエクスポート
 module.exports = {
-  getAnneiUpdateTimeAndComment:
-    TimeAnnounceController.getAnneiUpdateTimeAndComment,
+  getAnneiUpdateTimeAndComment: TimeAnnounceController.getAnneiUpdateTimeAndComment,
 };
