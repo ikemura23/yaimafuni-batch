@@ -71,8 +71,7 @@ class PortMapper {
       return null;
     }
 
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     return mapping[portName] || null;
   }
@@ -88,8 +87,7 @@ class PortMapper {
       return null;
     }
 
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     // 逆引き
     for (const [name, code] of Object.entries(mapping)) {
@@ -112,9 +110,7 @@ class PortMapper {
       return [];
     }
 
-    return portNames
-      .map((portName) => this.getPortCode(portName, company))
-      .filter((code) => code !== null);
+    return portNames.map((portName) => this.getPortCode(portName, company)).filter((code) => code !== null);
   }
 
   /**
@@ -128,9 +124,7 @@ class PortMapper {
       return [];
     }
 
-    return portCodes
-      .map((portCode) => this.getPortName(portCode, company))
-      .filter((name) => name !== null);
+    return portCodes.map((portCode) => this.getPortName(portCode, company)).filter((name) => name !== null);
   }
 
   /**
@@ -139,8 +133,7 @@ class PortMapper {
    * @returns {Array<string>} 港名の配列
    */
   static getAllPortNames(company = 'ykf') {
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     return Object.keys(mapping);
   }
@@ -151,8 +144,7 @@ class PortMapper {
    * @returns {Array<string>} 港コードの配列
    */
   static getAllPortCodes(company = 'ykf') {
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     return Object.values(mapping);
   }

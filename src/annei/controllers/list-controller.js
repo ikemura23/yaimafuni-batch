@@ -64,8 +64,7 @@ class ListController {
       if (!timeAndComment) {
         // 時間・アナウンス関連のコントローラーから取得
         const TimeAnnounceController = require('./time-announce-controller');
-        timeAndComment =
-          await TimeAnnounceController.getAnneiUpdateTimeAndComment();
+        timeAndComment = await TimeAnnounceController.getAnneiUpdateTimeAndComment();
       }
 
       const value = await ListController.getAnneiList();

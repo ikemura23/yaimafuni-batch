@@ -12,10 +12,10 @@ class ListTransformer {
    */
   static transformListData(rawData) {
     console.group('ListTransformer.transformListData start');
-    
+
     try {
       const transformedData = {};
-      
+
       for (const [portKey, portData] of Object.entries(rawData)) {
         transformedData[portKey] = {
           ...portData,
@@ -25,7 +25,7 @@ class ListTransformer {
           status: this.normalizeStatus(portData.status),
         };
       }
-      
+
       return transformedData;
     } catch (error) {
       console.error('ListTransformer.transformListData error:', error);
@@ -82,4 +82,4 @@ class ListTransformer {
   }
 }
 
-module.exports = ListTransformer; 
+module.exports = ListTransformer;

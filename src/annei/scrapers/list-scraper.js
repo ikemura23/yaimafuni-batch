@@ -13,15 +13,15 @@ class ListScraper {
    */
   static async scrapeListData() {
     console.group('ListScraper.scrapeListData start');
-    
+
     try {
       const { browser, page } = await BrowserHelper.createBrowserAndPage();
-      
+
       try {
         await BrowserHelper.navigateToPage(page, this.TARGET_URL);
-        
+
         const dataList = await this.getDataList(page);
-        
+
         return dataList;
       } finally {
         await BrowserHelper.closeBrowser(browser);
@@ -44,13 +44,10 @@ class ListScraper {
     const haterumaStatus = {
       portName: '波照間島航路',
       portCode: 'hateruma',
-      status: await this.readStatusData(
-        page,
-        '#condition > div > div:nth-child(3) > div > div:nth-child(1) > a',
-      ),
+      status: await this.readStatusData(page, '#condition > div > div:nth-child(3) > div > div:nth-child(1) > a'),
       comment: await this.readCommentData(
         page,
-        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div.conditon_item_caption',
+        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div.conditon_item_caption'
       ),
     };
 
@@ -58,13 +55,10 @@ class ListScraper {
     const ueharaStatus = {
       portName: '上原航路',
       portCode: 'uehara',
-      status: await this.readStatusData(
-        page,
-        '#condition > div > div:nth-child(3) > div > div:nth-child(2) > a',
-      ),
+      status: await this.readStatusData(page, '#condition > div > div:nth-child(3) > div > div:nth-child(2) > a'),
       comment: await this.readCommentData(
         page,
-        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div.conditon_item_caption',
+        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div.conditon_item_caption'
       ),
     };
 
@@ -72,13 +66,10 @@ class ListScraper {
     const hatomaStatus = {
       portName: '鳩間航路',
       portCode: 'hatoma',
-      status: await this.readStatusData(
-        page,
-        '#condition > div > div:nth-child(3) > div > div:nth-child(3) > a',
-      ),
+      status: await this.readStatusData(page, '#condition > div > div:nth-child(3) > div > div:nth-child(3) > a'),
       comment: await this.readCommentData(
         page,
-        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div.conditon_item_caption',
+        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div.conditon_item_caption'
       ),
     };
 
@@ -86,13 +77,10 @@ class ListScraper {
     const ooharaStatus = {
       portName: '大原航路',
       portCode: 'oohara',
-      status: await this.readStatusData(
-        page,
-        '#condition > div > div:nth-child(3) > div > div:nth-child(4) > a',
-      ),
+      status: await this.readStatusData(page, '#condition > div > div:nth-child(3) > div > div:nth-child(4) > a'),
       comment: await this.readCommentData(
         page,
-        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div.conditon_item_caption',
+        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div.conditon_item_caption'
       ),
     };
 
@@ -100,13 +88,10 @@ class ListScraper {
     const taketomiStatus = {
       portName: '竹富航路',
       portCode: 'taketomi',
-      status: await this.readStatusData(
-        page,
-        '#condition > div > div:nth-child(3) > div > div:nth-child(5) > a',
-      ),
+      status: await this.readStatusData(page, '#condition > div > div:nth-child(3) > div > div:nth-child(5) > a'),
       comment: await this.readCommentData(
         page,
-        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption',
+        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div.conditon_item_caption'
       ),
     };
 
@@ -114,13 +99,10 @@ class ListScraper {
     const kohamaStatus = {
       portName: '小浜航路',
       portCode: 'kohama',
-      status: await this.readStatusData(
-        page,
-        '#condition > div > div:nth-child(3) > div > div:nth-child(6) > a',
-      ),
+      status: await this.readStatusData(page, '#condition > div > div:nth-child(3) > div > div:nth-child(6) > a'),
       comment: await this.readCommentData(
         page,
-        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div.conditon_item_caption',
+        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div.conditon_item_caption'
       ),
     };
 
@@ -128,13 +110,10 @@ class ListScraper {
     const kuroshimaStatus = {
       portName: '黒島航路',
       portCode: 'kuroshima',
-      status: await this.readStatusData(
-        page,
-        '#condition > div > div:nth-child(3) > div > div:nth-child(7) > a',
-      ),
+      status: await this.readStatusData(page, '#condition > div > div:nth-child(3) > div > div:nth-child(7) > a'),
       comment: await this.readCommentData(
         page,
-        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div.conditon_item_caption',
+        '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div.conditon_item_caption'
       ),
     };
 
@@ -192,4 +171,4 @@ class ListScraper {
   }
 }
 
-module.exports = ListScraper; 
+module.exports = ListScraper;

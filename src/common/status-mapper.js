@@ -79,8 +79,7 @@ class StatusMapper {
       return '';
     }
 
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     const status = mapping[symbol];
     return status ? status.code : consts.CATION; // デフォルトは注意
@@ -97,8 +96,7 @@ class StatusMapper {
       return '';
     }
 
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     const status = mapping[symbol];
     return status ? status.text : '注意'; // デフォルトは注意
@@ -118,8 +116,7 @@ class StatusMapper {
       };
     }
 
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     const status = mapping[symbol];
     return (
@@ -216,8 +213,7 @@ class StatusMapper {
    * @returns {boolean} 有効な記号かどうか
    */
   static isValidSymbol(symbol, company = 'ykf') {
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     return symbol in mapping;
   }
@@ -228,14 +224,7 @@ class StatusMapper {
    * @returns {boolean} 有効なステータスコードかどうか
    */
   static isValidStatusCode(statusCode) {
-    const validCodes = [
-      consts.CANCEL,
-      consts.CATION,
-      consts.NORMAL,
-      consts.SUSPEND,
-      consts.NONE,
-      '',
-    ];
+    const validCodes = [consts.CANCEL, consts.CATION, consts.NORMAL, consts.SUSPEND, consts.NONE, ''];
 
     return validCodes.includes(statusCode);
   }
@@ -246,8 +235,7 @@ class StatusMapper {
    * @returns {Array<string>} 記号の配列
    */
   static getAllSymbols(company = 'ykf') {
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     return Object.keys(mapping);
   }
@@ -258,8 +246,7 @@ class StatusMapper {
    * @returns {Array<string>} ステータスコードの配列
    */
   static getAllStatusCodes(company = 'ykf') {
-    const mapping =
-      company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
+    const mapping = company === 'ykf' ? this.getYKFMapping() : this.getAnneiMapping();
 
     return Object.values(mapping).map((status) => status.code);
   }
