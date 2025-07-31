@@ -13,15 +13,15 @@ class DetailScraper {
    */
   static async scrapeDetailData() {
     console.group('DetailScraper.scrapeDetailData start');
-    
+
     try {
       const { browser, page } = await BrowserHelper.createBrowserAndPage();
-      
+
       try {
         await BrowserHelper.navigateToPage(page, this.TARGET_URL);
-        
+
         const data = await this.getData(page);
-        
+
         return data;
       } finally {
         await BrowserHelper.closeBrowser(browser);
@@ -68,7 +68,7 @@ class DetailScraper {
       page,
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div',
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div',
-      '波照間発',
+      '波照間発'
     );
   }
 
@@ -82,7 +82,7 @@ class DetailScraper {
       page,
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div',
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div',
-      '上原発',
+      '上原発'
     );
   }
 
@@ -96,7 +96,7 @@ class DetailScraper {
       page,
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div',
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div',
-      '鳩間発',
+      '鳩間発'
     );
   }
 
@@ -110,7 +110,7 @@ class DetailScraper {
       page,
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div',
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div',
-      '大原発',
+      '大原発'
     );
   }
 
@@ -124,7 +124,7 @@ class DetailScraper {
       page,
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div',
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div',
-      '竹富発',
+      '竹富発'
     );
   }
 
@@ -138,7 +138,7 @@ class DetailScraper {
       page,
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div',
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div',
-      '小浜発',
+      '小浜発'
     );
   }
 
@@ -152,7 +152,7 @@ class DetailScraper {
       page,
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(1) > div',
       '#condition > div > div:nth-child(5) > div.condition_list > div:nth-child(4) > div > div:nth-child(3) > div:nth-child(2) > div',
-      '黒島発',
+      '黒島発'
     );
   }
 
@@ -204,16 +204,10 @@ class DetailScraper {
 
     for (const node of parentNodes) {
       // 左の時刻（例 08:00）
-      const time = await node.$eval(
-        'div.condition_item_port_detail_time',
-        (nd) => nd.innerText,
-      );
+      const time = await node.$eval('div.condition_item_port_detail_time', (nd) => nd.innerText);
 
       // 右のステータス記号文字（例 ○ △ ✗）
-      const status = await node.$eval(
-        'div.condition_item_port_detail_status',
-        (nd) => nd.innerText,
-      );
+      const status = await node.$eval('div.condition_item_port_detail_status', (nd) => nd.innerText);
 
       row.push({
         memo: '',
@@ -265,4 +259,4 @@ class DetailScraper {
   }
 }
 
-module.exports = DetailScraper; 
+module.exports = DetailScraper;

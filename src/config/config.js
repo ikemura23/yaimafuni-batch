@@ -6,8 +6,7 @@ module.exports = {
     storageBucket: 'yaima-funi.appspot.com',
   },
   slack: {
-    webHookUrl:
-      'https://hooks.slack.com/services/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',
+    webHookUrl: 'https://hooks.slack.com/services/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',
   },
   puppeteer: {
     userAgent:
