@@ -66,10 +66,7 @@ async function getData(page, itemSelector) {
       intensity: await node.$eval('tr:nth-child(2) > td', (nd) => nd.innerText),
       pressure: await node.$eval('tr:nth-child(3) > td', (nd) => nd.innerText),
       area: await node.$eval('tr:nth-child(4) > td', (nd) => nd.innerText),
-      maxWindSpeedNearCenter: await node.$eval(
-        'tr:nth-child(5) > td',
-        (nd) => nd.innerText,
-      ),
+      maxWindSpeedNearCenter: await node.$eval('tr:nth-child(5) > td', (nd) => nd.innerText),
     };
     console.log(data);
     datas.push(data);

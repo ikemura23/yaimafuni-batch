@@ -66,9 +66,7 @@ class BrowserHelper {
    */
   static async getTextContents(page, selector) {
     try {
-      return await page.$$eval(selector, (items) =>
-        items.map((item) => item.textContent),
-      );
+      return await page.$$eval(selector, (items) => items.map((item) => item.textContent));
     } catch (error) {
       return [];
     }
@@ -97,9 +95,7 @@ class BrowserHelper {
    */
   static async getInnerHTMLs(page, selector) {
     try {
-      return await page.$$eval(selector, (items) =>
-        items.map((item) => item.innerHTML),
-      );
+      return await page.$$eval(selector, (items) => items.map((item) => item.innerHTML));
     } catch (error) {
       return [];
     }
@@ -114,10 +110,7 @@ class BrowserHelper {
       try {
         await browser.close();
       } catch (error) {
-        console.error(
-          'ブラウザクローズ時にエラーが発生しました:',
-          error.message,
-        );
+        console.error('ブラウザクローズ時にエラーが発生しました:', error.message);
       }
     }
   }
@@ -131,8 +124,7 @@ class BrowserHelper {
   static async executeScraping(scrapingFunction, options = {}) {
     let browser = null;
     try {
-      const { browser: createdBrowser, page } =
-        await this.createBrowserAndPage(options);
+      const { browser: createdBrowser, page } = await this.createBrowserAndPage(options);
       browser = createdBrowser;
 
       return await scrapingFunction(page);

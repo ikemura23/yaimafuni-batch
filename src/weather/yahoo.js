@@ -53,34 +53,28 @@ async function getData(page, itemSelector) {
  * @param {Page} page
  */
 async function getToday(page) {
-  const date = await getData(
-    page,
-    'div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.date',
-  );
+  const date = await getData(page, 'div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.date');
   // console.log(date)
-  const weather = await getData(
-    page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.pict',
-  );
+  const weather = await getData(page, '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.pict');
   // console.log(weather)
   const wind = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > dl > dd:nth-child(2)',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > dl > dd:nth-child(2)'
   );
   // console.log(wind)
   const wave = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > dl > dd:nth-child(4)',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > dl > dd:nth-child(4)'
   );
   // console.log(wave)
   const temperatureHight = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > ul > li.high',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > ul > li.high'
   );
   // console.log(temperatureHight)
   const temperatureLow = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > ul > li.low',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > ul > li.low'
   );
   // console.log(temperatureLow)
 
@@ -104,34 +98,28 @@ async function getToday(page) {
  * @param page
  */
 async function getTomorrow(page) {
-  const date = await getData(
-    page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.date',
-  );
+  const date = await getData(page, '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.date');
   console.log(date);
-  const weather = await getData(
-    page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.pict',
-  );
+  const weather = await getData(page, '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.pict');
   // console.log(weather)
   const wind = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > dl > dd:nth-child(2)',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > dl > dd:nth-child(2)'
   );
   // console.log(wind)
   const wave = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > dl > dd:nth-child(4)',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > dl > dd:nth-child(4)'
   );
   // console.log(wave)
   const temperatureHight = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > ul > li.high',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > ul > li.high'
   );
   // console.log(temperatureHight)
   const temperatureLow = await getData(
     page,
-    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > ul > li.low',
+    '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > ul > li.low'
   );
   // console.log(temperatureLow)
 

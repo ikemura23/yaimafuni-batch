@@ -11,21 +11,23 @@ class DetailTransformer {
    */
   static transformDetailData(rawData) {
     console.group('DetailTransformer.transformDetailData start');
-    
+
     try {
       const transformedData = {};
-      
+
       for (const [portKey, portData] of Object.entries(rawData)) {
         transformedData[portKey] = {
           ...portData,
           // 行データのステータスを正規化
-          row: portData.row ? portData.row.map(row => ({
-            ...row,
-            status: this.normalizeRowStatus(row.status),
-          })) : [],
+          row: portData.row
+            ? portData.row.map((row) => ({
+                ...row,
+                status: this.normalizeRowStatus(row.status),
+              }))
+            : [],
         };
       }
-      
+
       return transformedData;
     } catch (error) {
       console.error('DetailTransformer.transformDetailData error:', error);
@@ -82,4 +84,4 @@ class DetailTransformer {
   }
 }
 
-module.exports = DetailTransformer; 
+module.exports = DetailTransformer;
