@@ -11,15 +11,24 @@ class TimeAnnounceTransformer {
    * @returns {Object} 送信用データ
    */
   static transformTimeAndAnnounceData(scrapedData) {
-    const { updateTime, announce, announce2 } = scrapedData;
+    console.group('TimeAnnounceTransformer.transformTimeAndAnnounceData start');
 
-    // 送信用の変数
-    const data = {
-      comment: announce2 ? `${announce}\n${announce2}` : announce,
-      updateTime: updateTime,
-    };
+    try {
+      const { updateTime, announce, announce2 } = scrapedData;
 
-    return data;
+      // 送信用の変数
+      const data = {
+        comment: announce2 ? `${announce}\n${announce2}` : announce,
+        updateTime: updateTime,
+      };
+
+      return data;
+    } catch (error) {
+      console.error('TimeAnnounceTransformer.transformTimeAndAnnounceData error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 }
 

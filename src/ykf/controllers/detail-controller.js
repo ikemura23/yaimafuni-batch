@@ -1,39 +1,87 @@
 // YKF 詳細
+const DetailScraper = require('../scrapers/detail-scraper');
+const DetailTransformer = require('../transformers/detail-transformer');
+const repository = require('../../repository/firebase_repository');
+const firestoreRepository = require('../../repository/firestoreRepository.js');
 const consts = require('../../consts.js');
-const firebase = require('../../repository/firebase_repository');
 const sendError = require('../../slack');
-const DetailScraper = require('../../ykf/scrapers/detail-scraper');
-const DetailTransformer = require('../../ykf/transformers/detail-transformer');
-
-const COMPANY = consts.YKF;
-
-module.exports = async () => {
-  console.log(`開始: ${COMPANY} 詳細`);
-
-  try {
-    // スクレイピング処理
-    const data = await DetailScraper.scrapeDetailData();
-    console.table(data);
-
-    // 送信開始
-    if (data != null) {
-      await sendToFirebase(data);
-    } else {
-      console.log('dataが null のため送信しない');
-    }
-  } catch (error) {
-    console.error(error.stack, `${COMPANY}詳細でエラー`);
-    sendError(error.stack, `${COMPANY}詳細のスクレイピングでエラー発生!`);
-  }
-
-  console.log(`終了: ${COMPANY} 詳細`);
-};
 
 /**
- * DBへ登録
+ * YKF詳細関連の統合コントローラー
  */
-async function sendToFirebase(data) {
-  const tableName = `${COMPANY}_timeTable/`;
-  console.log('送信開始' + tableName);
-  return await firebase.update(tableName, data);
+class DetailController {
+  /**
+   * 詳細データを取得（既存のgetYkfDetailと同等）
+   * @returns {Promise<Object>} 詳細データ
+   */
+  static async getYkfDetail() {
+    console.group('DetailController.getYkfDetail start');
+
+    try {
+      const rawData = await DetailScraper.scrapeDetailData();
+      const transformedData = DetailTransformer.transformDetailData(rawData);
+
+      return transformedData;
+    } catch (error) {
+      console.error('DetailController.getYkfDetail error:', error);
+      sendError(error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * 詳細データを保存（既存のsaveYkfDetailと同等）
+   * @param {Object} value - 保存するデータ
+   * @returns {Promise<void>}
+   */
+  static async saveYkfDetail(value) {
+    console.group('DetailController.saveYkfDetail start');
+
+    try {
+      const tableName = `${consts.YKF}_timeTable/`;
+      await repository.update(tableName, value);
+      await firestoreRepository.update(tableName, value);
+    } catch (error) {
+      console.error('DetailController.saveYkfDetail error:', error);
+      sendError(error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * 詳細データを更新（既存のupdateYkfDetailと同等）
+   * @returns {Promise<void>}
+   */
+  static async updateYkfDetail() {
+    console.group('DetailController.updateYkfDetail start');
+
+    try {
+      const value = await DetailController.getYkfDetail();
+
+      if (value != null) {
+        await DetailController.saveYkfDetail(value);
+      } else {
+        console.log('dataが null のため送信しない');
+      }
+
+      console.log('DetailController.updateYkfDetail end');
+    } catch (error) {
+      console.error('DetailController.updateYkfDetail error:', error);
+      sendError(error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
 }
+
+// 既存のインターフェースを維持するためのエクスポート
+module.exports = {
+  getYkfDetail: DetailController.getYkfDetail,
+  saveYkfDetail: DetailController.saveYkfDetail,
+  updateYkfDetail: DetailController.updateYkfDetail,
+};

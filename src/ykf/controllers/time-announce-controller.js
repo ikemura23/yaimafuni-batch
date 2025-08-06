@@ -1,28 +1,80 @@
+const TimeAnnounceScraper = require('../scrapers/time-announce-scraper');
+const TimeAnnounceTransformer = require('../transformers/time-announce-transformer');
+const repository = require('../../repository/firebase_repository');
+const firestoreRepository = require('../../repository/firestoreRepository.js');
 const consts = require('../../consts.js');
-const firebase = require('../../repository/firebase_repository');
 const sendError = require('../../slack');
-const TimeAnnounceScraper = require('../../ykf/scrapers/time-announce-scraper');
-const TimeAnnounceTransformer = require('../../ykf/transformers/time-announce-transformer');
 
-const COMPANY = consts.YKF;
+/**
+ * YKF時間・アナウンス関連の統合コントローラー
+ */
+class TimeAnnounceController {
+  /**
+   * 更新時間とコメントデータを取得（既存のgetYkfUpdateTimeAndCommentと同等）
+   * @returns {Promise<Object>} 更新時間とコメントデータ
+   */
+  static async getYkfUpdateTimeAndComment() {
+    console.group('TimeAnnounceController.getYkfUpdateTimeAndComment start');
 
-module.exports = async () => {
-  console.log('開始:' + COMPANY + ' 時間+アナウンス');
+    try {
+      const rawData = await TimeAnnounceScraper.scrapeTimeAndAnnounceData();
+      const transformedData = TimeAnnounceTransformer.transformTimeAndAnnounceData(rawData);
 
-  try {
-    // スクレイピング処理
-    const scrapedData = await TimeAnnounceScraper.scrapeTimeAndAnnounceData();
-
-    // データ変換処理
-    const data = TimeAnnounceTransformer.transformTimeAndAnnounceData(scrapedData);
-    console.dir(data);
-
-    // 送信開始
-    await firebase.update(consts.YKF, data);
-  } catch (error) {
-    console.error(error.stack, '異常: YKF 時間+アナウンスでエラー');
-    sendError(error.stack, '異常: YKF 時間+アナウンスのスクレイピングでエラー発生!');
+      return transformedData;
+    } catch (error) {
+      console.error('TimeAnnounceController.getYkfUpdateTimeAndComment error:', error);
+      sendError(error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
-  console.log('終了:' + COMPANY + ' 時間+アナウンス');
+  /**
+   * 更新時間とコメントデータを保存（既存のsaveYkfUpdateTimeAndCommentと同等）
+   * @param {Object} value - 保存するデータ
+   * @returns {Promise<void>}
+   */
+  static async saveYkfUpdateTimeAndComment(value) {
+    console.group('TimeAnnounceController.saveYkfUpdateTimeAndComment start');
+
+    try {
+      await repository.update(consts.YKF, value);
+      await firestoreRepository.update(consts.YKF, value);
+    } catch (error) {
+      console.error('TimeAnnounceController.saveYkfUpdateTimeAndComment error:', error);
+      sendError(error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * 更新時間とコメントデータを更新（既存のupdateYkfUpdateTimeAndCommentと同等）
+   * @returns {Promise<void>}
+   */
+  static async updateYkfUpdateTimeAndComment() {
+    console.group('TimeAnnounceController.updateYkfUpdateTimeAndComment start');
+
+    try {
+      const value = await TimeAnnounceController.getYkfUpdateTimeAndComment();
+      await TimeAnnounceController.saveYkfUpdateTimeAndComment(value);
+
+      console.log('TimeAnnounceController.updateYkfUpdateTimeAndComment end');
+    } catch (error) {
+      console.error('TimeAnnounceController.updateYkfUpdateTimeAndComment error:', error);
+      sendError(error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+}
+
+// 既存のインターフェースを維持するためのエクスポート
+module.exports = {
+  getYkfUpdateTimeAndComment: TimeAnnounceController.getYkfUpdateTimeAndComment,
+  saveYkfUpdateTimeAndComment: TimeAnnounceController.saveYkfUpdateTimeAndComment,
+  updateYkfUpdateTimeAndComment: TimeAnnounceController.updateYkfUpdateTimeAndComment,
 };
