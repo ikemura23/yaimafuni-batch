@@ -1,205 +1,130 @@
-# ykfとanneiフォルダのアーキテクチャ統一タスク
+# index.jsのコントローラー呼び出し統一タスク
 
 ## 概要
 
-ykfフォルダとanneiフォルダのアーキテクチャを統一するための詳細タスク定義
+index.jsにおけるanneiとykfのコントローラー呼び出し方法を統一し、テスト導入時の保守性と拡張性を向上させるための詳細タスク定義
 
 ## タスク一覧
 
-### タスク1: ykf/list-controller.jsの統一
+### タスク1: ControllerManagerクラスの作成
 
 **優先度**: 高  
 **推定時間**: 2時間
 
 #### チェックリスト
 
-- [x] anneiのクラスベース構造を参考にクラス定義を作成
-- [x] getYkfList()メソッドの実装
-- [x] saveYkfList()メソッドの実装（firebase + firestore対応）
-- [x] updateYkfList()メソッドの実装
-- [x] 既存のインターフェース維持のためのエクスポート設定
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] Slack通知の実装
+- [ ] `src/controllers/`ディレクトリの作成
+- [ ] `src/controllers/index.js`ファイルの作成
+- [ ] ControllerManagerクラスの基本構造の実装
+- [ ] anneiコントローラーの統合
+  - [ ] list-controller.jsの統合
+  - [ ] detail-controller.jsの統合
+  - [ ] time-announce-controller.jsの統合
+- [ ] ykfコントローラーの統合
+  - [ ] list-controller.jsの統合
+  - [ ] detail-controller.jsの統合
+  - [ ] time-announce-controller.jsの統合
+- [ ] updateAll()メソッドの実装
+- [ ] 個別実行メソッドの実装（テスト用）
+- [ ] エラーハンドリングの実装
 
 #### 技術要件
 
-- クラス名: `ListController`
-- 静的メソッド: `getYkfList`, `saveYkfList`, `updateYkfList`
-- エラーハンドリング: try-catch + console.group/groupEnd
-- データ保存: firebase + firestore両方に対応
+- クラス名: `ControllerManager`
+- メソッド: `updateAll()`, `updateAnneiList()`, `updateYkfList()`など
+- エラーハンドリング: try-catch + 適切なログ出力
+- 既存のインターフェースを維持
 
-### タスク2: ykf/detail-controller.jsの統一
+### タスク2: index.jsの修正
 
 **優先度**: 高  
-**推定時間**: 2時間
-
-#### チェックリスト
-
-- [x] anneiのクラスベース構造を参考にクラス定義を作成
-- [x] getYkfDetail()メソッドの実装
-- [x] saveYkfDetail()メソッドの実装（firebase + firestore対応）
-- [x] updateYkfDetail()メソッドの実装
-- [x] 既存のインターフェース維持のためのエクスポート設定
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] Slack通知の実装
-
-#### 技術要件
-
-- クラス名: `DetailController`
-- 静的メソッド: `getYkfDetail`, `saveYkfDetail`, `updateYkfDetail`
-- エラーハンドリング: try-catch + console.group/groupEnd
-- データ保存: firebase + firestore両方に対応
-
-### タスク3: ykf/time-announce-controller.jsの統一
-
-**優先度**: 高  
-**推定時間**: 2時間
-
-#### チェックリスト
-
-- [x] anneiのクラスベース構造を参考にクラス定義を作成
-- [x] getYkfUpdateTimeAndComment()メソッドの実装
-- [x] saveYkfUpdateTimeAndComment()メソッドの実装（firebase + firestore対応）
-- [x] updateYkfUpdateTimeAndComment()メソッドの実装
-- [x] 既存のインターフェース維持のためのエクスポート設定
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] Slack通知の実装
-
-#### 技術要件
-
-- クラス名: `TimeAnnounceController`
-- 静的メソッド: `getYkfUpdateTimeAndComment`, `saveYkfUpdateTimeAndComment`, `updateYkfUpdateTimeAndComment`
-- エラーハンドリング: try-catch + console.group/groupEnd
-- データ保存: firebase + firestore両方に対応
-
-### タスク4: ykf/scrapers/list-scraper.jsの統一
-
-**優先度**: 中  
 **推定時間**: 1時間
 
 #### チェックリスト
 
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] BrowserHelper.executeScrapingの使用確認
-- [x] エラーメッセージの統一
+- [ ] 既存のコントローラー呼び出し部分の特定
+- [ ] ControllerManagerのインポート追加
+- [ ] 既存の呼び出し処理をControllerManagerに置き換え
+- [ ] 他の処理（weather, typhoon等）の統合検討
+- [ ] エラーハンドリングの確認
+- [ ] ログ出力の確認
 
 #### 技術要件
 
-- エラーハンドリング: try-catch + console.group/groupEnd
-- ログ出力: 統一されたフォーマット
+- 既存のFirebase初期化処理を維持
+- 既存のエラーハンドリングを維持
+- 処理の順序を維持
 
-### タスク5: ykf/scrapers/detail-scraper.jsの統一
-
-**優先度**: 中  
-**推定時間**: 1時間
-
-#### チェックリスト
-
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] BrowserHelper.executeScrapingの使用確認
-- [x] エラーメッセージの統一
-
-#### 技術要件
-
-- エラーハンドリング: try-catch + console.group/groupEnd
-- ログ出力: 統一されたフォーマット
-
-### タスク6: ykf/scrapers/time-announce-scraper.jsの統一
-
-**優先度**: 中  
-**推定時間**: 1時間
-
-#### チェックリスト
-
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] BrowserHelper.executeScrapingの使用確認
-- [x] エラーメッセージの統一
-
-#### 技術要件
-
-- エラーハンドリング: try-catch + console.group/groupEnd
-- ログ出力: 統一されたフォーマット
-
-### タスク7: ykf/transformers/list-transformer.jsの統一
-
-**優先度**: 低  
-**推定時間**: 30分
-
-#### チェックリスト
-
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] エラーメッセージの統一
-
-#### 技術要件
-
-- エラーハンドリング: try-catch + console.group/groupEnd
-- ログ出力: 統一されたフォーマット
-
-### タスク8: ykf/transformers/detail-transformer.jsの統一
-
-**優先度**: 低  
-**推定時間**: 30分
-
-#### チェックリスト
-
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] エラーメッセージの統一
-
-#### 技術要件
-
-- エラーハンドリング: try-catch + console.group/groupEnd
-- ログ出力: 統一されたフォーマット
-
-### タスク9: ykf/transformers/time-announce-transformer.jsの統一
-
-**優先度**: 低  
-**推定時間**: 30分
-
-#### チェックリスト
-
-- [x] console.group/groupEndを使用したログ出力の実装
-- [x] 詳細なエラーハンドリングの実装
-- [x] エラーメッセージの統一
-
-#### 技術要件
-
-- エラーハンドリング: try-catch + console.group/groupEnd
-- ログ出力: 統一されたフォーマット
-
-### タスク10: 動作確認とテスト
+### タスク3: 動作確認とテスト
 
 **優先度**: 高  
 **推定時間**: 2時間
 
 #### チェックリスト
 
-- [ ] 各コントローラーの動作確認
-- [ ] データ保存の動作確認（firebase + firestore）
+- [ ] ControllerManagerの動作確認
+  - [ ] anneiコントローラーの動作確認
+  - [ ] ykfコントローラーの動作確認
+- [ ] データ保存の動作確認
+  - [ ] firebaseへの保存確認
+  - [ ] firestoreへの保存確認
 - [ ] エラーハンドリングの動作確認
 - [ ] ログ出力の確認
-- [ ] Slack通知の動作確認
 - [ ] 既存機能への影響確認
+- [ ] 処理時間の確認
 
 #### 技術要件
 
 - 各機能の正常動作確認
 - エラー時の適切な処理確認
-- ログ出力の確認
+- パフォーマンスの確認
+
+### タスク4: 他の処理の統合検討
+
+**優先度**: 中  
+**推定時間**: 1時間
+
+#### チェックリスト
+
+- [ ] 既存の他の処理の調査
+  - [ ] weather処理の調査
+  - [ ] typhoon処理の調査
+  - [ ] top処理の調査
+- [ ] 統合可能性の検討
+- [ ] 統合方針の決定
+- [ ] 統合実装の計画
+
+#### 技術要件
+
+- 既存処理の構造理解
+- 統合による影響の評価
+- 段階的統合の計画
+
+### タスク5: 設定駆動型への拡張検討
+
+**優先度**: 低  
+**推定時間**: 1時間
+
+#### チェックリスト
+
+- [ ] 設定駆動型アーキテクチャの設計検討
+- [ ] 設定ファイルの構造設計
+- [ ] 動的ローディングの実装検討
+- [ ] 設定変更時の動作確認
+
+#### 技術要件
+
+- 設定ファイルの設計
+- 動的ローディングの実装
+- 設定変更時の安全性確保
 
 ## 実装順序
 
-1. **タスク1-3**: コントローラーの統一（高優先度）
-2. **タスク10**: 動作確認とテスト
-3. **タスク4-6**: スクレイパーの統一（中優先度）
-4. **タスク7-9**: トランスフォーマーの統一（低優先度）
+1. **タスク1**: ControllerManagerクラスの作成（基盤構築）
+2. **タスク2**: index.jsの修正（統合実装）
+3. **タスク3**: 動作確認とテスト（品質確保）
+4. **タスク4**: 他の処理の統合検討（拡張検討）
+5. **タスク5**: 設定駆動型への拡張検討（将来拡張）
 
 ## 完了条件
 
@@ -215,3 +140,16 @@ ykfフォルダとanneiフォルダのアーキテクチャを統一するため
 - 段階的に実装し、各段階でテストすること
 - エラーハンドリングを適切に実装すること
 - ログ出力を統一すること
+- テスト導入時のことを考慮した設計にすること
+
+## リスク管理
+
+### リスク
+- 既存の処理に影響を与える可能性
+- 新しいクラスの学習コスト
+
+### 対策
+- 段階的な実装
+- 既存の処理を維持しながら統合
+- 十分なテストの実施
+- ロールバック計画の準備

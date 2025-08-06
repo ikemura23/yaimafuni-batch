@@ -1,209 +1,193 @@
-# ykfとanneiフォルダのアーキテクチャ統一設計書
+# index.jsのコントローラー呼び出し統一設計書
 
 ## 概要
 
-ykfフォルダとanneiフォルダのアーキテクチャを統一し、保守性、可読性、拡張性を向上させる。
+index.jsにおけるanneiとykfのコントローラー呼び出し方法を統一し、テスト導入時の保守性と拡張性を向上させる。
 
 ## 現在の状況分析
 
-### フォルダ構造
+### 問題点
 
-両フォルダとも同じ構造を持つ：
+1. **呼び出し方法の不統一**
+   ```javascript
+   // Annei - 個別の関数をインポート
+   const updateAnneiList = require('./src/annei/controllers/list-controller.js').updateAnneiList;
+   
+   // YKF - モジュール全体をインポート
+   const YkfList = require('./src/ykf/controllers/list-controller.js');
+   ```
 
-```
-src/
-├── ykf/
-│   ├── controllers/
-│   │   ├── list-controller.js
-│   │   ├── detail-controller.js
-│   │   └── time-announce-controller.js
-│   ├── scrapers/
-│   │   ├── list-scraper.js
-│   │   ├── detail-scraper.js
-│   │   └── time-announce-scraper.js
-│   └── transformers/
-│       ├── list-transformer.js
-│       ├── detail-transformer.js
-│       └── time-announce-transformer.js
-└── annei/
-    ├── controllers/
-    ├── scrapers/
-    └── transformers/
-```
+2. **テスト時の問題**
+   - モジュール全体をインポートしている場合、テスト時にモック化が困難
+   - 依存関係が不明確
 
-### 現在の違い
-
-#### 1. コントローラーの構造
-
-- **ykf**: 関数ベースのシンプルな構造
-  ```javascript
-  module.exports = async () => {
-    // 直接実行可能な関数
-  };
-  ```
-- **annei**: クラスベースの構造
-  ```javascript
-  class ListController {
-    static async getAnneiList() { ... }
-    static async saveAnneiList() { ... }
-    static async updateAnneiList() { ... }
-  }
-  ```
-
-#### 2. エラーハンドリング
-
-- **ykf**: 基本的なtry-catch文
-- **annei**: console.group/groupEndを使用した詳細なログ出力
-
-#### 3. データ保存
-
-- **ykf**: firebaseのみ
-- **annei**: firebase + firestore
-
-#### 4. スクレイピング処理
-
-- **ykf**: BrowserHelper.executeScrapingを使用
-- **annei**: 手動でブラウザの作成・クローズを管理
-
-#### 5. Transformer処理
-
-- **ykf**: シンプルな変換処理
-- **annei**: 詳細なエラーハンドリングとログ出力
+3. **コードの冗長性**
+   - 似たような処理が繰り返されている
+   - 新しいコントローラー追加時の手間
 
 ## 統一要件
 
-### 要件1: コントローラーの統一
+### 要件1: テスト容易性の確保
+- テスト時に個別関数をモック化可能な構造
+- 依存関係の明確化
 
-- anneiのクラスベース構造をykfにも適用
-- 静的メソッド（get, save, update）の統一
-- 既存のインターフェース維持のためのエクスポート
+### 要件2: 保守性の向上
+- 統一された呼び出しパターン
+- 拡張性の高い設計
 
-### 要件2: エラーハンドリングの統一
-
-- console.group/groupEndを使用したログ出力の統一
-- 詳細なエラーハンドリングの統一
-- Slack通知の統一
-
-### 要件3: データ保存の統一
-
-- firebaseとfirestoreの両方への保存を統一
-- 保存処理の抽象化
-
-### 要件4: スクレイピング処理の統一
-
-- BrowserHelper.executeScrapingの使用を統一
-- エラーハンドリングの統一
-
-### 要件5: Transformerの統一
-
-- エラーハンドリングとログ出力の統一
-- データ変換処理の標準化
-
-### 要件6: ファイル構造の統一
-
-- 各ファイルの役割と責任の明確化
+### 要件3: 可読性の向上
+- 処理の流れが明確
 - 命名規則の統一
-- コメントとドキュメントの統一
 
-## 実装優先順位
+## 推奨解決案: コントローラー管理クラス
 
-### 高優先度
+### アーキテクチャ概要
 
-1. **コントローラーの統一** - アーキテクチャの基盤
-   - ykfのlist-controller.jsをannei形式に変更
-   - ykfのdetail-controller.jsをannei形式に変更
-   - ykfのtime-announce-controller.jsをannei形式に変更
+```
+src/
+├── controllers/
+│   └── index.js          # 新規作成: コントローラー管理クラス
+├── annei/
+│   └── controllers/
+├── ykf/
+│   └── controllers/
+└── index.js              # 修正: 管理クラスを使用
+```
 
-### 中優先度
-
-2. **エラーハンドリングとログ出力の統一**
-   - console.group/groupEndの統一
-   - エラーハンドリングパターンの統一
-
-3. **データ保存処理の統一**
-   - firebase + firestoreの両方への保存を統一
-   - 保存処理の抽象化
-
-### 低優先度
-
-4. **スクレイピングとTransformerの統一**
-   - BrowserHelper.executeScrapingの統一
-   - Transformerのエラーハンドリング統一
-
-## 統一後のアーキテクチャ
-
-### コントローラーの統一パターン
+### コントローラー管理クラスの設計
 
 ```javascript
-class ListController {
-  static async getYkfList() { ... }
-  static async saveYkfList(value) { ... }
-  static async updateYkfList() { ... }
+// src/controllers/index.js
+class ControllerManager {
+  constructor() {
+    this.annei = {
+      list: require('./annei/controllers/list-controller.js').updateAnneiList,
+      detail: require('./annei/controllers/detail-controller.js').updateAnneiDetail,
+      time: require('./annei/controllers/time-announce-controller.js').updateAnneiUpdateTimeAndComment
+    };
+    
+    this.ykf = {
+      list: require('./ykf/controllers/list-controller.js').updateYkfList,
+      detail: require('./ykf/controllers/detail-controller.js').updateYkfDetail,
+      time: require('./ykf/controllers/time-announce-controller.js').updateYkfUpdateTimeAndComment
+    };
+  }
+
+  async updateAll() {
+    // Annei処理
+    await this.annei.list();
+    await this.annei.detail();
+    
+    // YKF処理
+    await this.ykf.list();
+    await this.ykf.time();
+    await this.ykf.detail();
+    
+    // 他の処理（既存の処理を統合）
+    // await this.weather.update();
+    // await this.typhoon.update();
+    // など
+  }
+
+  // 個別実行メソッド（テスト用）
+  async updateAnneiList() {
+    return await this.annei.list();
+  }
+
+  async updateYkfList() {
+    return await this.ykf.list();
+  }
 }
 
-// 既存のインターフェースを維持
-module.exports = {
-  getYkfList: ListController.getYkfList,
-  saveYkfList: ListController.saveYkfList,
-  updateYkfList: ListController.updateYkfList,
+module.exports = ControllerManager;
+```
+
+### index.jsでの使用例
+
+```javascript
+// index.js
+const ControllerManager = require('./src/controllers/index.js');
+
+exports.handler = async function () {
+  let admin;
+  try {
+    // Firebase初期化処理（既存）
+    
+    const controllerManager = new ControllerManager();
+    
+    console.group('main start');
+    await controllerManager.updateAll();
+    console.groupEnd();
+    
+    console.log('main finish');
+  } catch (err) {
+    console.log('Error happened: ', err);
+  } finally {
+    // Firebase接続終了処理（既存）
+  }
 };
-```
-
-### エラーハンドリングの統一パターン
-
-```javascript
-static async getYkfList() {
-  console.group('ListController.getYkfList start');
-
-  try {
-    // 処理
-    return result;
-  } catch (error) {
-    console.error('ListController.getYkfList error:', error);
-    sendError(error);
-    throw error;
-  } finally {
-    console.groupEnd();
-  }
-}
-```
-
-### データ保存の統一パターン
-
-```javascript
-static async saveYkfList(value) {
-  console.group('ListController.saveYkfList start');
-
-  try {
-    await repository.set(consts.YKF, value);
-    await firestoreRepository.set(consts.YKF, value);
-  } catch (error) {
-    console.error('ListController.saveYkfList error:', error);
-    sendError(error);
-    throw error;
-  } finally {
-    console.groupEnd();
-  }
-}
 ```
 
 ## 期待される効果
 
-1. **保守性の向上**: 統一されたアーキテクチャにより、コードの理解と修正が容易になる
-2. **可読性の向上**: 一貫したパターンにより、コードの読みやすさが向上する
-3. **拡張性の向上**: 新しい機能追加時の開発効率が向上する
-4. **バグの削減**: 統一されたエラーハンドリングにより、バグの発生を抑制する
-5. **開発効率の向上**: 開発者が新しい機能を追加する際の学習コストが削減される
+### 1. テスト容易性の向上
+```javascript
+// テスト例
+const ControllerManager = require('./src/controllers/index.js');
+jest.mock('./src/controllers/index.js');
+
+// クラス全体をモック化可能
+const mockControllerManager = {
+  updateAll: jest.fn(),
+  updateAnneiList: jest.fn(),
+  updateYkfList: jest.fn()
+};
+```
+
+### 2. 保守性の向上
+- 新しいコントローラー追加時の変更箇所が明確
+- 依存関係の管理が容易
+
+### 3. 可読性の向上
+- 処理の流れが明確
+- 責任の分離が適切
+
+### 4. 拡張性の向上
+- 新しいサービス追加時の拡張が容易
+- 設定駆動型への移行も可能
+
+## 実装優先順位
+
+### 高優先度
+1. **ControllerManagerクラスの作成**
+2. **index.jsの修正**
+3. **動作確認とテスト**
+
+### 中優先度
+4. **他の処理（weather, typhoon等）の統合**
+5. **設定駆動型への拡張**
 
 ## リスクと対策
 
 ### リスク
-
-- 既存の機能に影響を与える可能性
-- 変更範囲が広いため、テストが重要
+- 既存の処理に影響を与える可能性
+- 新しいクラスの学習コスト
 
 ### 対策
+- 段階的な実装
+- 既存の処理を維持しながら統合
+- 十分なテストの実施
 
-- 既存のインターフェースを維持
-- 段階的な実装とテスト
-- 各段階での動作確認
+## 移行戦略
+
+### Phase 1: 基盤構築
+1. ControllerManagerクラスの作成
+2. 基本的な統合処理の実装
+
+### Phase 2: 段階的統合
+1. AnneiとYKFの統合
+2. 動作確認
+
+### Phase 3: 拡張
+1. 他の処理の統合
+2. 設定駆動型への移行検討
