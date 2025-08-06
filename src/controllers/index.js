@@ -48,7 +48,21 @@ class ControllerManager {
   }
 
   /**
-   * Annei一覧更新（テスト用）
+   * Annei一覧更新（デバッグ・単体テスト用）
+   *
+   * 使用例:
+   * ```javascript
+   * // 単体テスト
+   * const manager = new ControllerManager();
+   * await manager.updateAnneiList();
+   *
+   * // デバッグ（特定のコントローラーでエラーが発生した場合）
+   * try {
+   *   await manager.updateAnneiList();
+   * } catch (error) {
+   *   console.error('Annei一覧更新でエラー:', error);
+   * }
+   * ```
    * @returns {Promise<void>}
    */
   async updateAnneiList() {
@@ -66,7 +80,21 @@ class ControllerManager {
   }
 
   /**
-   * Annei詳細更新（テスト用）
+   * Annei詳細更新（デバッグ・単体テスト用）
+   *
+   * 使用例:
+   * ```javascript
+   * // 単体テスト
+   * const manager = new ControllerManager();
+   * await manager.updateAnneiDetail();
+   *
+   * // デバッグ（詳細データの取得・保存を個別に確認）
+   * try {
+   *   await manager.updateAnneiDetail();
+   * } catch (error) {
+   *   console.error('Annei詳細更新でエラー:', error);
+   * }
+   * ```
    * @returns {Promise<void>}
    */
   async updateAnneiDetail() {
@@ -84,7 +112,21 @@ class ControllerManager {
   }
 
   /**
-   * YKF一覧更新（テスト用）
+   * YKF一覧更新（デバッグ・単体テスト用）
+   *
+   * 使用例:
+   * ```javascript
+   * // 単体テスト
+   * const manager = new ControllerManager();
+   * await manager.updateYkfList();
+   *
+   * // デバッグ（YKF一覧の取得・保存を個別に確認）
+   * try {
+   *   await manager.updateYkfList();
+   * } catch (error) {
+   *   console.error('YKF一覧更新でエラー:', error);
+   * }
+   * ```
    * @returns {Promise<void>}
    */
   async updateYkfList() {
@@ -102,7 +144,21 @@ class ControllerManager {
   }
 
   /**
-   * YKF詳細更新（テスト用）
+   * YKF詳細更新（デバッグ・単体テスト用）
+   *
+   * 使用例:
+   * ```javascript
+   * // 単体テスト
+   * const manager = new ControllerManager();
+   * await manager.updateYkfDetail();
+   *
+   * // デバッグ（YKF詳細データの取得・保存を個別に確認）
+   * try {
+   *   await manager.updateYkfDetail();
+   * } catch (error) {
+   *   console.error('YKF詳細更新でエラー:', error);
+   * }
+   * ```
    * @returns {Promise<void>}
    */
   async updateYkfDetail() {
@@ -120,7 +176,21 @@ class ControllerManager {
   }
 
   /**
-   * YKF時間・アナウンス更新（テスト用）
+   * YKF時間・アナウンス更新（デバッグ・単体テスト用）
+   *
+   * 使用例:
+   * ```javascript
+   * // 単体テスト
+   * const manager = new ControllerManager();
+   * await manager.updateYkfTime();
+   *
+   * // デバッグ（YKF時間・アナウンスの取得・保存を個別に確認）
+   * try {
+   *   await manager.updateYkfTime();
+   * } catch (error) {
+   *   console.error('YKF時間・アナウンス更新でエラー:', error);
+   * }
+   * ```
    * @returns {Promise<void>}
    */
   async updateYkfTime() {
