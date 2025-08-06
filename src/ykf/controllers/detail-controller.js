@@ -41,8 +41,8 @@ class DetailController {
 
     try {
       const tableName = `${consts.YKF}_timeTable/`;
-      await repository.update(tableName, value);
-      await firestoreRepository.update(tableName, value);
+      await repository.set(tableName, value);
+      await firestoreRepository.set(tableName, value);
     } catch (error) {
       console.error('DetailController.saveYkfDetail error:', error);
       sendError(error);
