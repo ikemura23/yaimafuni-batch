@@ -28,6 +28,44 @@ node index.js
 npm run deploy
 ```
 
+## テスト
+
+このプロジェクトではJestを使用した単体テストを実装しています。
+
+### テスト実行
+
+```bash
+# 基本的なテスト実行
+npm test
+
+# ウォッチモード（ファイル変更時に自動実行）
+npm run test:watch
+
+# カバレッジレポート付きテスト実行
+npm run test:coverage
+```
+
+### 利用可能なスクリプト
+
+```bash
+npm start          # ローカル実行
+npm run deploy     # デプロイ
+npm run format     # コードフォーマット
+npm run format:check # フォーマットチェック
+npm test           # テスト実行
+npm run test:watch # テストウォッチモード
+npm run test:coverage # テストカバレッジ
+```
+
+### テスト構成
+
+- `__tests__/controllers.test.js` - ControllerManagerクラスの単体テスト
+- `__tests__/README.md` - テストの詳細な使用方法
+
+### テストカバレッジ
+
+現在、ControllerManagerクラスに対して100%のコードカバレッジを達成しています。
+
 ## Chromium を S3 にアップロード
 
 ```

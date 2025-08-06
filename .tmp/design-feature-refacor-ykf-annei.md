@@ -149,6 +149,38 @@ const mockControllerManager = {
 };
 ```
 
+### 5. 単体テストの実装
+
+#### テストフレームワーク: Jest
+
+- **理由**: Node.jsプロジェクトで最も人気があり、設定が簡単
+- **機能**: モック機能、カバレッジレポート、ウォッチモード
+
+#### テスト構成
+
+```
+__tests__/
+├── controllers.test.js    # ControllerManagerの単体テスト
+└── README.md             # テスト使用方法の説明
+```
+
+#### テストカバレッジ
+
+- **目標**: 100%のコードカバレッジ
+- **実装**: 15個のテストケース
+  - 正常実行テスト
+  - エラーハンドリングテスト
+  - ログ出力検証
+  - 統合テスト
+
+#### テスト実行
+
+```bash
+npm test              # 基本的なテスト実行
+npm run test:watch    # ウォッチモード
+npm run test:coverage # カバレッジレポート付き
+```
+
 ### 2. 保守性の向上
 
 - 新しいコントローラー追加時の変更箇所が明確
@@ -171,6 +203,7 @@ const mockControllerManager = {
 1. **ControllerManagerクラスの作成**
 2. **index.jsの修正**
 3. **動作確認とテスト**
+4. **単体テストの導入**
 
 ### 中優先度
 
@@ -201,6 +234,7 @@ const mockControllerManager = {
 
 1. AnneiとYKFの統合
 2. 動作確認
+3. 単体テストの実装
 
 ### Phase 3: 拡張
 
