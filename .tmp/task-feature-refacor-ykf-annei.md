@@ -13,20 +13,20 @@ index.jsにおけるanneiとykfのコントローラー呼び出し方法を統�
 
 #### チェックリスト
 
-- [ ] `src/controllers/`ディレクトリの作成
-- [ ] `src/controllers/index.js`ファイルの作成
-- [ ] ControllerManagerクラスの基本構造の実装
-- [ ] anneiコントローラーの統合
-  - [ ] list-controller.jsの統合
-  - [ ] detail-controller.jsの統合
-  - [ ] time-announce-controller.jsの統合
-- [ ] ykfコントローラーの統合
-  - [ ] list-controller.jsの統合
-  - [ ] detail-controller.jsの統合
-  - [ ] time-announce-controller.jsの統合
-- [ ] updateAll()メソッドの実装
-- [ ] 個別実行メソッドの実装（テスト用）
-- [ ] エラーハンドリングの実装
+- [x] `src/controllers/`ディレクトリの作成
+- [x] `src/controllers/index.js`ファイルの作成
+- [x] ControllerManagerクラスの基本構造の実装
+- [x] anneiコントローラーの統合
+  - [x] list-controller.jsの統合
+  - [x] detail-controller.jsの統合
+  - [x] time-announce-controller.jsの統合
+- [x] ykfコントローラーの統合
+  - [x] list-controller.jsの統合
+  - [x] detail-controller.jsの統合
+  - [x] time-announce-controller.jsの統合
+- [x] updateAll()メソッドの実装
+- [x] 個別実行メソッドの実装（テスト用）
+- [x] エラーハンドリングの実装
 
 #### 技術要件
 
@@ -42,12 +42,12 @@ index.jsにおけるanneiとykfのコントローラー呼び出し方法を統�
 
 #### チェックリスト
 
-- [ ] 既存のコントローラー呼び出し部分の特定
-- [ ] ControllerManagerのインポート追加
-- [ ] 既存の呼び出し処理をControllerManagerに置き換え
-- [ ] 他の処理（weather, typhoon等）の統合検討
-- [ ] エラーハンドリングの確認
-- [ ] ログ出力の確認
+- [x] 既存のコントローラー呼び出し部分の特定
+- [x] ControllerManagerのインポート追加
+- [x] 既存の呼び出し処理をControllerManagerに置き換え
+- [x] 他の処理（weather, typhoon等）の統合検討
+- [x] エラーハンドリングの確認
+- [x] ログ出力の確認
 
 #### 技術要件
 
@@ -62,16 +62,16 @@ index.jsにおけるanneiとykfのコントローラー呼び出し方法を統�
 
 #### チェックリスト
 
-- [ ] ControllerManagerの動作確認
-  - [ ] anneiコントローラーの動作確認
-  - [ ] ykfコントローラーの動作確認
-- [ ] データ保存の動作確認
-  - [ ] firebaseへの保存確認
-  - [ ] firestoreへの保存確認
-- [ ] エラーハンドリングの動作確認
-- [ ] ログ出力の確認
-- [ ] 既存機能への影響確認
-- [ ] 処理時間の確認
+- [x] ControllerManagerの動作確認
+  - [x] anneiコントローラーの動作確認
+  - [x] ykfコントローラーの動作確認
+- [x] データ保存の動作確認
+  - [x] firebaseへの保存確認
+  - [x] firestoreへの保存確認
+- [x] エラーハンドリングの動作確認
+- [x] ログ出力の確認
+- [x] 既存機能への影響確認
+- [x] 処理時間の確認
 
 #### 技術要件
 
@@ -128,10 +128,10 @@ index.jsにおけるanneiとykfのコントローラー呼び出し方法を統�
 
 ## 完了条件
 
-- [ ] すべてのタスクが完了
-- [ ] 動作確認が完了
-- [ ] 既存機能に影響がないことを確認
-- [ ] コードフォーマットが適用済み
+- [x] すべてのタスクが完了
+- [x] 動作確認が完了
+- [x] 既存機能に影響がないことを確認
+- [x] コードフォーマットが適用済み
 - [ ] コミットが完了
 
 ## 注意事項
@@ -145,10 +145,12 @@ index.jsにおけるanneiとykfのコントローラー呼び出し方法を統�
 ## リスク管理
 
 ### リスク
+
 - 既存の処理に影響を与える可能性
 - 新しいクラスの学習コスト
 
 ### 対策
+
 - 段階的な実装
 - 既存の処理を維持しながら統合
 - 十分なテストの実施
