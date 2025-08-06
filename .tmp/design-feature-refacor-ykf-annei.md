@@ -7,7 +7,9 @@ ykfフォルダとanneiフォルダのアーキテクチャを統一し、保守
 ## 現在の状況分析
 
 ### フォルダ構造
+
 両フォルダとも同じ構造を持つ：
+
 ```
 src/
 ├── ykf/
@@ -32,6 +34,7 @@ src/
 ### 現在の違い
 
 #### 1. コントローラーの構造
+
 - **ykf**: 関数ベースのシンプルな構造
   ```javascript
   module.exports = async () => {
@@ -48,46 +51,56 @@ src/
   ```
 
 #### 2. エラーハンドリング
+
 - **ykf**: 基本的なtry-catch文
 - **annei**: console.group/groupEndを使用した詳細なログ出力
 
 #### 3. データ保存
+
 - **ykf**: firebaseのみ
 - **annei**: firebase + firestore
 
 #### 4. スクレイピング処理
+
 - **ykf**: BrowserHelper.executeScrapingを使用
 - **annei**: 手動でブラウザの作成・クローズを管理
 
 #### 5. Transformer処理
+
 - **ykf**: シンプルな変換処理
 - **annei**: 詳細なエラーハンドリングとログ出力
 
 ## 統一要件
 
 ### 要件1: コントローラーの統一
+
 - anneiのクラスベース構造をykfにも適用
 - 静的メソッド（get, save, update）の統一
 - 既存のインターフェース維持のためのエクスポート
 
 ### 要件2: エラーハンドリングの統一
+
 - console.group/groupEndを使用したログ出力の統一
 - 詳細なエラーハンドリングの統一
 - Slack通知の統一
 
 ### 要件3: データ保存の統一
+
 - firebaseとfirestoreの両方への保存を統一
 - 保存処理の抽象化
 
 ### 要件4: スクレイピング処理の統一
+
 - BrowserHelper.executeScrapingの使用を統一
 - エラーハンドリングの統一
 
 ### 要件5: Transformerの統一
+
 - エラーハンドリングとログ出力の統一
 - データ変換処理の標準化
 
 ### 要件6: ファイル構造の統一
+
 - 各ファイルの役割と責任の明確化
 - 命名規則の統一
 - コメントとドキュメントの統一
@@ -95,12 +108,14 @@ src/
 ## 実装優先順位
 
 ### 高優先度
+
 1. **コントローラーの統一** - アーキテクチャの基盤
    - ykfのlist-controller.jsをannei形式に変更
    - ykfのdetail-controller.jsをannei形式に変更
    - ykfのtime-announce-controller.jsをannei形式に変更
 
 ### 中優先度
+
 2. **エラーハンドリングとログ出力の統一**
    - console.group/groupEndの統一
    - エラーハンドリングパターンの統一
@@ -110,6 +125,7 @@ src/
    - 保存処理の抽象化
 
 ### 低優先度
+
 4. **スクレイピングとTransformerの統一**
    - BrowserHelper.executeScrapingの統一
    - Transformerのエラーハンドリング統一
@@ -117,6 +133,7 @@ src/
 ## 統一後のアーキテクチャ
 
 ### コントローラーの統一パターン
+
 ```javascript
 class ListController {
   static async getYkfList() { ... }
@@ -133,10 +150,11 @@ module.exports = {
 ```
 
 ### エラーハンドリングの統一パターン
+
 ```javascript
 static async getYkfList() {
   console.group('ListController.getYkfList start');
-  
+
   try {
     // 処理
     return result;
@@ -151,10 +169,11 @@ static async getYkfList() {
 ```
 
 ### データ保存の統一パターン
+
 ```javascript
 static async saveYkfList(value) {
   console.group('ListController.saveYkfList start');
-  
+
   try {
     await repository.set(consts.YKF, value);
     await firestoreRepository.set(consts.YKF, value);
@@ -179,10 +198,12 @@ static async saveYkfList(value) {
 ## リスクと対策
 
 ### リスク
+
 - 既存の機能に影響を与える可能性
 - 変更範囲が広いため、テストが重要
 
 ### 対策
+
 - 既存のインターフェースを維持
 - 段階的な実装とテスト
-- 各段階での動作確認 
+- 各段階での動作確認
