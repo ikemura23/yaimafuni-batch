@@ -11,25 +11,34 @@ class ListTransformer {
    * @returns {Object} 送信用データ
    */
   static transformListData(contentList) {
-    const returnData = {};
+    console.group('ListTransformer.transformListData start');
 
-    for (const data of contentList) {
-      const portName = data.port;
-      const portCode = PortMapper.getPortCode(portName, 'ykf');
-      const statusText = data.status; // 記号文字、◯や△や☓など
+    try {
+      const returnData = {};
 
-      if (portCode) {
-        const portData = {
-          comment: '',
-          portCode: portCode,
-          portName: portName,
-          status: StatusMapper.getStatus(statusText, 'ykf'),
-        };
-        returnData[portCode] = portData;
+      for (const data of contentList) {
+        const portName = data.port;
+        const portCode = PortMapper.getPortCode(portName, 'ykf');
+        const statusText = data.status; // 記号文字、◯や△や☓など
+
+        if (portCode) {
+          const portData = {
+            comment: '',
+            portCode: portCode,
+            portName: portName,
+            status: StatusMapper.getStatus(statusText, 'ykf'),
+          };
+          returnData[portCode] = portData;
+        }
       }
-    }
 
-    return returnData;
+      return returnData;
+    } catch (error) {
+      console.error('ListTransformer.transformListData error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
   /**
@@ -39,7 +48,17 @@ class ListTransformer {
    * @deprecated PortMapper.getPortCode() を使用してください
    */
   static getPortCode(portName) {
-    return PortMapper.getPortCode(portName, 'ykf');
+    console.group('ListTransformer.getPortCode start');
+
+    try {
+      const result = PortMapper.getPortCode(portName, 'ykf');
+      return result;
+    } catch (error) {
+      console.error('ListTransformer.getPortCode error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
   /**
@@ -49,7 +68,17 @@ class ListTransformer {
    * @deprecated StatusMapper.getStatus() を使用してください
    */
   static getStatusCode(kigou) {
-    return StatusMapper.getStatus(kigou, 'ykf');
+    console.group('ListTransformer.getStatusCode start');
+
+    try {
+      const result = StatusMapper.getStatus(kigou, 'ykf');
+      return result;
+    } catch (error) {
+      console.error('ListTransformer.getStatusCode error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 }
 
