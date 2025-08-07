@@ -14,14 +14,11 @@ exports.handler = async function () {
 
     console.log('main init');
 
-    const updateAnneiList = require('./src/annei/controllers/list-controller.js').updateAnneiList;
-    const updateAnneiDetail = require('./src/annei/controllers/detail-controller.js').updateAnneiDetail;
+    // ControllerManagerを使用してコントローラーを統合管理
+    const ControllerManager = require('./src/controllers/index.js');
+    const controllerManager = new ControllerManager();
 
-    const YkfList = require('./src/ykf/controllers/list-controller.js');
-    const ykfTime = require('./src/ykf/controllers/time-announce-controller.js');
-
-    const ykfDetail = require('./src/ykf/controllers/detail-controller.js');
-
+    // 他の処理（既存の処理を維持）
     const topCompany = require('./src/top/top_company.js');
     const topPort = require('./src/top/top_port.js');
     const yahoo = require('./src/weather/yahoo.js');
@@ -34,17 +31,18 @@ exports.handler = async function () {
     // const slack = require('./slack');
 
     console.group('main start');
-    await updateAnneiList();
-    await updateAnneiDetail();
-    await YkfList();
-    await ykfTime();
-    await ykfDetail();
+
+    // anneiとykfの処理をControllerManagerで統合実行
+    await controllerManager.updateAll();
+
+    // 他の処理（既存の処理を維持）
     await tyhoon();
     await yahoo();
     await topPort();
     await topCompany();
     await tenkijp();
     await updateHourlyWeather();
+
     console.groupEnd();
     console.log('main finish');
   } catch (err) {

@@ -11,23 +11,34 @@ class TimeAnnounceScraper {
    * @returns {Promise<Object>} スクレイピング結果
    */
   static async scrapeTimeAndAnnounceData() {
-    return await BrowserHelper.executeScraping(async (page) => {
-      // ページに移動
-      await BrowserHelper.navigateToPage(page, URL);
+    console.group('TimeAnnounceScraper.scrapeTimeAndAnnounceData start');
 
-      // 更新日時
-      const updateTime = await this.getUpdateTime(page);
-      // アナウンス
-      const announce = await this.getAnnounce(page);
-      // アナウンス2
-      const announce2 = await this.getAnnounce2(page);
+    try {
+      const result = await BrowserHelper.executeScraping(async (page) => {
+        // ページに移動
+        await BrowserHelper.navigateToPage(page, URL);
 
-      return {
-        updateTime,
-        announce,
-        announce2,
-      };
-    });
+        // 更新日時
+        const updateTime = await this.getUpdateTime(page);
+        // アナウンス
+        const announce = await this.getAnnounce(page);
+        // アナウンス2
+        const announce2 = await this.getAnnounce2(page);
+
+        return {
+          updateTime,
+          announce,
+          announce2,
+        };
+      });
+
+      return result;
+    } catch (error) {
+      console.error('TimeAnnounceScraper.scrapeTimeAndAnnounceData error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
   /**
@@ -36,7 +47,17 @@ class TimeAnnounceScraper {
    * @returns {Promise<string>} 更新日時
    */
   static async getUpdateTime(page) {
-    return await BrowserHelper.getTextContent(page, '#status > div > div.statusdate');
+    console.group('TimeAnnounceScraper.getUpdateTime start');
+
+    try {
+      const result = await BrowserHelper.getTextContent(page, '#status > div > div.statusdate');
+      return result;
+    } catch (error) {
+      console.error('TimeAnnounceScraper.getUpdateTime error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
   /**
@@ -45,7 +66,17 @@ class TimeAnnounceScraper {
    * @returns {Promise<string>} アナウンス
    */
   static async getAnnounce(page) {
-    return await BrowserHelper.getTextContent(page, '#status > div > div:nth-child(3)');
+    console.group('TimeAnnounceScraper.getAnnounce start');
+
+    try {
+      const result = await BrowserHelper.getTextContent(page, '#status > div > div:nth-child(3)');
+      return result;
+    } catch (error) {
+      console.error('TimeAnnounceScraper.getAnnounce error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
   /**
@@ -54,7 +85,17 @@ class TimeAnnounceScraper {
    * @returns {Promise<string>} アナウンス2
    */
   static async getAnnounce2(page) {
-    return await BrowserHelper.getTextContent(page, '#status > div > div.statusdate2.bgylw', '');
+    console.group('TimeAnnounceScraper.getAnnounce2 start');
+
+    try {
+      const result = await BrowserHelper.getTextContent(page, '#status > div > div.statusdate2.bgylw', '');
+      return result;
+    } catch (error) {
+      console.error('TimeAnnounceScraper.getAnnounce2 error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 }
 

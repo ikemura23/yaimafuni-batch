@@ -10,8 +10,17 @@ class DetailTransformer {
    * @returns {Object} 変換後のデータ
    */
   static transformDetailData(scrapedData) {
-    // 詳細データは既に適切な形式になっているため、最小限の変換のみ
-    return scrapedData;
+    console.group('DetailTransformer.transformDetailData start');
+
+    try {
+      // 詳細データは既に適切な形式になっているため、最小限の変換のみ
+      return scrapedData;
+    } catch (error) {
+      console.error('DetailTransformer.transformDetailData error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
   /**
@@ -21,7 +30,17 @@ class DetailTransformer {
    * @deprecated StatusMapper.getStatusCode() を使用してください
    */
   static getRowStatusCode(statusRawText) {
-    return StatusMapper.getStatusCode(statusRawText, 'ykf');
+    console.group('DetailTransformer.getRowStatusCode start');
+
+    try {
+      const result = StatusMapper.getStatusCode(statusRawText, 'ykf');
+      return result;
+    } catch (error) {
+      console.error('DetailTransformer.getRowStatusCode error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 
   /**
@@ -31,7 +50,17 @@ class DetailTransformer {
    * @deprecated StatusMapper.getStatusText() を使用してください
    */
   static getRowStatusText(statusRawText) {
-    return StatusMapper.getStatusText(statusRawText, 'ykf');
+    console.group('DetailTransformer.getRowStatusText start');
+
+    try {
+      const result = StatusMapper.getStatusText(statusRawText, 'ykf');
+      return result;
+    } catch (error) {
+      console.error('DetailTransformer.getRowStatusText error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
   }
 }
 
