@@ -56,3 +56,6 @@ config.json
 
 *.zip
 serviceAccountKey.json
+
+# Temporary files and directories
+.tmp/
