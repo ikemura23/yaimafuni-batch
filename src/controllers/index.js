@@ -1,6 +1,6 @@
 /**
  * コントローラー管理クラス
- * anneiとykfのコントローラーを統合管理し、テスト容易性と保守性を向上させる
+ * annei、ykf、weatherのコントローラーを統合管理し、テスト容易性と保守性を向上させる
  */
 class ControllerManager {
   constructor() {
@@ -17,6 +17,9 @@ class ControllerManager {
       detail: require('../ykf/controllers/detail-controller.js').updateYkfDetail,
       time: require('../ykf/controllers/time-announce-controller.js').updateYkfUpdateTimeAndComment,
     };
+
+    // weatherコントローラーの統合
+    this.weather = new (require('../weather/controllers/index.js'))();
   }
 
   /**
@@ -37,6 +40,10 @@ class ControllerManager {
       await this.ykf.list();
       await this.ykf.time();
       await this.ykf.detail();
+
+      // Weather処理
+      console.log('Starting Weather controllers...');
+      await this.weather.updateAll();
 
       console.log('ControllerManager.updateAll completed successfully');
     } catch (error) {
@@ -201,6 +208,92 @@ class ControllerManager {
       console.log('ControllerManager.updateYkfTime completed successfully');
     } catch (error) {
       console.error('ControllerManager.updateYkfTime error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * Weather全更新（デバッグ・単体テスト用）
+   *
+   * 使用例:
+   * ```javascript
+   * // 単体テスト
+   * const manager = new ControllerManager();
+   * await manager.updateWeatherAll();
+   *
+   * // デバッグ（Weather全処理の取得・保存を個別に確認）
+   * try {
+   *   await manager.updateWeatherAll();
+   * } catch (error) {
+   *   console.error('Weather全更新でエラー:', error);
+   * }
+   * ```
+   * @returns {Promise<void>}
+   */
+  async updateWeatherAll() {
+    console.group('ControllerManager.updateWeatherAll start');
+
+    try {
+      await this.weather.updateAll();
+      console.log('ControllerManager.updateWeatherAll completed successfully');
+    } catch (error) {
+      console.error('ControllerManager.updateWeatherAll error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * Yahoo天気更新（デバッグ・単体テスト用）
+   * @returns {Promise<void>}
+   */
+  async updateYahooWeather() {
+    console.group('ControllerManager.updateYahooWeather start');
+
+    try {
+      await this.weather.updateYahooWeather();
+      console.log('ControllerManager.updateYahooWeather completed successfully');
+    } catch (error) {
+      console.error('ControllerManager.updateYahooWeather error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * 天気.jp更新（デバッグ・単体テスト用）
+   * @returns {Promise<void>}
+   */
+  async updateTenkijpWeather() {
+    console.group('ControllerManager.updateTenkijpWeather start');
+
+    try {
+      await this.weather.updateTenkijpWeather();
+      console.log('ControllerManager.updateTenkijpWeather completed successfully');
+    } catch (error) {
+      console.error('ControllerManager.updateTenkijpWeather error:', error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * 時間別天気更新（デバッグ・単体テスト用）
+   * @returns {Promise<void>}
+   */
+  async updateHourlyWeather() {
+    console.group('ControllerManager.updateHourlyWeather start');
+
+    try {
+      await this.weather.updateHourlyWeather();
+      console.log('ControllerManager.updateHourlyWeather completed successfully');
+    } catch (error) {
+      console.error('ControllerManager.updateHourlyWeather error:', error);
       throw error;
     } finally {
       console.groupEnd();
