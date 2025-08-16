@@ -21,27 +21,19 @@ exports.handler = async function () {
     // 他の処理（既存の処理を維持）
     const topCompany = require('./src/top/top_company.js');
     const topPort = require('./src/top/top_port.js');
-    const yahoo = require('./src/weather/yahoo.js');
-    const tenkijp = require('./src/weather/tenkijp.js');
     const tyhoon = require('./src/typhoon/tenkijp.js');
-
-    // １時間おきの天気
-    const updateHourlyWeather = require('./src/weather/hourly/updateHourlyWeather');
 
     // const slack = require('./slack');
 
     console.group('main start');
 
-    // anneiとykfの処理をControllerManagerで統合実行
+    // annei、ykf、weatherの処理をControllerManagerで統合実行
     await controllerManager.updateAll();
 
     // 他の処理（既存の処理を維持）
     await tyhoon();
-    await yahoo();
     await topPort();
     await topCompany();
-    await tenkijp();
-    await updateHourlyWeather();
 
     console.groupEnd();
     console.log('main finish');
