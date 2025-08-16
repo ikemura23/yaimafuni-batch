@@ -19,7 +19,19 @@ class ControllerManager {
     };
 
     // weatherコントローラーの統合
-    this.weather = new (require('../weather/controllers/index.js'))();
+    const YahooController = require('../weather/controllers/yahoo-controller.js');
+    const TenkijpController = require('../weather/controllers/tenkijp-controller.js');
+    const HourlyController = require('../weather/controllers/hourly-controller.js');
+    
+    const yahooController = new YahooController();
+    const tenkijpController = new TenkijpController();
+    const hourlyController = new HourlyController();
+    
+    this.weather = {
+      yahoo: () => yahooController.updateYahooWeather(),
+      tenkijp: () => tenkijpController.updateTenkijpWeather(),
+      hourly: () => hourlyController.updateHourlyWeather(),
+    };
   }
 
   /**
@@ -43,7 +55,9 @@ class ControllerManager {
 
       // Weather処理
       console.log('Starting Weather controllers...');
-      await this.weather.updateAll();
+      await this.weather.yahoo();
+      await this.weather.tenkijp();
+      await this.weather.hourly();
 
       console.log('ControllerManager.updateAll completed successfully');
     } catch (error) {
@@ -236,7 +250,9 @@ class ControllerManager {
     console.group('ControllerManager.updateWeatherAll start');
 
     try {
-      await this.weather.updateAll();
+      await this.weather.yahoo();
+      await this.weather.tenkijp();
+      await this.weather.hourly();
       console.log('ControllerManager.updateWeatherAll completed successfully');
     } catch (error) {
       console.error('ControllerManager.updateWeatherAll error:', error);
@@ -254,7 +270,7 @@ class ControllerManager {
     console.group('ControllerManager.updateYahooWeather start');
 
     try {
-      await this.weather.updateYahooWeather();
+      await this.weather.yahoo();
       console.log('ControllerManager.updateYahooWeather completed successfully');
     } catch (error) {
       console.error('ControllerManager.updateYahooWeather error:', error);
@@ -272,7 +288,7 @@ class ControllerManager {
     console.group('ControllerManager.updateTenkijpWeather start');
 
     try {
-      await this.weather.updateTenkijpWeather();
+      await this.weather.tenkijp();
       console.log('ControllerManager.updateTenkijpWeather completed successfully');
     } catch (error) {
       console.error('ControllerManager.updateTenkijpWeather error:', error);
@@ -290,7 +306,7 @@ class ControllerManager {
     console.group('ControllerManager.updateHourlyWeather start');
 
     try {
-      await this.weather.updateHourlyWeather();
+      await this.weather.hourly();
       console.log('ControllerManager.updateHourlyWeather completed successfully');
     } catch (error) {
       console.error('ControllerManager.updateHourlyWeather error:', error);
