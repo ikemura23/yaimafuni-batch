@@ -2,13 +2,12 @@ exports.handler = async function () {
   let admin;
   try {
     admin = require('firebase-admin');
-    const config = require('./src/config/config.js');
 
     // Initialize Firebase Admin if not already initialized
     if (!admin.apps.length) {
       admin.initializeApp({
         credential: admin.credential.cert(require('./serviceAccountKey.json')),
-        databaseURL: config.firebase.databaseURL,
+        databaseURL: process.env.YAIMAFUNI_FIREBASE_DATABASE_URL,
       });
     }
 
