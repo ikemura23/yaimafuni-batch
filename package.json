@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.2",
     "firebase-admin": "^11.10.1",
     "puppeteer-core": "23.7.1",
     "slack-node": "^0.1.8"

@@ -1,3 +1,6 @@
+// 環境変数を読み込み
+require('dotenv').config();
+
 exports.handler = async function () {
   let admin;
   try {
@@ -7,7 +10,7 @@ exports.handler = async function () {
     // Initialize Firebase Admin if not already initialized
     if (!admin.apps.length) {
       admin.initializeApp({
-        credential: admin.credential.cert(require('./serviceAccountKey.json')),
+        credential: admin.credential.cert(require(config.firebase.serviceAccountKeyPath)),
         databaseURL: config.firebase.databaseURL,
       });
     }
