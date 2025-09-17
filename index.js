@@ -4,7 +4,6 @@ exports.handler = async function () {
     // 設定の検証
     const { validateConfig, showConfigStatus } = require('./config-validator');
     validateConfig();
-    // showConfigStatus();
 
     admin = require('firebase-admin');
 
