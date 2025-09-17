@@ -66,16 +66,14 @@ describe('HourlyController', () => {
               T00_06: '--%',
               T06_12: '10%',
               T12_18: '20%',
-              T18_24: '0%'
-            }
-          }
-        ]
+              T18_24: '0%',
+            },
+          },
+        ],
       };
-      
+
       const mockTransformedData = {
-        '2024-01-01': [
-          { time: '00', temperature: 20, humidity: 60 }
-        ]
+        '2024-01-01': [{ time: '00', temperature: 20, humidity: 60 }],
       };
 
       // モック関数の設定
@@ -102,7 +100,7 @@ describe('HourlyController', () => {
     test('API呼び出しでエラーが発生した場合、エラーが適切に処理される', async () => {
       const testError = new Error('API Error');
       testError.stack = 'Error stack trace';
-      
+
       hourlyController.scraper.fetchWeather.mockRejectedValue(testError);
 
       await expect(hourlyController.updateHourlyWeather()).rejects.toThrow('API Error');

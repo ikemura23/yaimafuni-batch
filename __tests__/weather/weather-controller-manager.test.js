@@ -84,7 +84,7 @@ describe('WeatherControllerManager', () => {
 
       expect(consoleSpy.error).toHaveBeenCalledWith('WeatherControllerManager.updateAll error:', testError);
       expect(consoleSpy.groupEnd).toHaveBeenCalled();
-      
+
       // 後続の処理は実行されないことを確認
       expect(weatherControllerManager.tenkijp.updateTenkijpWeather).not.toHaveBeenCalled();
       expect(weatherControllerManager.hourly.updateHourlyWeather).not.toHaveBeenCalled();
@@ -99,7 +99,7 @@ describe('WeatherControllerManager', () => {
 
       expect(consoleSpy.error).toHaveBeenCalledWith('WeatherControllerManager.updateAll error:', testError);
       expect(consoleSpy.groupEnd).toHaveBeenCalled();
-      
+
       // Yahoo天気は成功、時間別天気は実行されないことを確認
       expect(weatherControllerManager.yahoo.updateYahooWeather).toHaveBeenCalledTimes(1);
       expect(weatherControllerManager.hourly.updateHourlyWeather).not.toHaveBeenCalled();
@@ -115,7 +115,7 @@ describe('WeatherControllerManager', () => {
 
       expect(consoleSpy.error).toHaveBeenCalledWith('WeatherControllerManager.updateAll error:', testError);
       expect(consoleSpy.groupEnd).toHaveBeenCalled();
-      
+
       // 前の2つの処理は成功していることを確認
       expect(weatherControllerManager.yahoo.updateYahooWeather).toHaveBeenCalledTimes(1);
       expect(weatherControllerManager.tenkijp.updateTenkijpWeather).toHaveBeenCalledTimes(1);
@@ -153,7 +153,9 @@ describe('WeatherControllerManager', () => {
 
       expect(weatherControllerManager.tenkijp.updateTenkijpWeather).toHaveBeenCalledTimes(1);
       expect(consoleSpy.group).toHaveBeenCalledWith('WeatherControllerManager.updateTenkijpWeather start');
-      expect(consoleSpy.log).toHaveBeenCalledWith('WeatherControllerManager.updateTenkijpWeather completed successfully');
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        'WeatherControllerManager.updateTenkijpWeather completed successfully'
+      );
       expect(consoleSpy.groupEnd).toHaveBeenCalled();
     });
 
@@ -176,7 +178,9 @@ describe('WeatherControllerManager', () => {
 
       expect(weatherControllerManager.hourly.updateHourlyWeather).toHaveBeenCalledTimes(1);
       expect(consoleSpy.group).toHaveBeenCalledWith('WeatherControllerManager.updateHourlyWeather start');
-      expect(consoleSpy.log).toHaveBeenCalledWith('WeatherControllerManager.updateHourlyWeather completed successfully');
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        'WeatherControllerManager.updateHourlyWeather completed successfully'
+      );
       expect(consoleSpy.groupEnd).toHaveBeenCalled();
     });
 

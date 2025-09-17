@@ -33,15 +33,15 @@ describe('YahooTransformer', () => {
           weather: '晴れ',
           temperature: { hight: '25°', low: '15°' },
           wave: '1.5m',
-          wind: '北 2m/s'
+          wind: '北 2m/s',
         },
         tomorrow: {
           date: '1月2日(火)',
           weather: '曇り',
           temperature: { hight: '22°', low: '12°' },
           wave: '2.0m',
-          wind: '南 3m/s'
-        }
+          wind: '南 3m/s',
+        },
       };
 
       const result = yahooTransformer.transform(mockData);
@@ -49,13 +49,13 @@ describe('YahooTransformer', () => {
       // 結果の確認
       expect(result).toHaveProperty('today');
       expect(result).toHaveProperty('tomorrow');
-      
+
       expect(result.today).toEqual({
         date: '1月1日(月)',
         weather: '晴れ',
         temperature: { hight: '25°', low: '15°' },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       });
 
       expect(result.tomorrow).toEqual({
@@ -63,7 +63,7 @@ describe('YahooTransformer', () => {
         weather: '曇り',
         temperature: { hight: '22°', low: '12°' },
         wave: '2.0m',
-        wind: '南 3m/s'
+        wind: '南 3m/s',
       });
 
       // ログ確認
@@ -79,8 +79,8 @@ describe('YahooTransformer', () => {
           weather: '曇り',
           temperature: { hight: '22°', low: '12°' },
           wave: '2.0m',
-          wind: '南 3m/s'
-        }
+          wind: '南 3m/s',
+        },
       };
 
       expect(() => {
@@ -99,8 +99,20 @@ describe('YahooTransformer', () => {
       });
 
       const mockData = {
-        today: { date: '1月1日', weather: '晴れ', temperature: { hight: '25°', low: '15°' }, wave: '1.5m', wind: '北 2m/s' },
-        tomorrow: { date: '1月2日', weather: '曇り', temperature: { hight: '22°', low: '12°' }, wave: '2.0m', wind: '南 3m/s' }
+        today: {
+          date: '1月1日',
+          weather: '晴れ',
+          temperature: { hight: '25°', low: '15°' },
+          wave: '1.5m',
+          wind: '北 2m/s',
+        },
+        tomorrow: {
+          date: '1月2日',
+          weather: '曇り',
+          temperature: { hight: '22°', low: '12°' },
+          wave: '2.0m',
+          wind: '南 3m/s',
+        },
       };
 
       expect(() => {
@@ -119,7 +131,7 @@ describe('YahooTransformer', () => {
         weather: '晴れ',
         temperature: { hight: '25°', low: '15°' },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       };
 
       const result = yahooTransformer.validateAndTransform(mockWeatherData);
@@ -129,7 +141,7 @@ describe('YahooTransformer', () => {
         weather: '晴れ',
         temperature: { hight: '25°', low: '15°' },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       });
     });
 
@@ -139,7 +151,7 @@ describe('YahooTransformer', () => {
         weather: '', // 空
         temperature: { hight: '25°', low: '' }, // low が空
         // wave は欠損
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       };
 
       const result = yahooTransformer.validateAndTransform(mockWeatherData);
@@ -149,7 +161,7 @@ describe('YahooTransformer', () => {
         weather: '',
         temperature: { hight: '25°', low: '' },
         wave: '',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       });
 
       // 警告ログが出力されることを確認
@@ -163,7 +175,7 @@ describe('YahooTransformer', () => {
         weather: '晴れ',
         // temperature は欠損
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       };
 
       const result = yahooTransformer.validateAndTransform(mockWeatherData);
@@ -173,7 +185,7 @@ describe('YahooTransformer', () => {
         weather: '晴れ',
         temperature: { hight: '', low: '' },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       });
 
       // 警告ログが出力されることを確認
@@ -186,7 +198,7 @@ describe('YahooTransformer', () => {
         weather: '晴れ',
         temperature: { hight: '25°' }, // low が欠損
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       };
 
       const result = yahooTransformer.validateAndTransform(mockWeatherData);
@@ -196,7 +208,7 @@ describe('YahooTransformer', () => {
         weather: '晴れ',
         temperature: { hight: '25°', low: '' },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       });
     });
 
@@ -220,7 +232,7 @@ describe('YahooTransformer', () => {
         weather: '',
         temperature: { hight: '', low: '' },
         wave: '',
-        wind: ''
+        wind: '',
       });
 
       // すべてのフィールドで警告ログが出力されることを確認
@@ -239,7 +251,7 @@ describe('YahooTransformer', () => {
         wave: '1.5m',
         wind: '北 2m/s',
         extraField1: 'extra1', // 余分なフィールド
-        extraField2: 'extra2'  // 余分なフィールド
+        extraField2: 'extra2', // 余分なフィールド
       };
 
       const result = yahooTransformer.validateAndTransform(mockWeatherData);
@@ -250,7 +262,7 @@ describe('YahooTransformer', () => {
         weather: '晴れ',
         temperature: { hight: '25°', low: '15°' },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       });
 
       expect(result).not.toHaveProperty('extraField1');
@@ -267,21 +279,21 @@ describe('YahooTransformer', () => {
           weather: '晴れ時々曇り',
           temperature: {
             hight: '28°',
-            low: '18°'
+            low: '18°',
           },
           wave: '1.0m',
-          wind: '北東 3m/s'
+          wind: '北東 3m/s',
         },
         tomorrow: {
           date: '1月16日(火)',
           weather: '曇り一時雨',
           temperature: {
             hight: '24°',
-            low: '16°'
+            low: '16°',
           },
           wave: '2.5m',
-          wind: '南南西 5m/s'
-        }
+          wind: '南南西 5m/s',
+        },
       };
 
       const result = yahooTransformer.transform(mockData);
@@ -311,21 +323,21 @@ describe('YahooTransformer', () => {
           weather: '\n晴れ時々曇り\r\n ',
           temperature: {
             hight: ' 28°\n',
-            low: '\r15°\n '
+            low: '\r15°\n ',
           },
           wave: '  1.0m ',
-          wind: ' 北東 3m/s\n'
+          wind: ' 北東 3m/s\n',
         },
         tomorrow: {
           date: '1月16日(火)',
           weather: '曇り',
           temperature: {
             hight: '24°',
-            low: '16°'
+            low: '16°',
           },
           wave: '2.5m',
-          wind: '南 5m/s'
-        }
+          wind: '南 5m/s',
+        },
       };
 
       const result = yahooTransformer.transform(mockData);

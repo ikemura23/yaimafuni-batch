@@ -1,14 +1,23 @@
 // 港別の運行ステータスの値をまとめているだけ
 
 const admin = require('firebase-admin');
-const config = require('../config/config');
 const consts = require('../consts.js');
 
 // Initialize Firebase Admin if not already initialized
 if (!admin.apps.length) {
+  // サービスアカウントキーの取得
+  let serviceAccount;
+  if (process.env.YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT) {
+    // 環境変数からJSONをパース
+    serviceAccount = JSON.parse(process.env.YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT);
+  } else {
+    // デフォルトのファイルから読み込み
+    serviceAccount = require('../../serviceAccountKey.json');
+  }
+
   admin.initializeApp({
-    credential: admin.credential.cert(require('../../serviceAccountKey.json')),
-    databaseURL: config.firebase.databaseURL,
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.YAIMAFUNI_FIREBASE_DATABASE_URL,
   });
 }
 

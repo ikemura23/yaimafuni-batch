@@ -54,7 +54,7 @@ describe('YahooScraper', () => {
         weather: '晴れ',
         temperature: { hight: '25°', low: '15°' },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       };
 
       const mockTomorrowData = {
@@ -62,7 +62,7 @@ describe('YahooScraper', () => {
         weather: '曇り',
         temperature: { hight: '22°', low: '12°' },
         wave: '2.0m',
-        wind: '南 3m/s'
+        wind: '南 3m/s',
       };
 
       // スパイ用のメソッドモック
@@ -160,11 +160,12 @@ describe('YahooScraper', () => {
         wind: '北 2m/s\r\n',
         wave: '1.5m\n',
         temperatureHight: '25°\r\n',
-        temperatureLow: '15°\n'
+        temperatureLow: '15°\n',
       };
 
       // getDataメソッドのモック（順番に呼び出される）
-      const getDataSpy = jest.spyOn(yahooScraper, 'getData')
+      const getDataSpy = jest
+        .spyOn(yahooScraper, 'getData')
         .mockResolvedValueOnce(mockRawData.date)
         .mockResolvedValueOnce(mockRawData.weather)
         .mockResolvedValueOnce(mockRawData.wind)
@@ -180,15 +181,15 @@ describe('YahooScraper', () => {
         weather: '晴れ',
         temperature: {
           hight: '25°',
-          low: '15°'
+          low: '15°',
         },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       };
 
       expect(result).toEqual(expectedData);
       expect(getDataSpy).toHaveBeenCalledTimes(6);
-      
+
       getDataSpy.mockRestore();
     });
 
@@ -199,10 +200,11 @@ describe('YahooScraper', () => {
         wind: '  北 2m/s  \r\n  ',
         wave: '\r\n  1.5m  \n',
         temperatureHight: '  25°  \r\n',
-        temperatureLow: '\n  15°  \r'
+        temperatureLow: '\n  15°  \r',
       };
 
-      const getDataSpy = jest.spyOn(yahooScraper, 'getData')
+      const getDataSpy = jest
+        .spyOn(yahooScraper, 'getData')
         .mockResolvedValueOnce(mockRawData.date)
         .mockResolvedValueOnce(mockRawData.weather)
         .mockResolvedValueOnce(mockRawData.wind)
@@ -217,14 +219,14 @@ describe('YahooScraper', () => {
         weather: '晴れ',
         temperature: {
           hight: '25°',
-          low: '15°'
+          low: '15°',
         },
         wave: '1.5m',
-        wind: '北 2m/s'
+        wind: '北 2m/s',
       };
 
       expect(result).toEqual(expectedData);
-      
+
       getDataSpy.mockRestore();
     });
   });
@@ -238,11 +240,12 @@ describe('YahooScraper', () => {
         wind: '南 3m/s\r\n',
         wave: '2.0m\n',
         temperatureHight: '22°\r\n',
-        temperatureLow: '12°\n'
+        temperatureLow: '12°\n',
       };
 
       // getDataメソッドのモック
-      const getDataSpy = jest.spyOn(yahooScraper, 'getData')
+      const getDataSpy = jest
+        .spyOn(yahooScraper, 'getData')
         .mockResolvedValueOnce(mockRawData.date)
         .mockResolvedValueOnce(mockRawData.weather)
         .mockResolvedValueOnce(mockRawData.wind)
@@ -258,15 +261,15 @@ describe('YahooScraper', () => {
         weather: '曇り',
         temperature: {
           hight: '22°',
-          low: '12°'
+          low: '12°',
         },
         wave: '2.0m',
-        wind: '南 3m/s'
+        wind: '南 3m/s',
       };
 
       expect(result).toEqual(expectedData);
       expect(getDataSpy).toHaveBeenCalledTimes(6);
-      
+
       getDataSpy.mockRestore();
     });
   });

@@ -60,22 +60,22 @@ describe('YahooController', () => {
       // モックデータの設定
       const mockScrapedData = {
         today: { date: '2024-01-01', weather: 'sunny', temperature: 25 },
-        tomorrow: { date: '2024-01-02', weather: 'rainy', temperature: 20 }
+        tomorrow: { date: '2024-01-02', weather: 'rainy', temperature: 20 },
       };
-      
+
       const mockTransformedData = {
-        today: { 
+        today: {
           date: '2024-01-01',
           weather: 'sunny',
           temperature: { high: 25, low: 15 },
-          precipitation: '0%'
+          precipitation: '0%',
         },
-        tomorrow: { 
+        tomorrow: {
           date: '2024-01-02',
           weather: 'rainy',
           temperature: { high: 20, low: 12 },
-          precipitation: '80%'
-        }
+          precipitation: '80%',
+        },
       };
 
       // モック関数の設定
@@ -103,7 +103,7 @@ describe('YahooController', () => {
     test('スクレイピングでエラーが発生した場合、エラーが適切に処理される', async () => {
       const testError = new Error('Scraping Error');
       testError.stack = 'Error stack trace';
-      
+
       yahooController.scraper.scrapeWeather.mockRejectedValue(testError);
 
       await expect(yahooController.updateYahooWeather()).rejects.toThrow('Scraping Error');
@@ -152,7 +152,7 @@ describe('YahooController', () => {
     test('正常にデータが保存される', async () => {
       const testData = {
         today: { date: '2024-01-01', weather: 'sunny' },
-        tomorrow: { date: '2024-01-02', weather: 'cloudy' }
+        tomorrow: { date: '2024-01-02', weather: 'cloudy' },
       };
       repository.set.mockResolvedValue();
 

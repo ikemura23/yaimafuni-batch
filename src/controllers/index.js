@@ -22,11 +22,11 @@ class ControllerManager {
     const YahooController = require('../weather/controllers/yahoo-controller.js');
     const TenkijpController = require('../weather/controllers/tenkijp-controller.js');
     const HourlyController = require('../weather/controllers/hourly-controller.js');
-    
+
     const yahooController = new YahooController();
     const tenkijpController = new TenkijpController();
     const hourlyController = new HourlyController();
-    
+
     this.weather = {
       yahoo: () => yahooController.updateYahooWeather(),
       tenkijp: () => tenkijpController.updateTenkijpWeather(),

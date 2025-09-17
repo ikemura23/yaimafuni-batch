@@ -1,5 +1,4 @@
 const Slack = require('slack-node');
-const config = require('./config/config.js');
 
 /**
  * 引数をSlack#notificasionに投稿
@@ -7,7 +6,7 @@ const config = require('./config/config.js');
 module.exports = function post(msg, comment = '') {
   console.log(`Post to Slack: ${comment} ${msg}`);
 
-  const webhookUri = config.slack.webHookUrl;
+  const webhookUri = process.env.YAIMAFUNI_SLACK_WEBHOOK_URL;
   slack = new Slack();
   slack.setWebhook(webhookUri);
   slack.webhook(

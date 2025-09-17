@@ -15,7 +15,7 @@ class TenkijpScraper {
   async scrapeWeather() {
     console.log('TenkijpScraper.scrapeWeather start');
     const browser = await createBrowser();
-    
+
     try {
       const page = await browser.newPage();
       await page.goto(this.url, {
@@ -59,7 +59,7 @@ class TenkijpScraper {
     const weather = await this.getData(page, '#forecast-point-3h-today > tbody > tr.weather > td');
     const windDirection = await this.getData(page, '#forecast-point-3h-today > tbody > tr.wind-direction > td > p');
     const windSpeed = await this.getData(page, '#forecast-point-3h-today > tbody > tr.wind-speed > td');
-    
+
     const datas = [];
     for (let i = 1; i < 6; i++) {
       datas.push({
@@ -69,7 +69,7 @@ class TenkijpScraper {
         windSpeed: windSpeed[i],
       });
     }
-    
+
     return datas;
   }
 
@@ -83,7 +83,7 @@ class TenkijpScraper {
     const weather = await this.getData(page, '#forecast-point-3h-tomorrow > tbody > tr.weather > td');
     const windDirection = await this.getData(page, '#forecast-point-3h-tomorrow > tbody > tr.wind-blow > td > p'); // todayとtrクラス名が違う
     const windSpeed = await this.getData(page, '#forecast-point-3h-tomorrow > tbody > tr.wind-speed > td');
-    
+
     const datas = [];
     for (let i = 1; i < 6; i++) {
       datas.push({
@@ -93,7 +93,7 @@ class TenkijpScraper {
         windSpeed: windSpeed[i],
       });
     }
-    
+
     return datas;
   }
 }

@@ -9,7 +9,7 @@ class HourlyTransformer {
    */
   transform(apiResponse) {
     console.log('HourlyTransformer.transform start');
-    
+
     try {
       const data = this.mapToData(
         apiResponse.hourly.time,
@@ -17,9 +17,9 @@ class HourlyTransformer {
         apiResponse.hourly.windspeed_10m,
         apiResponse.hourly.winddirection_10m
       );
-      
+
       const dateGroupList = this.groupBy(data, 'date');
-      
+
       console.log('HourlyTransformer.transform end');
       return dateGroupList;
     } catch (error) {
@@ -48,7 +48,7 @@ class HourlyTransformer {
         windSpeed: windSpeedList[i],
       };
     });
-    
+
     return result;
   }
 
@@ -77,7 +77,7 @@ class HourlyTransformer {
       '北北西',
       '北',
     ];
-    
+
     const directionIndex = Math.round(windDirection / 22.5);
     return cardinalDirection[directionIndex];
   }

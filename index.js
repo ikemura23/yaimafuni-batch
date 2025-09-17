@@ -1,14 +1,32 @@
 exports.handler = async function () {
   let admin;
   try {
+    // 設定の検証
+    const { validateConfig, showConfigStatus } = require('./config-validator');
+    validateConfig();
+
     admin = require('firebase-admin');
-    const config = require('./src/config/config.js');
 
     // Initialize Firebase Admin if not already initialized
     if (!admin.apps.length) {
+      // サービスアカウントキーの取得
+      let serviceAccount;
+      if (process.env.YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT) {
+        // 環境変数にJSONオブジェクトが設定されている場合
+        try {
+          serviceAccount = JSON.parse(process.env.YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT);
+        } catch (error) {
+          console.error('❌ 環境変数 YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT のJSON解析に失敗しました:', error.message);
+          throw error;
+        }
+      } else {
+        // デフォルトのファイルパスを使用
+        serviceAccount = require('./serviceAccountKey.json');
+      }
+
       admin.initializeApp({
-        credential: admin.credential.cert(require('./serviceAccountKey.json')),
-        databaseURL: config.firebase.databaseURL,
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: process.env.YAIMAFUNI_FIREBASE_DATABASE_URL,
       });
     }
 
