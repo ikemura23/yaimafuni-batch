@@ -1,8 +1,6 @@
 const admin = require('firebase-admin');
 const { getFirestore } = require('firebase-admin/firestore');
 
-const config = require('../config/config');
-
 let db = null;
 
 /**
@@ -30,7 +28,7 @@ function initializeFirestore() {
     const serviceAccount = getServiceAccount();
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
-      databaseURL: config.firebase.databaseURL,
+      databaseURL: process.env.YAIMAFUNI_FIREBASE_DATABASE_URL,
     });
   }
   if (!db) {
@@ -44,7 +42,7 @@ function initializeFirestore() {
  */
 function getCollection() {
   const firestore = initializeFirestore();
-  const collectionName = config.firebase.firestore?.collection || 'dev';
+  const collectionName = process.env.YAIMAFUNI_FIRESTORE_COLLECTION || 'dev';
   return firestore.collection(collectionName);
 }
 

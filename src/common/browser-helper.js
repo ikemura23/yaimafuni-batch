@@ -1,5 +1,4 @@
 const createBrowser = require('../browser-factory');
-const config = require('../config/config');
 
 /**
  * 汎用的なブラウザ操作の共通処理
@@ -17,7 +16,9 @@ class BrowserHelper {
     const page = await browser.newPage();
 
     // ユーザーエージェント設定
-    const userAgent = options.userAgent || config.puppeteer.userAgent;
+    const userAgent =
+      options.userAgent ||
+      'Mozilla /5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B5110e Safari/601.1';
     await page.setUserAgent(userAgent);
 
     // タイムアウト設定
