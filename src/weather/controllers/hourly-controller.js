@@ -18,7 +18,7 @@ class HourlyController {
    */
   async updateHourlyWeather() {
     console.group('HourlyController.updateHourlyWeather start');
-    
+
     try {
       // 1. API呼び出し
       console.log('Starting hourly weather API call...');

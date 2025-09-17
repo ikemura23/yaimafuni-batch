@@ -43,20 +43,20 @@ describe('HourlyScraper', () => {
           windspeed: 5.2,
           winddirection: 180,
           weathercode: 0,
-          time: '2024-01-01T12:00'
+          time: '2024-01-01T12:00',
         },
         hourly: {
           time: ['2024-01-01T00:00', '2024-01-01T01:00'],
           weathercode: [0, 1],
           windspeed_10m: [3.5, 4.2],
-          winddirection_10m: [180, 200]
-        }
+          winddirection_10m: [180, 200],
+        },
       };
 
       // fetchモックの設定
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockApiResponse)
+        json: jest.fn().mockResolvedValue(mockApiResponse),
       });
 
       const result = await hourlyScraper.fetchWeather();
@@ -72,7 +72,7 @@ describe('HourlyScraper', () => {
       // fetchモックでHTTPエラーを発生させる
       fetch.mockResolvedValueOnce({
         ok: false,
-        status: 404
+        status: 404,
       });
 
       await expect(hourlyScraper.fetchWeather()).rejects.toThrow('HTTP error! status: 404');
@@ -84,7 +84,7 @@ describe('HourlyScraper', () => {
 
     test('ネットワークエラーが発生した場合、適切にエラーが処理される', async () => {
       const networkError = new Error('Network Error');
-      
+
       // fetchモックでネットワークエラーを発生させる
       fetch.mockRejectedValueOnce(networkError);
 
@@ -97,11 +97,11 @@ describe('HourlyScraper', () => {
 
     test('JSONパースエラーが発生した場合、適切にエラーが処理される', async () => {
       const jsonError = new Error('Invalid JSON');
-      
+
       // fetchモックでJSONエラーを発生させる
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockRejectedValue(jsonError)
+        json: jest.fn().mockRejectedValue(jsonError),
       });
 
       await expect(hourlyScraper.fetchWeather()).rejects.toThrow('Invalid JSON');
@@ -116,7 +116,7 @@ describe('HourlyScraper', () => {
 
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(emptyResponse)
+        json: jest.fn().mockResolvedValue(emptyResponse),
       });
 
       const result = await hourlyScraper.fetchWeather();
@@ -133,25 +133,25 @@ describe('HourlyScraper', () => {
           windspeed: 5.2,
           winddirection: 180,
           weathercode: 0,
-          time: '2024-01-01T12:00'
+          time: '2024-01-01T12:00',
         },
         hourly: {
-          time: Array.from({length: 24}, (_, i) => `2024-01-01T${String(i).padStart(2, '0')}:00`),
-          weathercode: Array.from({length: 24}, (_, i) => i % 3),
-          windspeed_10m: Array.from({length: 24}, (_, i) => 3.5 + i * 0.1),
-          winddirection_10m: Array.from({length: 24}, (_, i) => 180 + i * 5)
+          time: Array.from({ length: 24 }, (_, i) => `2024-01-01T${String(i).padStart(2, '0')}:00`),
+          weathercode: Array.from({ length: 24 }, (_, i) => i % 3),
+          windspeed_10m: Array.from({ length: 24 }, (_, i) => 3.5 + i * 0.1),
+          winddirection_10m: Array.from({ length: 24 }, (_, i) => 180 + i * 5),
         },
         hourly_units: {
           time: 'iso8601',
           weathercode: 'wmo code',
           windspeed_10m: 'm/s',
-          winddirection_10m: '°'
-        }
+          winddirection_10m: '°',
+        },
       };
 
       fetch.mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(complexResponse)
+        json: jest.fn().mockResolvedValue(complexResponse),
       });
 
       const result = await hourlyScraper.fetchWeather();

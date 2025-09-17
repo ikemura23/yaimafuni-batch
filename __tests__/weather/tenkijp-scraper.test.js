@@ -157,7 +157,8 @@ describe('TenkijpScraper', () => {
       const mockWindSpeed = ['風速', '2m/s', '3m/s', '4m/s', '3m/s', '2m/s'];
 
       // getDataメソッドのモック
-      const getDataSpy = jest.spyOn(tenkijpScraper, 'getData')
+      const getDataSpy = jest
+        .spyOn(tenkijpScraper, 'getData')
         .mockResolvedValueOnce(mockHour)
         .mockResolvedValueOnce(mockWeather)
         .mockResolvedValueOnce(mockWindDirection)
@@ -176,7 +177,7 @@ describe('TenkijpScraper', () => {
 
       expect(result).toEqual(expectedData);
       expect(getDataSpy).toHaveBeenCalledTimes(4);
-      
+
       getDataSpy.mockRestore();
     });
   });
@@ -190,7 +191,8 @@ describe('TenkijpScraper', () => {
       const mockWindSpeed = ['風速', '4m/s', '3m/s', '2m/s', '3m/s', '4m/s'];
 
       // getDataメソッドのモック
-      const getDataSpy = jest.spyOn(tenkijpScraper, 'getData')
+      const getDataSpy = jest
+        .spyOn(tenkijpScraper, 'getData')
         .mockResolvedValueOnce(mockHour)
         .mockResolvedValueOnce(mockWeather)
         .mockResolvedValueOnce(mockWindDirection)
@@ -209,7 +211,7 @@ describe('TenkijpScraper', () => {
 
       expect(result).toEqual(expectedData);
       expect(getDataSpy).toHaveBeenCalledTimes(4);
-      
+
       getDataSpy.mockRestore();
     });
   });

@@ -60,20 +60,20 @@ describe('TenkijpController', () => {
       // モックデータの設定
       const mockScrapedData = {
         today: { date: '2024-01-01', weather: 'sunny' },
-        tomorrow: { date: '2024-01-02', weather: 'cloudy' }
+        tomorrow: { date: '2024-01-02', weather: 'cloudy' },
       };
-      
+
       const mockTransformedData = {
-        today: { 
+        today: {
           date: '2024-01-01',
           weather: 'sunny',
-          temperature: { high: 25, low: 15 }
+          temperature: { high: 25, low: 15 },
         },
-        tomorrow: { 
+        tomorrow: {
           date: '2024-01-02',
           weather: 'cloudy',
-          temperature: { high: 22, low: 12 }
-        }
+          temperature: { high: 22, low: 12 },
+        },
       };
 
       // モック関数の設定
@@ -101,7 +101,7 @@ describe('TenkijpController', () => {
     test('スクレイピングでエラーが発生した場合、エラーが適切に処理される', async () => {
       const testError = new Error('Scraping Error');
       testError.stack = 'Error stack trace';
-      
+
       tenkijpController.scraper.scrapeWeather.mockRejectedValue(testError);
 
       await expect(tenkijpController.updateTenkijpWeather()).rejects.toThrow('Scraping Error');
@@ -150,7 +150,7 @@ describe('TenkijpController', () => {
     test('正常にデータが保存される', async () => {
       const testData = {
         today: { date: '2024-01-01', weather: 'sunny' },
-        tomorrow: { date: '2024-01-02', weather: 'cloudy' }
+        tomorrow: { date: '2024-01-02', weather: 'cloudy' },
       };
       repository.set.mockResolvedValue();
 

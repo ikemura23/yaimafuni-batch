@@ -9,13 +9,13 @@ class YahooTransformer {
    */
   transform(data) {
     console.log('YahooTransformer.transform start');
-    
+
     try {
       // 既存のデータ形式をそのまま維持
       // 必要に応じてデータの検証や整形を行う
       const transformedData = {
         today: this.validateAndTransform(data.today),
-        tomorrow: this.validateAndTransform(data.tomorrow)
+        tomorrow: this.validateAndTransform(data.tomorrow),
       };
 
       console.log('YahooTransformer.transform end');
@@ -50,10 +50,10 @@ class YahooTransformer {
       weather: weatherData.weather || '',
       temperature: {
         hight: weatherData.temperature?.hight || '',
-        low: weatherData.temperature?.low || ''
+        low: weatherData.temperature?.low || '',
       },
       wave: weatherData.wave || '',
-      wind: weatherData.wind || ''
+      wind: weatherData.wind || '',
     };
   }
 }

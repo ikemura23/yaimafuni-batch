@@ -3,7 +3,8 @@
  */
 class HourlyScraper {
   constructor() {
-    this.apiUrl = 'https://api.open-meteo.com/v1/jma?latitude=24.34&longitude=124.16&hourly=weathercode,windspeed_10m,winddirection_10m&current_weather=true&windspeed_unit=ms&timezone=Asia%2FTokyo';
+    this.apiUrl =
+      'https://api.open-meteo.com/v1/jma?latitude=24.34&longitude=124.16&hourly=weathercode,windspeed_10m,winddirection_10m&current_weather=true&windspeed_unit=ms&timezone=Asia%2FTokyo';
   }
 
   /**
@@ -12,16 +13,16 @@ class HourlyScraper {
    */
   async fetchWeather() {
     console.log('HourlyScraper.fetchWeather start');
-    
+
     try {
       const response = await fetch(this.apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const responseJson = await response.json();
       const parsedObj = JSON.parse(JSON.stringify(responseJson)); // JSON.stringifyがないとパースエラーになる
-      
+
       console.log('HourlyScraper.fetchWeather end');
       return parsedObj;
     } catch (error) {

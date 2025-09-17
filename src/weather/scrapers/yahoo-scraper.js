@@ -15,7 +15,7 @@ class YahooScraper {
   async scrapeWeather() {
     console.log('YahooScraper.scrapeWeather start');
     const browser = await createBrowser();
-    
+
     try {
       const page = await browser.newPage();
       await page.goto(this.url, { waitUntil: 'networkidle2' });
@@ -52,7 +52,10 @@ class YahooScraper {
    */
   async getToday(page) {
     const date = await this.getData(page, 'div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.date');
-    const weather = await this.getData(page, '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.pict');
+    const weather = await this.getData(
+      page,
+      '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > p.pict'
+    );
     const wind = await this.getData(
       page,
       '#main > div.forecastCity > table > tbody > tr > td:nth-child(1) > div > dl > dd:nth-child(2)'
@@ -88,8 +91,14 @@ class YahooScraper {
    * @returns {Promise<Object>} 明日の天気データ
    */
   async getTomorrow(page) {
-    const date = await this.getData(page, '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.date');
-    const weather = await this.getData(page, '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.pict');
+    const date = await this.getData(
+      page,
+      '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.date'
+    );
+    const weather = await this.getData(
+      page,
+      '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > p.pict'
+    );
     const wind = await this.getData(
       page,
       '#main > div.forecastCity > table > tbody > tr > td:nth-child(2) > div > dl > dd:nth-child(2)'

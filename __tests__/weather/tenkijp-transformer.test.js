@@ -36,7 +36,7 @@ describe('TenkijpTransformer', () => {
         tomorrow: [
           { hour: '09', weather: '曇り', windBlow: '南', windSpeed: '3m/s' },
           { hour: '12', weather: '晴れ', windBlow: '南西', windSpeed: '2m/s' },
-        ]
+        ],
       };
 
       const result = tenkijpTransformer.transform(mockData);
@@ -44,13 +44,13 @@ describe('TenkijpTransformer', () => {
       // 結果の確認
       expect(result).toHaveProperty('today');
       expect(result).toHaveProperty('tomorrow');
-      
+
       expect(result.today).toHaveLength(3);
       expect(result.today[0]).toEqual({
         hour: '09',
         weather: '晴れ',
         windBlow: '北',
-        windSpeed: '2m/s'
+        windSpeed: '2m/s',
       });
 
       expect(result.tomorrow).toHaveLength(2);
@@ -58,7 +58,7 @@ describe('TenkijpTransformer', () => {
         hour: '09',
         weather: '曇り',
         windBlow: '南',
-        windSpeed: '3m/s'
+        windSpeed: '3m/s',
       });
 
       // ログ確認
@@ -69,7 +69,7 @@ describe('TenkijpTransformer', () => {
     test('空のデータでも正常に処理される', () => {
       const mockData = {
         today: [],
-        tomorrow: []
+        tomorrow: [],
       };
 
       const result = tenkijpTransformer.transform(mockData);
@@ -83,7 +83,7 @@ describe('TenkijpTransformer', () => {
     test('不正なデータでエラーが適切に処理される', () => {
       const mockData = {
         today: null, // 不正なデータ
-        tomorrow: []
+        tomorrow: [],
       };
 
       expect(() => {
@@ -110,19 +110,19 @@ describe('TenkijpTransformer', () => {
         hour: '09',
         weather: '晴れ',
         windBlow: '北',
-        windSpeed: '2m/s'
+        windSpeed: '2m/s',
       });
       expect(result[1]).toEqual({
         hour: '12',
         weather: '曇り',
         windBlow: '北東',
-        windSpeed: '3m/s'
+        windSpeed: '3m/s',
       });
       expect(result[2]).toEqual({
         hour: '15',
         weather: '雨',
         windBlow: '東',
-        windSpeed: '4m/s'
+        windSpeed: '4m/s',
       });
     });
 
@@ -130,8 +130,8 @@ describe('TenkijpTransformer', () => {
       const mockDataArray = [
         { hour: '09', weather: '晴れ', windBlow: '北', windSpeed: '2m/s' },
         { hour: '12', weather: '', windBlow: '北東', windSpeed: '3m/s' }, // weather が空
-        { hour: '', weather: '雨', windBlow: '', windSpeed: '4m/s' },    // hour, windBlow が空
-        { hour: '18', weather: '曇り', windBlow: '南', windSpeed: '' },   // windSpeed が空
+        { hour: '', weather: '雨', windBlow: '', windSpeed: '4m/s' }, // hour, windBlow が空
+        { hour: '18', weather: '曇り', windBlow: '南', windSpeed: '' }, // windSpeed が空
       ];
 
       const result = tenkijpTransformer.validateAndTransform(mockDataArray);
@@ -141,13 +141,13 @@ describe('TenkijpTransformer', () => {
         hour: '12',
         weather: '',
         windBlow: '北東',
-        windSpeed: '3m/s'
+        windSpeed: '3m/s',
       });
       expect(result[2]).toEqual({
         hour: '',
         weather: '雨',
         windBlow: '',
-        windSpeed: '4m/s'
+        windSpeed: '4m/s',
       });
 
       // 警告ログが出力されることを確認
@@ -209,15 +209,15 @@ describe('TenkijpTransformer', () => {
       expect(result).toHaveLength(3);
       expect(result[1]).toEqual({
         hour: '12',
-        weather: '',        // デフォルト値
+        weather: '', // デフォルト値
         windBlow: '北東',
-        windSpeed: '3m/s'
+        windSpeed: '3m/s',
       });
       expect(result[2]).toEqual({
-        hour: '',           // デフォルト値
+        hour: '', // デフォルト値
         weather: '雨',
         windBlow: '東',
-        windSpeed: '4m/s'
+        windSpeed: '4m/s',
       });
 
       // 警告ログが出力されることを確認
@@ -243,7 +243,7 @@ describe('TenkijpTransformer', () => {
           { hour: '15', weather: '晴れ', windBlow: '南南西', windSpeed: '2m/s' },
           { hour: '18', weather: '曇り', windBlow: '南西', windSpeed: '3m/s' },
           { hour: '21', weather: '曇り時々雨', windBlow: '西', windSpeed: '4m/s' },
-        ]
+        ],
       };
 
       const result = tenkijpTransformer.transform(mockData);

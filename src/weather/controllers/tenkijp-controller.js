@@ -18,7 +18,7 @@ class TenkijpController {
    */
   async updateTenkijpWeather() {
     console.group('TenkijpController.updateTenkijpWeather start');
-    
+
     try {
       // 1. スクレイピング実行
       console.log('Starting Tenkijp weather scraping...');
@@ -51,7 +51,7 @@ class TenkijpController {
     try {
       await Promise.all([
         repository.set('weather/tenkijp/today/table', data.today),
-        repository.set('weather/tenkijp/tomorrow/table', data.tomorrow)
+        repository.set('weather/tenkijp/tomorrow/table', data.tomorrow),
       ]);
       console.log('Tenkijp weather data saved successfully');
     } catch (error) {

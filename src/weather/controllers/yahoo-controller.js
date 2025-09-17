@@ -18,7 +18,7 @@ class YahooController {
    */
   async updateYahooWeather() {
     console.group('YahooController.updateYahooWeather start');
-    
+
     try {
       // 1. スクレイピング実行
       console.log('Starting Yahoo weather scraping...');
@@ -51,7 +51,7 @@ class YahooController {
     try {
       await Promise.all([
         repository.set('weather/yahoo/today', data.today),
-        repository.set('weather/yahoo/tomorrow', data.tomorrow)
+        repository.set('weather/yahoo/tomorrow', data.tomorrow),
       ]);
       console.log('Yahoo weather data saved successfully');
     } catch (error) {
