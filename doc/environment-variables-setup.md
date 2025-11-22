@@ -13,11 +13,6 @@
 | `YAIMAFUNI_FIREBASE_DATABASE_URL`    | Firebase Realtime DatabaseのURL      | ✅   | なし                       |
 | `YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT` | サービスアカウントキーファイルのパス | ❌   | `./serviceAccountKey.json` |
 
-### 2. Slack設定
-
-| 環境変数名                    | 説明                     | 必須 | デフォルト値 |
-| ----------------------------- | ------------------------ | ---- | ------------ |
-| `YAIMAFUNI_SLACK_WEBHOOK_URL` | Slack通知用のWebhook URL | ✅   | なし         |
 
 ## 開発環境での設定方法
 
@@ -29,7 +24,6 @@
 # ~/.bashrc または ~/.zshrc に追加
 export YAIMAFUNI_FIREBASE_DATABASE_URL="https://yaima-funi.firebaseio.com"
 export YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT="./serviceAccountKey.json"
-export YAIMAFUNI_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
 ```
 
 #### 設定の適用
@@ -57,8 +51,7 @@ source ~/.zshrc   # Zshの場合
       "program": "${workspaceFolder}/index.js",
       "env": {
         "YAIMAFUNI_FIREBASE_DATABASE_URL": "https://yaima-funi.firebaseio.com",
-        "YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT": "./serviceAccountKey.json",
-        "YAIMAFUNI_SLACK_WEBHOOK_URL": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+        "YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT": "./serviceAccountKey.json"
       }
     }
   ]
@@ -71,7 +64,6 @@ source ~/.zshrc   # Zshの場合
 2. Environment variablesに以下を追加：
    - `YAIMAFUNI_FIREBASE_DATABASE_URL=https://yaima-funi.firebaseio.com`
    - `YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT=./serviceAccountKey.json`
-   - `YAIMAFUNI_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK`
 
 ## 本番環境での設定方法（AWS Lambda）
 
@@ -88,7 +80,6 @@ source ~/.zshrc   # Zshの場合
 | ------------------------------------ | ----------------------------------------------------- |
 | `YAIMAFUNI_FIREBASE_DATABASE_URL`    | `https://yaima-funi.firebaseio.com`                   |
 | `YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT` | `./serviceAccountKey.json`                            |
-| `YAIMAFUNI_SLACK_WEBHOOK_URL`        | `https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK` |
 
 #### AWS CLIを使用
 
@@ -98,8 +89,7 @@ aws lambda update-function-configuration \
   --function-name yaimafuni-batch \
   --environment Variables='{
     "YAIMAFUNI_FIREBASE_DATABASE_URL":"https://yaima-funi.firebaseio.com",
-    "YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT":"./serviceAccountKey.json",
-    "YAIMAFUNI_SLACK_WEBHOOK_URL":"https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+    "YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT":"./serviceAccountKey.json"
   }'
 ```
 
@@ -121,7 +111,6 @@ Resources:
         Variables:
           YAIMAFUNI_FIREBASE_DATABASE_URL: https://yaima-funi.firebaseio.com
           YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT: ./serviceAccountKey.json
-          YAIMAFUNI_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
 ```
 
 #### Serverless Frameworkを使用
@@ -136,7 +125,6 @@ provider:
   environment:
     YAIMAFUNI_FIREBASE_DATABASE_URL: https://yaima-funi.firebaseio.com
     YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT: ./serviceAccountKey.json
-    YAIMAFUNI_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
 
 functions:
   batch:
@@ -175,8 +163,7 @@ aws lambda update-function-configuration \
   --function-name yaimafuni-batch \
   --environment Variables='{
     "YAIMAFUNI_FIREBASE_DATABASE_URL":"https://yaima-funi.firebaseio.com",
-    "YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT_JSON":"'$(cat serviceAccountKey.base64)'",
-    "YAIMAFUNI_SLACK_WEBHOOK_URL":"https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+    "YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT_JSON":"'$(cat serviceAccountKey.base64)'"
   }'
 ```
 
@@ -224,7 +211,6 @@ sam deploy --guided
 | -------- | --------------- | ------------------------------------ |
 | Firebase | Database URL    | `YAIMAFUNI_FIREBASE_DATABASE_URL`    |
 | Firebase | Service Account | `YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT` |
-| Slack    | Webhook URL     | `YAIMAFUNI_SLACK_WEBHOOK_URL`        |
 
 ## 設定例
 
@@ -234,7 +220,6 @@ sam deploy --guided
 # 開発環境用の設定例
 export YAIMAFUNI_FIREBASE_DATABASE_URL="https://yaima-funi.firebaseio.com"
 export YAIMAFUNI_FIREBASE_SERVICE_ACCOUNT="./serviceAccountKey.json"
-export YAIMAFUNI_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/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"
 ```
 
 ### 最小限の設定例（必須項目のみ）
@@ -242,7 +227,6 @@ export YAIMAFUNI_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/T36RS5WFM/B
 ```bash
 # 最小限の設定（デフォルト値を使用）
 export YAIMAFUNI_FIREBASE_DATABASE_URL="https://yaima-funi.firebaseio.com"
-export YAIMAFUNI_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
 ```
 
 ## 設定の確認方法
@@ -266,7 +250,6 @@ node -e "require('./config-validator').showConfigStatus()"
 ```bash
 # 環境変数の存在確認
 echo $YAIMAFUNI_FIREBASE_DATABASE_URL
-echo $YAIMAFUNI_SLACK_WEBHOOK_URL
 ```
 
 ## セキュリティ注意事項
@@ -313,7 +296,6 @@ source ~/.bashrc  # または ~/.zshrc
 ```bash
 # 必須環境変数を設定
 export YAIMAFUNI_FIREBASE_DATABASE_URL="https://yaima-funi.firebaseio.com"
-export YAIMAFUNI_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
 ```
 
 #### 3. サービスアカウントキーが見つからない
