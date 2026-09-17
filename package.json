@@ -9,6 +9,8 @@
   "scripts": {
     "start": "node localRun.js",
     "deploy": "./deploy.sh",
+    "deploy:database-rules": "firebase deploy --only database",
+    "validate:database-rules": "node scripts/validate-database-rules.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest",
