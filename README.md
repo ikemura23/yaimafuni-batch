@@ -24,9 +24,22 @@ node index.js
 
 ## デプロイ
 
+### AWS Lambda（バッチ本体）
+
 ```
 npm run deploy
 ```
+
+### Realtime Database セキュリティルール
+
+ルールは [database.rules.json](./database.rules.json) で管理します。Lambda デプロイとは別コマンドです。
+
+```
+npm run validate:database-rules
+npm run deploy:database-rules
+```
+
+詳細: [doc/rtdb-security-rules.md](./doc/rtdb-security-rules.md)
 
 ## テスト
 
@@ -49,7 +62,9 @@ npm run test:coverage
 
 ```bash
 npm start          # ローカル実行
-npm run deploy     # デプロイ
+npm run deploy     # Lambda デプロイ
+npm run deploy:database-rules # RTDB ルールデプロイ
+npm run validate:database-rules # RTDB ルール検証
 npm run format     # コードフォーマット
 npm run format:check # フォーマットチェック
 npm test           # テスト実行
